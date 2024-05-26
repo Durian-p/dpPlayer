@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/tab_local"
+            android:title="@string/local_menu_local"/>
+    <item
+            android:id="@+id/tab_album"
+            android:title="@string/local_menu_album"/>
+    <item
+            android:id="@+id/tab_artist"
+            android:title="@string/local_menu_artist"/>
+</menu>

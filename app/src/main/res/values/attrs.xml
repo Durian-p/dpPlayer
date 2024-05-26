@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--播放暂停按钮-->
+    <declare-styleable name="PlayPauseView">
+        <attr name="bg_color" format="color" />
+        <attr name="btn_color" format="color" />
+        <attr name="loadingColor" format="color|reference" />
+        <attr name="gap_width" format="dimension" />
+        <attr name="border_width" format="dimension|reference" />
+        <attr name="hasProgress" format="boolean|reference" />
+        <attr name="space_padding" format="float" />
+        <attr name="anim_duration" format="integer" />
+        <attr name="anim_direction">
+            <enum name="positive" value="1" />
+            <enum name="negative" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <!--音乐条目属性-->
+    <declare-styleable name="LocalItemView">
+        <attr name="tv_name" format="reference|string" />
+        <attr name="iv_icon" format="reference|integer" />
+        <attr name="tv_desc" format="reference|string" />
+        <attr name="iv_icon_color" format="reference|color" />
+    </declare-styleable>
+
+    <!--滚动页面相关-->
+    <declare-styleable name="FastScrollRecyclerView">
+        <attr name="fastScrollThumbColor" format="reference|color" />
+        <attr name="fastScrollThumbInactiveColor" format="reference|color" />
+        <attr name="fastScrollTrackColor" format="reference|color" />
+        <attr name="fastScrollPopupBgColor" format="reference|color" />
+        <attr name="fastScrollPopupTextColor" format="reference|color" />
+        <attr name="fastScrollPopupTextSize" format="reference|dimension" />
+        <attr name="fastScrollPopupBackgroundSize" format="reference|dimension" />
+        <attr name="fastScrollPopupPosition" format="enum">
+            <enum name="adjacent" value="0" />
+            <enum name="center" value="1" />
+        </attr>
+        <attr name="fastScrollAutoHide" format="reference|boolean" />
+        <attr name="fastScrollAutoHideDelay" format="reference|integer" />
+        <attr name="fastScrollEnableThumbInactiveColor" format="reference|boolean" />
+        <attr name="fastScrollThumbEnabled" format="reference|boolean" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SongTitleTextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/darker_gray</item>
+    </style>
+
+    <style name="ArtistTextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">9sp</item>
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+    <style name="MyTabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
+        <!-- 未选中的 Tab 文字颜色为灰色 -->
+        <item name="tabTextColor">@android:color/darker_gray</item>
+        <!-- 选中的 Tab 文字颜色为白色 -->
+        <item name="tabSelectedTextColor">@android:color/white</item>
+    </style>
+    <style name="RedButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">#e53935</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="colorControlHighlight">#48ffffff</item>
+    </style>
+    <style name="FastScrollStyle">
+        <item name="android:fastScrollThumbDrawable">@drawable/fastscroll_thumb</item>
+        <item name="android:fastScrollTrackDrawable">@drawable/fastscroll_track</item>
+    </style>
+    <style name="TitleText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">21sp</item> <!-- Adjust the text size as needed -->
+
+    </style>
+
+
+    <color name="darker_gray">#161616</color>
+    <color name="light_gray">#2B2B2B</color>
+</resources>

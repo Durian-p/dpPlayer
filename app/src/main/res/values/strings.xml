@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">MyMusicAPP</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="my">我的</string>
+    <string name="rover">漫游</string>
+    <string name="discover">发现</string>
+    <string name="local">本地</string>
+    <string name="recent">最近播放</string>
+    <string name="star">我的收藏</string>
+    <string name="play_next">播放下一首</string>
+    <string name="song_num">%1$d 首</string>
+    <string name="default_num">0 首</string>
+
+    <string name="item_local">本地歌曲</string>
+    <string name="item_history">播放历史</string>
+    <string name="item_favorite">我的收藏</string>
+    <string name="item_download">下载</string>
+    <string name="item_cached">缓存下载</string>
+    <string name="item_cached_music">缓存歌曲</string>
+    <string name="local_music">本地歌曲</string>
+    <string name="item_video">本地视频</string>
+    <string name="local_music_title">本地音乐</string>
+    <string name="local_menu_local">本地</string>
+    <string name="local_menu_album">专辑</string>
+    <string name="local_menu_artist">艺术家</string>
+    <string name="general_error">出现错误</string>
+    <string name="retry">重试</string>
+    <string name="random_play">随机播放</string>
+    <string name="tip_empty_song">本地音乐空空如也</string>
+    <string name="back">返回</string>
+    <string name="localTitle">本地音乐</string>
+    <string name="album_cover">专辑封面</string>
+    <string name="artist_img">艺人名称</string>
+</resources>
