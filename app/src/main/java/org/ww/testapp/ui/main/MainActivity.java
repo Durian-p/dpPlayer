@@ -2,169 +2,56 @@ package org.ww.testapp.ui.main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
 import android.provider.Settings;
-import android.view.GestureDetector;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.ww.testapp.R;
-import org.ww.testapp.entity.Music;
-import org.ww.testapp.player.MusicControlSender;
-import org.ww.testapp.player.MusicService;
-import org.ww.testapp.ui.widget.PlayPauseView;
+import org.ww.testapp.ui.base.BaseMusicActivity;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseMusicActivity
 {
 
     private static final int REQUEST_CODE = 1024;
     private ViewPager2 mainVp;
     private BottomNavigationView bottomNavigation;
     SectionsPagerAdaptor sectionsPagerAdaptor;
-    private ImageView albumCover;
-    private TextView titleTextView;
-    private TextView artistTextView;
-    private PlayPauseView playPauseView;
-    private MusicService musicService;
-    private boolean isBound = false;
 
-
-    private void onSwipeRight() {
-        // 切换到上一首歌
-        // 获取上一首歌曲信息
-        Music pm = musicService.getPrevMusic();
-        Toast.makeText(this, pm.getTitle() + " - " + pm.getArtist(), Toast.LENGTH_SHORT).show();
-        // 这里添加切换到上一首歌的逻辑
-        MusicControlSender.sendPreviousBroadcast(this);
-    }
-
-    private void onSwipeLeft() {
-        // 切换到下一首歌
-        Music nm = musicService.getNextMusic();
-        Toast.makeText(this, nm.getTitle() + " - " + nm.getArtist(), Toast.LENGTH_SHORT).show();
-        // 这里添加切换到下一首歌的逻辑
-        MusicControlSender.sendNextBroadcast(this);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         requestPermission();
-        setContentView(R.layout.activity_main);
         initView();
         initService();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+
     private void initView()
     {
         mainVp = findViewById(R.id.mainVp);
         bottomNavigation = findViewById(R.id.mainNav);
-        albumCover = findViewById(R.id.albumImageView);
-        titleTextView = findViewById(R.id.titleTextView);
-        artistTextView = findViewById(R.id.artistTextView);
-        playPauseView = findViewById(R.id.playPauseView);
         sectionsPagerAdaptor = new SectionsPagerAdaptor(this);
-
-        Music defaultMusic = new Music("<未播放>", "", "");
-        new MusicUpdater(this, titleTextView, artistTextView, albumCover).updateMusicInfo(defaultMusic);
-
         mainVp.setAdapter(sectionsPagerAdaptor);
         mainVp.registerOnPageChangeCallback(pageChangeCallBack);
         //这里是bottomNavigationView的点击事件
         bottomNavigation.setOnItemSelectedListener(naviListener);
-        // 绑定播放暂停键的点击事件
-        playPauseView.setOnClickListener(playPauseListener);
-
-    }
-
-    private void initService()
-    {
-        // 绑定服务
-        Intent intent = new Intent(this, MusicService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
-    }
-
-    private ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MusicService.LocalBinder binder = (MusicService.LocalBinder) service;
-            musicService = binder.getService();
-            isBound = true;
-
-            // 观察播放状态
-            musicService.getPlaybackState().observe(MainActivity.this, new Observer<MusicService.PlaybackInfo>() {
-                @Override
-                public void onChanged(MusicService.PlaybackInfo playbackInfo) {
-                    updateUI(playbackInfo);
-                }
-            });
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            isBound = false;
-        }
-    };
-
-    private void updateUI(MusicService.PlaybackInfo playbackInfo)
-    {
-        // 根据播放状态更新 UI
-        // 例如更新播放按钮、显示歌曲信息等
-        if (playbackInfo.state == MusicService.PlayerState.None)
-        {
-            // 播放按钮显示为默认状态
-            Music defaultMusic = new Music("<未播放>", "", "");
-            new MusicUpdater(this, titleTextView, artistTextView, albumCover).updateMusicInfo(defaultMusic);
-        }
-        else
-        {
-            // 播放按钮显示为暂停状态
-            new MusicUpdater(this, titleTextView, artistTextView, albumCover).updateMusicInfo(playbackInfo.music);
-            // TODO: 更新播放进度条列表状态等
-            if (playbackInfo.state == MusicService.PlayerState.PLAYING)
-            {
-                // 播放按钮显示为播放状态
-                playPauseView.play();
-            }
-            else
-            {
-                // 播放按钮显示为暂停状态
-                playPauseView.pause();
-            }
-        }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (isBound) {
-            unbindService(connection);
-            isBound = false;
-        }
+    protected int getContentId()
+    {
+        return R.layout.activity_main;
     }
 
 
@@ -209,24 +96,6 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
             return true;
-        }
-    };
-
-    private final View.OnClickListener playPauseListener = new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View view)
-        {
-            // TODO: 完成播放暂停功能
-            if (playPauseView.isPlaying())
-            {
-                // 发送暂停广播
-                MusicControlSender.sendPauseBroadcast(MainActivity.this);
-            }
-            else
-            {
-                MusicControlSender.sendPlayBroadcast(MainActivity.this);
-            }
         }
     };
 

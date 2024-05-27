@@ -9,10 +9,13 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayoutMediator;
 import org.ww.testapp.R;
+import org.ww.testapp.ui.base.BaseMusicActivity;
 import org.ww.testapp.ui.data.MusicViewModel;
+import org.ww.testapp.ui.main.MainActivity;
 import org.ww.testapp.ui.my.local.adapter.LocalPagerAdapter;
 
-public class LocalActivity extends AppCompatActivity {
+public class LocalActivity extends BaseMusicActivity
+{
 
     private MusicViewModel musicViewModel;
 
@@ -20,7 +23,6 @@ public class LocalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_local);
 
         musicViewModel = new ViewModelProvider(this).get(MusicViewModel.class);
 
@@ -69,5 +71,11 @@ public class LocalActivity extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    protected int getContentId()
+    {
+        return R.layout.activity_local;
     }
 }
