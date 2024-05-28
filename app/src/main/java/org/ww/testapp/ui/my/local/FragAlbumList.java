@@ -1,7 +1,9 @@
 package org.ww.testapp.ui.my.local;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,31 +18,34 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
 import org.ww.testapp.ui.data.MusicViewModel;
-import org.ww.testapp.ui.my.local.adapter.ArtistAdapter;
+import org.ww.testapp.ui.my.local.adapter.AlbumAdapter;
 import org.ww.testapp.ui.widget.SidebarView;
 import org.ww.testapp.util.MusicLoader;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class FragArtist extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FragAlbumList extends Fragment implements SwipeRefreshLayout.OnRefreshListener, AlbumAdapter.OnItemClickListener
+{
 
     private RecyclerView recyclerView;
-    private ArtistAdapter adapter;
+    private AlbumAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private MusicViewModel musicViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.frag_local_artist, container, false);
+        return inflater.inflate(R.layout.frag_local_album, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.localArtistReView);
-        swipeRefreshLayout = view.findViewById(R.id.localArtistSwipe);
-        SidebarView sidebarView = view.findViewById(R.id.localArtistSide);
+        recyclerView = view.findViewById(R.id.localAlbumReView);
+        swipeRefreshLayout = view.findViewById(R.id.localAlbumSwipe);
+        SidebarView sidebarView = view.findViewById(R.id.localAlbumSide);
 
         // 显示加载动画
         swipeRefreshLayout.setRefreshing(true);
@@ -57,7 +62,8 @@ public class FragArtist extends Fragment implements SwipeRefreshLayout.OnRefresh
             @Override
             public void onChanged(List<Music> musicList) {
                 // 设置适配器
-                adapter = new ArtistAdapter(requireContext(), musicList);
+                adapter = new AlbumAdapter(requireContext(), musicList);
+                adapter.setOnItemClickListener(FragAlbumList.this);
                 recyclerView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
             }
@@ -107,5 +113,16 @@ public class FragArtist extends Fragment implements SwipeRefreshLayout.OnRefresh
                 });
             }
         }).start();
+    }
+
+    @Override
+    public void onItemClick(int position)
+    {
+        // 启动AlbumActivity展示详情
+        Intent intent = new Intent(requireContext(), AlbumActivity.class);
+        ArrayList<Music> albumMusicList = (ArrayList<Music>) adapter.getAlbumList().get(position);
+        intent.putParcelableArrayListExtra("albumMusicList", albumMusicList);
+        intent.putExtra("albumTitle",albumMusicList.get(0).getAlbum());
+        startActivity(intent);
     }
 }

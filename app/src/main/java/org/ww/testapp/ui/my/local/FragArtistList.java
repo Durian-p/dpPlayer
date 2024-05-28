@@ -16,31 +16,31 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
 import org.ww.testapp.ui.data.MusicViewModel;
-import org.ww.testapp.ui.my.local.adapter.AlbumAdapter;
+import org.ww.testapp.ui.my.local.adapter.ArtistAdapter;
 import org.ww.testapp.ui.widget.SidebarView;
 import org.ww.testapp.util.MusicLoader;
 
 import java.util.List;
 
-public class FragAlbum extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FragArtistList extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView recyclerView;
-    private AlbumAdapter adapter;
+    private ArtistAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private MusicViewModel musicViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.frag_local_album, container, false);
+        return inflater.inflate(R.layout.frag_local_artist, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.localAlbumReView);
-        swipeRefreshLayout = view.findViewById(R.id.localAlbumSwipe);
-        SidebarView sidebarView = view.findViewById(R.id.localAlbumSide);
+        recyclerView = view.findViewById(R.id.localArtistReView);
+        swipeRefreshLayout = view.findViewById(R.id.localArtistSwipe);
+        SidebarView sidebarView = view.findViewById(R.id.localArtistSide);
 
         // 显示加载动画
         swipeRefreshLayout.setRefreshing(true);
@@ -57,7 +57,7 @@ public class FragAlbum extends Fragment implements SwipeRefreshLayout.OnRefreshL
             @Override
             public void onChanged(List<Music> musicList) {
                 // 设置适配器
-                adapter = new AlbumAdapter(requireContext(), musicList);
+                adapter = new ArtistAdapter(requireContext(), musicList);
                 recyclerView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
             }

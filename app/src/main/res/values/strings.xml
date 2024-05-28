@@ -40,4 +40,7 @@
     <string name="localTitle">本地音乐</string>
     <string name="album_cover">专辑封面</string>
     <string name="artist_img">艺人名称</string>
+    <string name="album">专辑</string>
+    <string name="artist_image">艺术家图片</string>
+    <string name="artist">"歌手: "</string>
 </resources>

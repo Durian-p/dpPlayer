@@ -27,7 +27,7 @@
     </style>
     <style name="TitleText">
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">21sp</item> <!-- Adjust the text size as needed -->
+        <item name="android:textSize">20sp</item> <!-- Adjust the text size as needed -->
 
     </style>
 

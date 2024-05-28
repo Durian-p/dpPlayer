@@ -5,7 +5,6 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +46,7 @@ public class MyItemView extends LinearLayout {
         mContext = context;
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        View mView = inflater.inflate(R.layout.item_layout_view, this, true);
+        View mView = inflater.inflate(R.layout.item_myfeat_list, this, true);
         mIcon = mView.findViewById(R.id.iv_icon);
         mPlay = mView.findViewById(R.id.iv_play);
         mName = mView.findViewById(R.id.tv_name);

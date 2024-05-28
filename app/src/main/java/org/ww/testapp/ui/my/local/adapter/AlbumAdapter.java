@@ -31,6 +31,20 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     private String[] sections;
     private int[] sectionPositions;
 
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
+    public List<List<Music>> getAlbumList() {
+        return albumList;
+    }
+
     public AlbumAdapter(Context context, List<Music> musicList) {
         this.context = context;
         this.albumList = extractAlbums(musicList);
@@ -64,6 +78,18 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             // 如果没有专辑封面，则使用默认图标
             holder.coverImageView.setImageResource(R.drawable.default_cover);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                int position = holder.getBindingAdapterPosition();
+                if (onItemClickListener != null && position != RecyclerView.NO_POSITION) {
+                    onItemClickListener.onItemClick(position);
+                }
+            }
+        });
     }
 
     @Override

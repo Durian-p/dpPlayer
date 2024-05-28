@@ -12,12 +12,12 @@ import org.ww.testapp.entity.Music;
 
 import java.util.List;
 
-public class MusicInfoPagerAdapter extends RecyclerView.Adapter<MusicInfoPagerAdapter.MusicInfoViewHolder>
+public class MusicBarPagerAdapter extends RecyclerView.Adapter<MusicBarPagerAdapter.MusicInfoViewHolder>
 {
 
     private List<Music> musicList;
 
-    public MusicInfoPagerAdapter(List<Music> musicList)
+    public MusicBarPagerAdapter(List<Music> musicList)
     {
         this.musicList = musicList;
     }
@@ -61,7 +61,7 @@ public class MusicInfoPagerAdapter extends RecyclerView.Adapter<MusicInfoPagerAd
         public void bind(Music music)
         {
             titleTextView.setText(music.getTitle());
-            artistTextView.setText(music.getArtist());
+            artistTextView.setText(" - " + music.getArtist());
             // 设置专辑封面
             if (music.getAlbumArt() != null)
             {

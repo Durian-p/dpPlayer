@@ -26,8 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.my.local.LocalActivity"
-                  />
+        <activity android:name=".ui.my.local.LocalActivity"/>
+        <activity android:name=".ui.my.local.AlbumActivity"/>
+        <activity android:name=".ui.my.local.ArtistActivity"/>
         <service
                 android:name=".player.MusicService"
                 android:enabled="true"

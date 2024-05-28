@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+            android:background="@color/white_pressed">
+
+    <!-- CoordinatorLayout 包含 AppBarLayout 和 RecyclerView -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <!-- AppBarLayout 包含 CollapsingToolbarLayout 和 Toolbar -->
+        <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:contentScrim="@color/transparent"
+                android:background="@color/transparent">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                    app:contentScrim="@color/transparent"
+                    android:background="@color/transparent"
+                    app:expandedTitleMarginStart="48dp"
+                    app:expandedTitleMarginEnd="64dp">
+
+                <!-- 歌手大图 -->
+                <ImageView
+                        android:id="@+id/iv_artist_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@string/artist_image"
+                        android:src="@drawable/default_artist_avatar"
+                        app:layout_collapseMode="parallax"
+                        android:layout_marginBottom="24dp" />
+
+                <androidx.cardview.widget.CardView
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|bottom">
+                    <!-- 歌手名 -->
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                        <TextView
+                                android:id="@+id/tv_artist_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="歌手名"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/black"
+                                app:layout_collapseMode="parallax"
+                                app:layout_constraintTop_toBottomOf="@id/iv_artist_image"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                android:gravity="center_horizontal" />
+                        <TextView
+                                android:id="@+id/tv_artist_info"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="补充信息"
+                                android:textSize="12sp"
+                                android:textStyle="normal"
+                                android:textColor="@android:color/darker_gray"
+                                app:layout_collapseMode="parallax"
+                                app:layout_constraintTop_toBottomOf="@id/tv_artist_name"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                android:gravity="center_horizontal" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <include
+                layout="@layout/list_music"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- 歌曲列表 -->
+
+    <!-- 返回按钮 -->
+    <ImageButton
+            android:id="@+id/albartiBackBtn"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:scaleType="fitCenter"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_back"
+            app:tint="@android:color/white"
+            android:padding="8dp"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp" />
+
+    <include
+            layout="@layout/bottom_player_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="16dp"/>
+</FrameLayout>

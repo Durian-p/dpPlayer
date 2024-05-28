@@ -16,11 +16,13 @@ import org.jetbrains.annotations.NotNull;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
 import org.ww.testapp.util.ChineseToPinyin;
+import org.ww.testapp.util.MusicLoader;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> implements SectionIndexer {
+public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> implements SectionIndexer{
 
     private Context context;
     private List<Music> musicList; // 歌曲列表数据
@@ -44,7 +46,8 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position)
+    {
         Music music = musicList.get(position);
         if (music.getTitle() != null)
             holder.musicNameTextView.setText(music.getTitle());

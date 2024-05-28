@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:focusable="true"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+        android:background="@color/white">
 
     <ImageView
         android:id="@+id/iconIv"

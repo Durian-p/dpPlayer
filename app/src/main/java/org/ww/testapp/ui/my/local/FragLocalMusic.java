@@ -26,7 +26,7 @@ import org.ww.testapp.util.MusicLoader;
 
 import java.util.List;
 
-public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MusicAdapter.OnItemClickListener {
+public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MusicAdapter.OnItemClickListener, SidebarView.OnLetterClickedListener {
 
     private  BaseMusicActivity baseMusicActivity;
     private RecyclerView recyclerView;
@@ -67,6 +67,8 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
         // 设置布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+
 
         // 获取ViewModel
         musicViewModel = new ViewModelProvider(requireActivity()).get(MusicViewModel.class);
@@ -84,13 +86,7 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
         });
 
         // 设置sideBar
-        sidebarView.setOnLetterClickedListener(new SidebarView.OnLetterClickedListener() {
-            @Override
-            public void onLetterClicked(String str) {
-                int position = adapter.getPositionForSection(str.charAt(0));
-                recyclerView.smoothScrollToPosition(position);
-            }
-        });
+        sidebarView.setOnLetterClickedListener(this);
 
         // 设置SwipeRefreshLayout的Listener
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -127,5 +123,12 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
                 });
             }
         }).start();
+    }
+
+    @Override
+    public void onLetterClicked(String str)
+    {
+        int position = adapter.getPositionForSection(str.charAt(0));
+        recyclerView.smoothScrollToPosition(position);
     }
 }

@@ -26,7 +26,7 @@ public abstract class BaseMusicActivity extends AppCompatActivity
     private PlayPauseView playPauseView;
     private MusicService musicService;
     private boolean isBound = false;
-    private MusicInfoPagerAdapter adapter;
+    private MusicBarPagerAdapter adapter;
     private List<Music> musicList = new ArrayList<>();
 
     // ---control---
@@ -46,7 +46,7 @@ public abstract class BaseMusicActivity extends AppCompatActivity
     {
         musicInfoViewPager = findViewById(R.id.musicInfoViewPager);
         playPauseView = findViewById(R.id.playPauseView);
-        adapter = new MusicInfoPagerAdapter(musicList);
+        adapter = new MusicBarPagerAdapter(musicList);
         musicInfoViewPager.setAdapter(adapter);
 
         musicInfoViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback()

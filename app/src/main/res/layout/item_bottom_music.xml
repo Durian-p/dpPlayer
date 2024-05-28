@@ -28,7 +28,8 @@
             style="@style/SongTitleTextViewStyle"
             app:layout_constraintLeft_toRightOf="@id/albumImageView"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="5dp"/>
 
     <TextView
             android:id="@+id/artistTextView"
