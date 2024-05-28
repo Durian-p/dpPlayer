@@ -1,5 +1,6 @@
 package org.ww.testapp.ui.base;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -7,53 +8,67 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.viewpager2.widget.ViewPager2;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
 import org.ww.testapp.player.MusicControlSender;
 import org.ww.testapp.player.MusicService;
-import org.ww.testapp.ui.main.MusicUpdater;
 import org.ww.testapp.ui.widget.PlayPauseView;
 
-public abstract class BaseMusicActivity  extends AppCompatActivity
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class BaseMusicActivity extends AppCompatActivity
 {
-    private ImageView albumCover;
-    private TextView titleTextView;
-    private TextView artistTextView;
+    private ViewPager2 musicInfoViewPager;
     private PlayPauseView playPauseView;
     private MusicService musicService;
     private boolean isBound = false;
+    private MusicInfoPagerAdapter adapter;
+    private List<Music> musicList = new ArrayList<>();
 
-
-    private void onSwipeRight() {
-        // 切换到上一首歌
-        // 获取上一首歌曲信息
-        Music pm = musicService.getPrevMusic();
-        Toast.makeText(this, pm.getTitle() + " - " + pm.getArtist(), Toast.LENGTH_SHORT).show();
-        // 这里添加切换到上一首歌的逻辑
-        MusicControlSender.sendPreviousBroadcast(this);
-    }
-
-    private void onSwipeLeft() {
-        // 切换到下一首歌
-        Music nm = musicService.getNextMusic();
-        Toast.makeText(this, nm.getTitle() + " - " + nm.getArtist(), Toast.LENGTH_SHORT).show();
-        // 这里添加切换到下一首歌的逻辑
-        MusicControlSender.sendNextBroadcast(this);
-    }
+    // ---control---
+    private boolean updateService = true;
 
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(getContentId());
+        Intent intent = getIntent();
+        updateService = intent.getBooleanExtra("updateService", true);
         initBottomBar();
         initService();
     }
 
+    private void initBottomBar()
+    {
+        musicInfoViewPager = findViewById(R.id.musicInfoViewPager);
+        playPauseView = findViewById(R.id.playPauseView);
+        adapter = new MusicInfoPagerAdapter(musicList);
+        musicInfoViewPager.setAdapter(adapter);
+
+        musicInfoViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback()
+        {
+            @Override
+            public void onPageSelected(int position)
+            {
+                super.onPageSelected(position);
+                if (isBound && updateService)
+                {
+                    musicService.setCurrentMusic(position);
+                    //MusicControlSender.sendPlayBroadcast(BaseMusicActivity.this);
+                }
+            }
+        });
+        // TODO:????
+
+        playPauseView.setOnClickListener(playPauseListener);
+    }
+
+
+    // ----------------MusicService------------------
     protected void initService()
     {
         // 绑定服务
@@ -89,48 +104,34 @@ public abstract class BaseMusicActivity  extends AppCompatActivity
         }
     };
 
-
     private void updateUI(MusicService.PlaybackInfo playbackInfo)
     {
         // 根据播放状态更新 UI
-        // 例如更新播放按钮、显示歌曲信息等
         if (playbackInfo.state == MusicService.PlayerState.None)
         {
-            // 播放按钮显示为默认状态
+            // 显示默认信息
             Music defaultMusic = new Music("<未播放>", "", "");
-            new MusicUpdater(this, titleTextView, artistTextView, albumCover).updateMusicInfo(defaultMusic);
-        }
-        else
+            updateUIMusicList(new ArrayList<Music>()
+            {{
+                add(defaultMusic);
+            }});
+            playPauseView.pause();
+        } else
         {
-            // 播放按钮显示为暂停状态
-            new MusicUpdater(this, titleTextView, artistTextView, albumCover).updateMusicInfo(playbackInfo.music);
-            // TODO: 更新播放进度条列表状态等
+            // 更新播放信息
+            updateUIMusicList(musicService.getMusicList());
+            musicInfoViewPager.setCurrentItem(musicService.getCurrentMusicIndex(), false);
+
             if (playbackInfo.state == MusicService.PlayerState.PLAYING)
             {
-                // 播放按钮显示为播放状态
                 playPauseView.play();
-            }
-            else
+            } else
             {
-                // 播放按钮显示为暂停状态
                 playPauseView.pause();
             }
         }
     }
-
-    private void initBottomBar()
-    {
-        albumCover = findViewById(R.id.albumImageView);
-        titleTextView = findViewById(R.id.titleTextView);
-        artistTextView = findViewById(R.id.artistTextView);
-        playPauseView = findViewById(R.id.playPauseView);
-
-        Music defaultMusic = new Music("<未播放>", "", "");
-        new MusicUpdater(this, titleTextView, artistTextView, albumCover).updateMusicInfo(defaultMusic);
-        // 绑定播放暂停键的点击事件
-        playPauseView.setOnClickListener(playPauseListener);
-
-    }
+    // ----------------------------------------------
 
     protected final View.OnClickListener playPauseListener = new View.OnClickListener()
     {
@@ -138,29 +139,59 @@ public abstract class BaseMusicActivity  extends AppCompatActivity
         public void onClick(View v)
         {
             // 播放暂停按钮点击事件
-            if (musicService.getPlaybackState().getValue().state == MusicService.PlayerState.PLAYING)
+            if (isBound && musicService != null)
             {
-                // 暂停播放
-                MusicControlSender.sendPauseBroadcast(BaseMusicActivity.this);
-            }
-            else
-            {
-                // 播放
-                MusicControlSender.sendPlayBroadcast(BaseMusicActivity.this);
+                if (musicService.getPlaybackState().getValue().state == MusicService.PlayerState.PLAYING)
+                {
+                    MusicControlSender.sendPauseBroadcast(BaseMusicActivity.this);
+                } else
+                {
+                    MusicControlSender.sendPlayBroadcast(BaseMusicActivity.this);
+                }
             }
         }
     };
 
+    // ---------------------控制MusicService-------------------------
+    // 通知MusicService更新MusicList，之后MusicService会触发updateMusicListUi更新UI
+    public void updateServiceMusicList(List<Music> newMusicList)
+    {
+        musicService.setPlaylist(newMusicList);
+    }
+
+    public void updateServiceMusicList(List<Music> newMusicList, int position)
+    {
+        musicService.setPlaylist(newMusicList, position);
+    }
+
+    // ---------------------------------------------------------------
+
+    // MusicService通知更新MusicList 只更新UI
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateUIMusicList(List<Music> newMusicList)
+    {
+        musicList.clear();
+        musicList.addAll(newMusicList);
+        adapter.notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setCurrentMusic(int position)
+    {
+        musicService.setCurrentMusic(position);
+        adapter.notifyDataSetChanged();
+    }
 
     protected abstract int getContentId();
 
     @Override
-    public void onDestroy() {
+    public void onDestroy()
+    {
         super.onDestroy();
-        if (isBound) {
+        if (isBound)
+        {
             unbindService(connection);
             isBound = false;
         }
     }
 }
-

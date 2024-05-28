@@ -1,3 +1,4 @@
+// MusicAdapter.java
 package org.ww.testapp.ui.my.local.adapter;
 
 import android.annotation.SuppressLint;
@@ -19,34 +20,32 @@ import org.ww.testapp.util.ChineseToPinyin;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> implements SectionIndexer
-{
+public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> implements SectionIndexer {
 
     private Context context;
     private List<Music> musicList; // 歌曲列表数据
+    private OnItemClickListener onItemClickListener;
 
-    public MusicAdapter(Context context, List<Music> musicList)
-    {
+    public MusicAdapter(Context context, List<Music> musicList) {
         this.context = context;
         this.musicList = musicList;
     }
 
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
-    {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_local_music, parent, false);
         return new ViewHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position)
-    {
+    public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         Music music = musicList.get(position);
-        // 在这里可以获取歌曲的标题、艺术家和专辑信息，并设置到对应的 TextView 中
-
         if (music.getTitle() != null)
             holder.musicNameTextView.setText(music.getTitle());
         if (music.getArtist() != null)
@@ -60,11 +59,20 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
             // 如果没有专辑封面，则使用默认图标
             holder.coverImageView.setImageResource(R.drawable.default_cover);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = holder.getBindingAdapterPosition();
+                if (onItemClickListener != null && position != RecyclerView.NO_POSITION) {
+                    onItemClickListener.onItemClick(position);
+                }
+            }
+        });
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return musicList.size();
     }
 
@@ -75,52 +83,38 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder
-    {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView musicNameTextView;
-        // 添加艺术家和专辑信息的 TextView
         TextView albumArtistTextView;
-        // 添加专辑封面的 ImageView
         ImageView coverImageView;
 
-        public ViewHolder(@NonNull View itemView)
-        {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             musicNameTextView = itemView.findViewById(R.id.tvTitle);
-            // 初始化艺术家和专辑信息的 TextView
             albumArtistTextView = itemView.findViewById(R.id.tvAlbumArtist);
-            // 初始化专辑封面的 ImageView
             coverImageView = itemView.findViewById(R.id.ivCover);
         }
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
     @Override
-    public Object[] getSections()
-    {
-        // 在这里返回所有的分组标签（例如A、B、C...）
-        // 这里假设每个歌曲标题的首字母都可以作为分组标签
+    public Object[] getSections() {
         List<String> sections = new ArrayList<>();
-        for (Music music : musicList)
-        {
+        for (Music music : musicList) {
             String title = music.getTitle();
-            if (title != null && title.length() > 0)
-            {
+            if (title != null && title.length() > 0) {
                 char firstChar = title.charAt(0);
-                if (Character.isLetter(firstChar))
-                {
+                if (Character.isLetter(firstChar)) {
                     sections.add(String.valueOf(Character.toUpperCase(firstChar)));
-                }
-                else if (isChinese(firstChar))
-                {
+                } else if (isChinese(firstChar)) {
                     String pinyinFirstChar = ChineseToPinyin.convert(String.valueOf(firstChar));
-                    if (pinyinFirstChar != null && ! pinyinFirstChar.isEmpty())
-                    {
+                    if (pinyinFirstChar != null && !pinyinFirstChar.isEmpty()) {
                         sections.add(String.valueOf(Character.toUpperCase(pinyinFirstChar.charAt(0))));
                     }
-                }
-                else
-                {
-                    // 其他情况视为特殊字符
+                } else {
                     sections.add("#");
                 }
             }
@@ -129,41 +123,26 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
     }
 
     @Override
-    public int getPositionForSection(int sectionIndex)
-    {
-        // 根据分组标签返回该分组的第一个位置
-        if ( sectionIndex == '#')
-            sectionIndex = 26;
-        else
-            sectionIndex -= 'A';
+    public int getPositionForSection(int sectionIndex) {
+        if (sectionIndex == '#') sectionIndex = 26;
+        else sectionIndex -= 'A';
         String section = (String) getSections()[sectionIndex];
-        for (int i = 0; i < getItemCount(); i++)
-        {
+        for (int i = 0; i < getItemCount(); i++) {
             String title = musicList.get(i).getTitle();
-            if (title != null && title.length() > 0)
-            {
+            if (title != null && title.length() > 0) {
                 char firstChar = title.charAt(0);
-                if (Character.isLetter(firstChar))
-                {
-                    if (Character.toUpperCase(firstChar) == section.charAt(0))
-                    {
+                if (Character.isLetter(firstChar)) {
+                    if (Character.toUpperCase(firstChar) == section.charAt(0)) {
                         return i;
                     }
-                }
-                else if (isChinese(firstChar))
-                {
+                } else if (isChinese(firstChar)) {
                     String pinyinFirstChar = ChineseToPinyin.convert(String.valueOf(firstChar));
-                    if (pinyinFirstChar != null && ! pinyinFirstChar.isEmpty())
-                    {
-                        if (Character.toUpperCase(pinyinFirstChar.charAt(0)) == section.charAt(0))
-                        {
+                    if (pinyinFirstChar != null && !pinyinFirstChar.isEmpty()) {
+                        if (Character.toUpperCase(pinyinFirstChar.charAt(0)) == section.charAt(0)) {
                             return i;
                         }
                     }
-                }
-                else
-                {
-                    // 特殊字符以#分组，直接返回第一个位置
+                } else {
                     return 0;
                 }
             }
@@ -172,38 +151,23 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
     }
 
     @Override
-    public int getSectionForPosition(int position)
-    {
-        // 根据位置返回对应的分组标签的索引
+    public int getSectionForPosition(int position) {
         String title = musicList.get(position).getTitle();
-        if (title != null && title.length() > 0)
-        {
+        if (title != null && title.length() > 0) {
             char firstChar = title.charAt(0);
-            if (Character.isLetter(firstChar))
-            {
-                // 如果是英文字母，则直接转换为大写
+            if (Character.isLetter(firstChar)) {
                 return Character.toUpperCase(firstChar) - 'A';
-            }
-            else if (isChinese(firstChar))
-            {
-                // 如果是中文字符，则调用工具类获取拼音首字母，并转换为大写
+            } else if (isChinese(firstChar)) {
                 String pinyinFirstChar = ChineseToPinyin.convert(String.valueOf(firstChar));
-                if (pinyinFirstChar != null && ! pinyinFirstChar.isEmpty())
-                {
+                if (pinyinFirstChar != null && !pinyinFirstChar.isEmpty()) {
                     return Character.toUpperCase(pinyinFirstChar.charAt(0)) - 'A';
                 }
             }
         }
-        // 其他情况视为特殊字符，返回#对应的索引
         return 26; // '#' 的索引
     }
 
-    // 判断字符是否是中文字符
-    private boolean isChinese(char c)
-    {
-        // 中文字符的Unicode范围为0x4E00~0x9FA5
+    private boolean isChinese(char c) {
         return c >= 0x4E00 && c <= 0x9FA5;
     }
-
-
 }

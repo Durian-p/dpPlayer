@@ -110,6 +110,7 @@ public class FragMy extends Fragment {
                     }
                 } else {
                     Intent intent = new Intent(getActivity(), LocalActivity.class);
+                    intent.putExtra("updateService",false);
                     startActivity(intent);
                 }
             }

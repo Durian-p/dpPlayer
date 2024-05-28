@@ -17,9 +17,22 @@ import org.ww.testapp.entity.Music;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MusicService extends Service
 {
+
+    public List<Music> getMusicList()
+    {
+        return playlist;
+    }
+
+    public int getCurrentMusicIndex()
+    {
+        return currentSongIndex;
+    }
+
+
 
     public enum PlayerState
     {
@@ -86,9 +99,37 @@ public class MusicService extends Service
         }
     }
 
+    public void setCurrentMusic(int position)
+    {
+        if (playlist.size() == 0)
+            return;
+        int tempIndex = (position + playlist.size()) % playlist.size();
+        Long tempId = playlist.get(tempIndex).getId();
+        if (! Objects.equals(tempId, playlist.get(currentSongIndex).getId()))
+        {
+            currentSongIndex = tempIndex;
+            player.setMediaItem(MediaItem.fromUri(playlist.get(currentSongIndex).getPath()));
+        }
+    }
+
     public void setPlaylist(List<Music> playlist)
     {
+        if (playlist.size() == 0)
+             return;
         this.playlist = playlist;
+        currentSongIndex = 0;
+        updatePlaybackState(PlayerState.PLAYING);
+        player.setMediaItem(MediaItem.fromUri(playlist.get(currentSongIndex).getPath()));
+    }
+
+    public void setPlaylist(List<Music> playlist, int position)
+    {
+        if (playlist.size() == 0)
+            return;
+        this.playlist = playlist;
+        currentSongIndex = (position + playlist.size()) % playlist.size();
+        updatePlaybackState(PlayerState.PLAYING);
+        player.setMediaItem(MediaItem.fromUri(playlist.get(currentSongIndex).getPath()));
     }
 
     public void playMedia()
@@ -97,6 +138,7 @@ public class MusicService extends Service
         {
             return;
         }
+        currentSongIndex = Math.max(currentSongIndex, 0);
         Music currentMusic = playlist.get(currentSongIndex);
         MediaItem mediaItem = MediaItem.fromUri(currentMusic.getPath());
 

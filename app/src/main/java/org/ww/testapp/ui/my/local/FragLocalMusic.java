@@ -1,11 +1,12 @@
+// FragLocalMusic.java
 package org.ww.testapp.ui.my.local;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
+import org.ww.testapp.player.MusicControlSender;
+import org.ww.testapp.ui.base.BaseMusicActivity;
 import org.ww.testapp.ui.data.MusicViewModel;
 import org.ww.testapp.ui.my.local.adapter.MusicAdapter;
 import org.ww.testapp.ui.widget.SidebarView;
@@ -23,15 +26,27 @@ import org.ww.testapp.util.MusicLoader;
 
 import java.util.List;
 
+public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MusicAdapter.OnItemClickListener {
 
-public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
-
+    private  BaseMusicActivity baseMusicActivity;
     private RecyclerView recyclerView;
     private MusicAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
-
     private MusicViewModel musicViewModel;
 
+    @Override
+    public void onAttach(@NonNull Context context)
+    {
+        super.onAttach(context);
+        if (context instanceof BaseMusicActivity)
+        {
+            baseMusicActivity = (BaseMusicActivity) context;
+        }
+        else
+        {
+            throw new RuntimeException(context.toString() + " must be an instance of BaseMusicActivity");
+        }
+    }
 
     @Nullable
     @Override
@@ -54,26 +69,24 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
         recyclerView.setLayoutManager(layoutManager);
 
         // 获取ViewModel
-//        musicViewModel = new ViewModelProvider(this).get(MusicViewModel.class);
         musicViewModel = new ViewModelProvider(requireActivity()).get(MusicViewModel.class);
+
         // 观察音乐列表数据
         musicViewModel.getMusicList().observe(getViewLifecycleOwner(), new Observer<List<Music>>() {
             @Override
             public void onChanged(List<Music> musicList) {
                 // 设置适配器
                 adapter = new MusicAdapter(requireContext(), musicList);
+                adapter.setOnItemClickListener(FragLocalMusic.this);
                 recyclerView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
             }
         });
 
-
         // 设置sideBar
-        sidebarView.setOnLetterClickedListener(new SidebarView.OnLetterClickedListener()
-        {
+        sidebarView.setOnLetterClickedListener(new SidebarView.OnLetterClickedListener() {
             @Override
-            public void onLetterClicked(String str)
-            {
+            public void onLetterClicked(String str) {
                 int position = adapter.getPositionForSection(str.charAt(0));
                 recyclerView.smoothScrollToPosition(position);
             }
@@ -81,7 +94,14 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
 
         // 设置SwipeRefreshLayout的Listener
         swipeRefreshLayout.setOnRefreshListener(this);
+    }
 
+    @Override
+    public void onItemClick(int position) {
+        if (baseMusicActivity != null) {
+            baseMusicActivity.updateServiceMusicList(musicViewModel.getMusicList().getValue(), position);
+            MusicControlSender.sendPlayBroadcast(baseMusicActivity);
+        }
     }
 
     @Override
@@ -101,14 +121,8 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
                     public void run() {
                         // 更新适配器数据
                         adapter.updateData(musicList);
-                        // 添加延时
-                        new Handler(requireContext().getMainLooper()).postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                // 停止刷新动画
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                        }, 200); // 延时 300 毫秒
+                        // 停止刷新动画
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
             }
