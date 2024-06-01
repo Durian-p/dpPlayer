@@ -1,5 +1,6 @@
 package org.ww.testapp.ui.my.local;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -20,9 +21,10 @@ import org.ww.testapp.ui.my.local.adapter.ArtistAdapter;
 import org.ww.testapp.ui.widget.SidebarView;
 import org.ww.testapp.util.MusicLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class FragArtistList extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FragArtistList extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ArtistAdapter.OnItemClickListener {
 
     private RecyclerView recyclerView;
     private ArtistAdapter adapter;
@@ -58,6 +60,7 @@ public class FragArtistList extends Fragment implements SwipeRefreshLayout.OnRef
             public void onChanged(List<Music> musicList) {
                 // 设置适配器
                 adapter = new ArtistAdapter(requireContext(), musicList);
+                adapter.setOnItemClickListener(FragArtistList.this);
                 recyclerView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
             }
@@ -107,5 +110,16 @@ public class FragArtistList extends Fragment implements SwipeRefreshLayout.OnRef
                 });
             }
         }).start();
+    }
+
+    @Override
+    public void onItemClick(int position)
+    {
+        // 启动ArtistActivity展示详情
+        Intent intent = new Intent(requireContext(), ArtistActivity.class);
+        ArrayList<Music> artistMusicList = (ArrayList<Music>) adapter.getArtistList().get(position);
+        intent.putParcelableArrayListExtra("artistMusicList", artistMusicList);
+        intent.putExtra("artistName",artistMusicList.get(0).getArtist());
+        startActivity(intent);
     }
 }

@@ -14,7 +14,6 @@ public class Music  implements Parcelable
     private String artist;
     private int duration;
     private String path;
-
     private Bitmap albumArt;
 
     public static final Parcelable.Creator<Music> CREATOR = new Parcelable.Creator<Music>() {

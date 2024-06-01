@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import org.w3c.dom.Text;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
 import org.ww.testapp.player.MusicControlSender;
@@ -20,9 +19,9 @@ import java.util.List;
 
 public class AlbumActivity extends BaseMusicActivity {
     private String albumTitle;
-    private RecyclerView recyclerView;
     private MusicAdapter musicAdapter;
     private List<Music> albumMusicList;
+    private RecyclerView mRecyclerView;
 
     private ImageView mAlbumCover;
     private TextView mAlbumTitle;
@@ -38,15 +37,10 @@ public class AlbumActivity extends BaseMusicActivity {
         albumMusicList = intent.getParcelableArrayListExtra("albumMusicList", Music.class);
         for (Music music: albumMusicList)
         {
-            try
-            {
-                music.setAlbumArt(MusicLoader.getAlbumArt(this, music.getPath()));
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
+            music.setAlbumArt(MusicLoader.getAlbumArt(this, music.getPath()));
         }
+
+
 
         initView();
     }
@@ -66,16 +60,18 @@ public class AlbumActivity extends BaseMusicActivity {
         mAlbumCover.setImageBitmap(albumMusicList.get(0).getAlbumArt());
 
         // 初始化 RecyclerView
-        recyclerView = findViewById(R.id.rv_musics);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView = findViewById(R.id.rv_musics);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         musicAdapter = new MusicAdapter(AlbumActivity.this, albumMusicList);
         musicAdapter.setOnItemClickListener(new MusicAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                // TODO: 放歌
+                // 播放歌曲
+                musicService.setPlaylist(albumMusicList, position);
+                MusicControlSender.sendPlayBroadcast(AlbumActivity.this);
             }
         });
-        recyclerView.setAdapter(musicAdapter);
+        mRecyclerView.setAdapter(musicAdapter);
 
 
     }

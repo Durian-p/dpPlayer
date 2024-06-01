@@ -79,16 +79,23 @@ public class MusicLoader {
         return musicList;
     }
 
-    public static Bitmap getAlbumArt(Context context, String audioFilePath) throws IOException
+    public static Bitmap getAlbumArt(Context context, String audioFilePath)
     {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(audioFilePath);
-        byte[] albumArt = retriever.getEmbeddedPicture();
-        retriever.release();
-        if (albumArt != null) {
-            return BitmapFactory.decodeByteArray(albumArt, 0, albumArt.length);
-        } else {
-            // 未找到专辑封面
+        try{
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(audioFilePath);
+            byte[] albumArt = retriever.getEmbeddedPicture();
+            retriever.release();
+            if (albumArt != null) {
+                return BitmapFactory.decodeByteArray(albumArt, 0, albumArt.length);
+            } else {
+                // 未找到专辑封面
+                return null;
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
             return null;
         }
     }

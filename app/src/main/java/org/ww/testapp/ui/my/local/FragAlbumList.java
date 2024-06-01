@@ -120,9 +120,9 @@ public class FragAlbumList extends Fragment implements SwipeRefreshLayout.OnRefr
     {
         // 启动AlbumActivity展示详情
         Intent intent = new Intent(requireContext(), AlbumActivity.class);
-        ArrayList<Music> albumMusicList = (ArrayList<Music>) adapter.getAlbumList().get(position);
-        intent.putParcelableArrayListExtra("albumMusicList", albumMusicList);
-        intent.putExtra("albumTitle",albumMusicList.get(0).getAlbum());
+        ArrayList<Music> artistMusicList = (ArrayList<Music>) adapter.getAlbumList().get(position);
+        intent.putParcelableArrayListExtra("artistMusicList", artistMusicList);
+        intent.putExtra("albumTitle",artistMusicList.get(0).getArtist());
         startActivity(intent);
     }
 }

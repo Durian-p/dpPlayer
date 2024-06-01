@@ -30,6 +30,21 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ViewHolder
     private String[] sections;
     private int[] sectionPositions;
 
+    private OnItemClickListener onItemClickListener;
+
+    public List<List<Music>> getArtistList()
+    {
+        return artistList;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
     public ArtistAdapter(Context context, List<Music> musicList) {
         this.context = context;
         this.artistList = extractArtists(musicList);
@@ -64,6 +79,19 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ViewHolder
             // 如果没有艺术家封面，则使用默认图标
             holder.coverImageView.setImageResource(R.drawable.default_cover);
         }
+
+        // 设置点击侦听器
+        holder.itemView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                int position = holder.getBindingAdapterPosition();
+                if (onItemClickListener != null && position != RecyclerView.NO_POSITION) {
+                    onItemClickListener.onItemClick(position);
+                }
+            }
+        });
     }
 
     @Override

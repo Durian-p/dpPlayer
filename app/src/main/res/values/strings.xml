@@ -43,4 +43,15 @@
     <string name="album">专辑</string>
     <string name="artist_image">艺术家图片</string>
     <string name="artist">"歌手: "</string>
+    <string name="play_time">播放时间</string>
+    <string name="artist_tips">歌手 - 专辑</string>
+    <string name="play_no_resource">无音乐</string>
+    <string name="lyric_default_hint">暂无歌词</string>
+    <string name="transition_cover">CoverTansition</string>
+    <string name="play_mode">播放模式</string>
+    <string name="love">收藏</string>
+    <string name="equalizer">均衡器</string>
+    <string name="search_lyric">在线搜歌</string>
+    <string name="song_operate">歌曲操作</string>
+    <string name="setting_key_mobile_wifi">mobile_wifi</string>
 </resources>

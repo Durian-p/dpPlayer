@@ -4,7 +4,8 @@
         android:id="@+id/playerBarContainer"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:background="@drawable/rounded_background">
 
     <ImageButton
             android:id="@+id/playListIb"

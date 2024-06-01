@@ -2,16 +2,5 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <multipleDevicesSelectedInDropDown value="true" />
-    <targetsSelectedWithDialog>
-      <Target>
-        <type value="QUICK_BOOT_TARGET" />
-        <deviceKey>
-          <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="E:\res\SDK\Android\.android\avd\Pixel_2_API_VanillaIceCream.avd" />
-          </Key>
-        </deviceKey>
-      </Target>
-    </targetsSelectedWithDialog>
   </component>
 </project>

@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.viewpager2.widget.ViewPager2;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
 import org.ww.testapp.player.MusicControlSender;
 import org.ww.testapp.player.MusicService;
+import org.ww.testapp.ui.player.PlayerActivity;
 import org.ww.testapp.ui.widget.PlayPauseView;
 
 import java.util.ArrayList;
@@ -24,7 +26,8 @@ public abstract class BaseMusicActivity extends AppCompatActivity
 {
     private ViewPager2 musicInfoViewPager;
     private PlayPauseView playPauseView;
-    private MusicService musicService;
+    protected MusicService musicService;
+
     private boolean isBound = false;
     private MusicBarPagerAdapter adapter;
     private List<Music> musicList = new ArrayList<>();
@@ -62,7 +65,7 @@ public abstract class BaseMusicActivity extends AppCompatActivity
                 }
             }
         });
-        // TODO:????
+
 
         playPauseView.setOnClickListener(playPauseListener);
     }

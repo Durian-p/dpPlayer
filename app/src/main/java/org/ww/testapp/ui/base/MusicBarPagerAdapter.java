@@ -1,16 +1,20 @@
 package org.ww.testapp.ui.base;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
+import org.ww.testapp.ui.player.PlayerActivity;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MusicBarPagerAdapter extends RecyclerView.Adapter<MusicBarPagerAdapter.MusicInfoViewHolder>
 {
@@ -35,6 +39,16 @@ public class MusicBarPagerAdapter extends RecyclerView.Adapter<MusicBarPagerAdap
     {
         Music music = musicList.get(position);
         holder.bind(music);
+        holder.musicInfoContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (musicList == null || musicList.size() == 0 || Objects.equals(musicList.get(0).getTitle(), "<未播放>"))
+                    return;
+                Intent playerIntent = new Intent(v.getContext(), PlayerActivity.class);
+                playerIntent.putExtra("music", music);
+                v.getContext().startActivity(playerIntent);
+            }
+        });
     }
 
     @Override
@@ -45,7 +59,7 @@ public class MusicBarPagerAdapter extends RecyclerView.Adapter<MusicBarPagerAdap
 
     static class MusicInfoViewHolder extends RecyclerView.ViewHolder
     {
-
+        private ConstraintLayout musicInfoContainer;
         private ImageView albumImageView;
         private TextView titleTextView;
         private TextView artistTextView;
@@ -56,6 +70,7 @@ public class MusicBarPagerAdapter extends RecyclerView.Adapter<MusicBarPagerAdap
             albumImageView = itemView.findViewById(R.id.albumImageView);
             titleTextView = itemView.findViewById(R.id.titleTextView);
             artistTextView = itemView.findViewById(R.id.artistTextView);
+            musicInfoContainer = itemView.findViewById(R.id.musicInfoContainer);
         }
 
         public void bind(Music music)

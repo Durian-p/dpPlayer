@@ -29,6 +29,7 @@
         <activity android:name=".ui.my.local.LocalActivity"/>
         <activity android:name=".ui.my.local.AlbumActivity"/>
         <activity android:name=".ui.my.local.ArtistActivity"/>
+        <activity android:name=".ui.player.PlayerActivity" />
         <service
                 android:name=".player.MusicService"
                 android:enabled="true"
