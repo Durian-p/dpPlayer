@@ -27,15 +27,7 @@ import org.ww.testapp.util.FormatUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-/* TODO:
- *   *** 收藏
- *   *** 播放模式
- *   ** 背景优化
- *   ** 歌词显示
- *
- */
-public class PlayerActivity extends AppCompatActivity
-{
+public class PlayerActivity extends AppCompatActivity {
     private Music playingMusic;
     private CoverFragment coverFragment;
     private LyricFragment lyricFragment;
@@ -66,27 +58,20 @@ public class PlayerActivity extends AppCompatActivity
     private Handler progressHandler = new Handler();
     private Runnable progressRunnable;
 
-
-    private ServiceConnection serviceConnection = new ServiceConnection()
-    {
+    private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
-        public void onServiceConnected(ComponentName name, IBinder service)
-        {
+        public void onServiceConnected(ComponentName name, IBinder service) {
             MusicService.LocalBinder binder = (MusicService.LocalBinder) service;
             musicService = binder.getService();
             isServiceBound = true;
 
             LiveData<MusicService.PlaybackInfo> playbackInfo = musicService.getPlaybackState();
-            playbackInfo.observe(PlayerActivity.this, new Observer<MusicService.PlaybackInfo>()
-            {
+            playbackInfo.observe(PlayerActivity.this, new Observer<MusicService.PlaybackInfo>() {
                 @Override
-                public void onChanged(MusicService.PlaybackInfo playbackInfo)
-                {
-                    if (isCoverFragmentReady)
-                    {
+                public void onChanged(MusicService.PlaybackInfo playbackInfo) {
+                    if (isCoverFragmentReady) {
                         updateUI(playbackInfo);
-                    } else
-                    {
+                    } else {
                         pendingPlaybackInfo = playbackInfo;
                     }
                 }
@@ -94,24 +79,21 @@ public class PlayerActivity extends AppCompatActivity
             // Start updating progress
             progressHandler.post(progressRunnable);
 
-            if (playbackInfo.getValue().music != null)
-            {
+            if (playbackInfo.getValue().music != null) {
                 titleTv.setText(playbackInfo.getValue().music.getTitle());
                 subTitleTv.setText(playbackInfo.getValue().music.getArtist());
             }
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName name)
-        {
+        public void onServiceDisconnected(ComponentName name) {
             musicService = null;
             isServiceBound = false;
         }
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_full);
 
@@ -124,8 +106,7 @@ public class PlayerActivity extends AppCompatActivity
         initProgressRunnable();
     }
 
-    private void initView()
-    {
+    private void initView() {
         playModeIv = findViewById(R.id.playModeIv);
         collectIv = findViewById(R.id.collectIv);
         progressSb = findViewById(R.id.progressSb);
@@ -147,34 +128,49 @@ public class PlayerActivity extends AppCompatActivity
 
         detailView.setAnimation(moveToViewLocation());
 
-        backIv.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
+        backIv.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 finish();
             }
         });
 
-        playPauseIv.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                if (musicService != null)
-                {
-                    if (musicService.isPlaying())
-                    {
+        playPauseIv.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (musicService != null) {
+                    if (musicService.isPlaying()) {
                         musicService.pauseMedia();
-                    } else
-                    {
+                    } else {
                         musicService.playMedia();
                     }
                 }
             }
         });
+
+        progressSb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser && musicService != null) {
+                    progressTv.setText(FormatUtil.formatTime(progress));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // 用户开始拖动进度条时可以暂停更新
+                progressHandler.removeCallbacks(progressRunnable);
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (musicService != null) {
+                    musicService.seekTo(seekBar.getProgress());
+                    progressHandler.post(progressRunnable); // 用户停止拖动进度条后继续更新
+                }
+            }
+        });
     }
 
-    private void setupViewPager(ViewPager2 viewPager)
-    {
+    private void setupViewPager(ViewPager2 viewPager) {
         fragments.clear();
         coverFragment = new CoverFragment();
         lyricFragment = new LyricFragment();
@@ -188,22 +184,17 @@ public class PlayerActivity extends AppCompatActivity
         viewPager.setCurrentItem(0);
 
         int height = bottomOpView.getHeight();
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback()
-        {
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
-            {
-                if (positionOffset <= 1 && position == 0)
-                {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (positionOffset <= 1 && position == 0) {
                     if (bottomOpView.getVisibility() == View.GONE) {
                         bottomOpView.startAnimation(moveToViewLocation());
                         bottomOpView.setVisibility(View.VISIBLE);
                     }
                     detailView.setTranslationY(height * positionOffset);
-                } else
-                {
-                    if (bottomOpView.getVisibility() == View.VISIBLE)
-                    {
+                } else {
+                    if (bottomOpView.getVisibility() == View.VISIBLE) {
                         bottomOpView.startAnimation(moveToViewBottom());
                         bottomOpView.setVisibility(View.GONE);
                     }
@@ -212,17 +203,14 @@ public class PlayerActivity extends AppCompatActivity
             }
 
             @Override
-            public void onPageSelected(int position)
-            {
-                if (position == 0)
-                {
+            public void onPageSelected(int position) {
+                if (position == 0) {
                     searchLyricIv.setVisibility(View.GONE);
                     operateSongIv.setVisibility(View.VISIBLE);
                     lyricFragment.getLyricView().setIndicatorShow(false);
                     rightTv.setChecked(false);
                     leftTv.setChecked(true);
-                } else
-                {
+                } else {
                     searchLyricIv.setVisibility(View.VISIBLE);
                     operateSongIv.setVisibility(View.GONE);
                     rightTv.setChecked(true);
@@ -231,31 +219,23 @@ public class PlayerActivity extends AppCompatActivity
             }
 
             @Override
-            public void onPageScrollStateChanged(int state)
-            {
+            public void onPageScrollStateChanged(int state) {
             }
         });
     }
 
-    private void initData()
-    {
-        if (playingMusic != null)
-        {
+    private void initData() {
+        if (playingMusic != null) {
             coverFragment.setPlayingMusic(playingMusic);
         }
     }
 
-
-    private void initProgressRunnable()
-    {
-        progressRunnable = new Runnable()
-        {
+    private void initProgressRunnable() {
+        progressRunnable = new Runnable() {
             @Override
-            public void run()
-            {
-                if (musicService != null && musicService.isPlaying())
-                {
-                    long currentPosition = musicService.getCurrentPosition();
+            public void run() {
+                if (musicService != null && musicService.isPlaying()) {
+                    long currentPosition = musicService.getCurrentProgress();
                     long duration = musicService.getDuration();
                     updateProgress(currentPosition, duration);
                 }
@@ -265,18 +245,15 @@ public class PlayerActivity extends AppCompatActivity
         };
     }
 
-    private void bindService()
-    {
+    private void bindService() {
         Intent intent = new Intent(this, MusicService.class);
         bindService(intent, serviceConnection, BIND_AUTO_CREATE);
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
-        if (isServiceBound)
-        {
+        if (isServiceBound) {
             unbindService(serviceConnection);
             isServiceBound = false;
         }
@@ -284,18 +261,14 @@ public class PlayerActivity extends AppCompatActivity
         progressHandler.removeCallbacks(progressRunnable);
     }
 
-    private void updatePlayMode()
-    {
+    private void updatePlayMode() {
         // UIUtils.updatePlayMode(playModeIv, false);
     }
 
-    private void updateUI(MusicService.PlaybackInfo playbackInfo)
-    {
-        if (musicService != null)
-        {
+    private void updateUI(MusicService.PlaybackInfo playbackInfo) {
+        if (musicService != null) {
             boolean isPlaying = playbackInfo.state == MusicService.PlayerState.PLAYING;
-            if (playbackInfo.music != null)
-            {
+            if (playbackInfo.music != null) {
                 titleTv.setText(playbackInfo.music.getTitle());
                 subTitleTv.setText(playbackInfo.music.getArtist());
             }
@@ -306,21 +279,17 @@ public class PlayerActivity extends AppCompatActivity
         }
     }
 
-    private void updatePlayStatus(boolean isPlaying)
-    {
-        if (isPlaying && ! playPauseIv.isPlaying())
-        {
+    private void updatePlayStatus(boolean isPlaying) {
+        if (isPlaying && !playPauseIv.isPlaying()) {
             playPauseIv.play();
             coverFragment.resumeRotateAnimation();
-        } else if (! isPlaying && playPauseIv.isPlaying())
-        {
+        } else if (!isPlaying && playPauseIv.isPlaying()) {
             coverFragment.stopRotateAnimation();
             playPauseIv.pause();
         }
     }
 
-    private void updateProgress(long progress, long max)
-    {
+    private void updateProgress(long progress, long max) {
         progressSb.setProgress((int) progress);
         progressSb.setMax((int) max);
         progressTv.setText(FormatUtil.formatTime(progress));
@@ -328,55 +297,44 @@ public class PlayerActivity extends AppCompatActivity
         lyricFragment.setCurrentTimeMillis(progress);
     }
 
-    public void nextPlay(View view)
-    {
+    public void nextPlay(View view) {
         musicService.playNext();
     }
 
-    public void prevPlay(View view)
-    {
+    public void prevPlay(View view) {
         musicService.playPrev();
     }
 
-    public void changePlayMode(View view)
-    {
+    public void changePlayMode(View view) {
         // UIUtils.updatePlayMode((ImageView) view, true);
     }
 
-    public void openPlayQueue(View view)
-    {
+    public void openPlayQueue(View view) {
         // PlayQueueDialog.newInstance().showIt(this);
     }
 
-    public void collectMusic(View view)
-    {
+    public void collectMusic(View view) {
         // UIUtils.collectMusic((ImageView) view, playingMusic);
     }
 
-    public void addToPlaylist(View view)
-    {
+    public void addToPlaylist(View view) {
         // PlaylistManagerUtils.addToPlaylist(this, playingMusic);
     }
 
-    public void showSongComment(View view)
-    {
+    public void showSongComment(View view) {
         // startActivity(new Intent(this, SongCommentActivity.class).putExtra("SONG", playingMusic));
     }
 
-    public void shareMusic(View view)
-    {
+    public void shareMusic(View view) {
         // Tools.qqShare(this, musicService.getPlayingMusic());
     }
 
-    public void downloadMusic(View view)
-    {
+    public void downloadMusic(View view) {
         // QualitySelectDialog.newInstance(playingMusic).show(this);
     }
 
-
     // 底部上移动画
-    private TranslateAnimation moveToViewLocation()
-    {
+    private TranslateAnimation moveToViewLocation() {
         TranslateAnimation hiddenAction = new TranslateAnimation(
                 Animation.RELATIVE_TO_PARENT, 0.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f,
@@ -386,10 +344,8 @@ public class PlayerActivity extends AppCompatActivity
         return hiddenAction;
     }
 
-    // 底部下降动画
-// 底部下移动画
-    private TranslateAnimation moveToViewBottom()
-    {
+    // 底部下移动画
+    private TranslateAnimation moveToViewBottom() {
         TranslateAnimation hiddenAction = new TranslateAnimation(
                 Animation.RELATIVE_TO_PARENT, 0.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f,
@@ -399,12 +355,9 @@ public class PlayerActivity extends AppCompatActivity
         return hiddenAction;
     }
 
-
-    public void notifyCoverFragmentReady()
-    {
+    public void notifyCoverFragmentReady() {
         isCoverFragmentReady = true;
-        if (pendingPlaybackInfo != null)
-        {
+        if (pendingPlaybackInfo != null) {
             updateUI(pendingPlaybackInfo);
             pendingPlaybackInfo = null;
         }

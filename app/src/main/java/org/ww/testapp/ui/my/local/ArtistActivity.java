@@ -8,18 +8,16 @@ import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
-import org.ww.testapp.player.MusicControlSender;
+import org.ww.testapp.player.MusicServiceController;
 import org.ww.testapp.ui.base.BaseMusicActivity;
 import org.ww.testapp.ui.my.local.adapter.MusicAdapter;
 import org.ww.testapp.util.MusicLoader;
 
-import java.io.IOException;
 import java.util.List;
 
 public class ArtistActivity extends BaseMusicActivity {
@@ -100,7 +98,7 @@ public class ArtistActivity extends BaseMusicActivity {
             public void onItemClick(int position) {
                 // 播放歌曲
                 musicService.setPlaylist(artistMusicList, position);
-                MusicControlSender.sendPlayBroadcast(ArtistActivity.this);
+                MusicServiceController.sendPlayBroadcast(ArtistActivity.this);
             }
         });
         mMusicList.setAdapter(musicAdapter);

@@ -19,7 +19,7 @@
 
     <!--背景色-->
     <color name="main_background">#EEEEEE</color>
-    <color name="iconColor">@color/black</color>
+    <color name="iconColor">#0F0F0F</color>
     <color name="cardColor">@color/white</color>
 
     <!--对话框-->
@@ -62,7 +62,7 @@
 
     <color name="main_blue_light">#3F56B5</color>
     <color name="main_blue_dark">#30459E</color>
-    <color name="main_white">#FFFFFF</color>
+    <color name="main_white">#F0F0F0</color>
     <color name="main_black">#000000</color>
     <color name="main_black_grey">#6D6D6D</color>
 
@@ -70,7 +70,7 @@
     <color name="transparent">#00000000</color>
 
     <color name="huise">#f2f2f2</color>
-    <color name="black">#000000</color>
+    <color name="black">#0F0F0F</color>
 
     <color name="black_semi_transparent">#B2000000</color>
     <color name="background">#f7f7f6</color>

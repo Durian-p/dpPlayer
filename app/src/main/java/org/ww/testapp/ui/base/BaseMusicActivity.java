@@ -8,15 +8,14 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
+import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.viewpager2.widget.ViewPager2;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
-import org.ww.testapp.player.MusicControlSender;
+import org.ww.testapp.player.MusicServiceController;
 import org.ww.testapp.player.MusicService;
-import org.ww.testapp.ui.player.PlayerActivity;
 import org.ww.testapp.ui.widget.PlayPauseView;
 
 import java.util.ArrayList;
@@ -26,6 +25,7 @@ public abstract class BaseMusicActivity extends AppCompatActivity
 {
     private ViewPager2 musicInfoViewPager;
     private PlayPauseView playPauseView;
+    private ImageButton playListIb;
     protected MusicService musicService;
 
     private boolean isBound = false;
@@ -49,6 +49,7 @@ public abstract class BaseMusicActivity extends AppCompatActivity
     {
         musicInfoViewPager = findViewById(R.id.musicInfoViewPager);
         playPauseView = findViewById(R.id.playPauseView);
+        playListIb = findViewById(R.id.playListIb);
         adapter = new MusicBarPagerAdapter(musicList);
         musicInfoViewPager.setAdapter(adapter);
 
@@ -61,13 +62,28 @@ public abstract class BaseMusicActivity extends AppCompatActivity
                 if (isBound && updateService)
                 {
                     musicService.setCurrentMusic(position);
-                    //MusicControlSender.sendPlayBroadcast(BaseMusicActivity.this);
+                    //MusicServiceController.sendPlayBroadcast(BaseMusicActivity.this);
                 }
             }
         });
 
 
         playPauseView.setOnClickListener(playPauseListener);
+
+        playListIb.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v)
+            {
+                showMusicListDialog();
+            }
+        });
+    }
+
+
+    private void showMusicListDialog() {
+        if (musicService != null && musicService.getPlayingMusicList() != null && musicService.getPlayingMusicList().size() > 0) {
+            DialogPlaylist dialogPlaylist = new DialogPlaylist(musicService.getPlayingMusicList(), musicService.getCurrentMusic().getId());
+            dialogPlaylist.show(getSupportFragmentManager(), "DialogPlaylist");
+        }
     }
 
 
@@ -103,7 +119,7 @@ public abstract class BaseMusicActivity extends AppCompatActivity
         public void onServiceDisconnected(ComponentName componentName)
         {
             isBound = false;
-            MusicControlSender.sendPauseBroadcast(BaseMusicActivity.this);
+            MusicServiceController.sendPauseBroadcast(BaseMusicActivity.this);
         }
     };
 
@@ -113,16 +129,17 @@ public abstract class BaseMusicActivity extends AppCompatActivity
         if (playbackInfo.state == MusicService.PlayerState.None)
         {
             // 显示默认信息
-            Music defaultMusic = new Music("<未播放>", "", "");
+            Music defaultMusic = new Music("[无歌曲播放中]", "[无歌曲播放中]", "");
             updateUIMusicList(new ArrayList<Music>()
             {{
                 add(defaultMusic);
             }});
             playPauseView.pause();
-        } else
+        }
+        else
         {
             // 更新播放信息
-            updateUIMusicList(musicService.getMusicList());
+            updateUIMusicList(musicService.getPlayingMusicList());
             musicInfoViewPager.setCurrentItem(musicService.getCurrentMusicIndex(), false);
 
             if (playbackInfo.state == MusicService.PlayerState.PLAYING)
@@ -146,10 +163,10 @@ public abstract class BaseMusicActivity extends AppCompatActivity
             {
                 if (musicService.getPlaybackState().getValue().state == MusicService.PlayerState.PLAYING)
                 {
-                    MusicControlSender.sendPauseBroadcast(BaseMusicActivity.this);
+                    MusicServiceController.sendPauseBroadcast(BaseMusicActivity.this);
                 } else
                 {
-                    MusicControlSender.sendPlayBroadcast(BaseMusicActivity.this);
+                    MusicServiceController.sendPlayBroadcast(BaseMusicActivity.this);
                 }
             }
         }
@@ -159,7 +176,7 @@ public abstract class BaseMusicActivity extends AppCompatActivity
     // 通知MusicService更新MusicList，之后MusicService会触发updateMusicListUi更新UI
     public void updateServiceMusicList(List<Music> newMusicList)
     {
-        musicService.setPlaylist(newMusicList);
+        musicService.setOriginalPlaylist(newMusicList);
     }
 
     public void updateServiceMusicList(List<Music> newMusicList, int position)

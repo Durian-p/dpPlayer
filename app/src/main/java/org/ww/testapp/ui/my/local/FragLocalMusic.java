@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
-import org.ww.testapp.player.MusicControlSender;
+import org.ww.testapp.player.MusicServiceController;
 import org.ww.testapp.ui.base.BaseMusicActivity;
 import org.ww.testapp.ui.data.MusicViewModel;
 import org.ww.testapp.ui.my.local.adapter.MusicAdapter;
@@ -96,7 +96,7 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
     public void onItemClick(int position) {
         if (baseMusicActivity != null) {
             baseMusicActivity.updateServiceMusicList(musicViewModel.getMusicList().getValue(), position);
-            MusicControlSender.sendPlayBroadcast(baseMusicActivity);
+            MusicServiceController.sendPlayBroadcast(baseMusicActivity);
         }
     }
 

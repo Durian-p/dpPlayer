@@ -10,6 +10,11 @@
         <item name="android:textSize">9sp</item>
         <item name="android:textColor">@color/light_gray</item>
     </style>
+
+    <style name="SelectedTextViewColorStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">#D830F6</item>
+    </style>
+
     <style name="MyTabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
         <!-- 未选中的 Tab 文字颜色为灰色 -->
         <item name="tabTextColor">@android:color/darker_gray</item>

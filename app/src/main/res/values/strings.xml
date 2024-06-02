@@ -54,4 +54,8 @@
     <string name="search_lyric">在线搜歌</string>
     <string name="song_operate">歌曲操作</string>
     <string name="setting_key_mobile_wifi">mobile_wifi</string>
+    <string name="play_mode_repeat">单曲播放</string>
+    <string name="play_list_size">(100)</string>
+    <string name="play_list">播放列表</string>
+
 </resources>

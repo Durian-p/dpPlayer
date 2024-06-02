@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import org.ww.testapp.R;
-import org.ww.testapp.player.MusicControlSender;
+import org.ww.testapp.player.MusicServiceController;
 import org.ww.testapp.ui.widget.LyricView;
 import org.ww.testapp.util.SPUtils;
 
@@ -41,7 +41,7 @@ public class LyricFragment extends Fragment
             lyricView.setTouchable(true);
             lyricView.setOnPlayerClickListener((progress, content) -> {
                 // 如果正在播放，暂停
-                MusicControlSender.sendPlayPauseBroadcast(requireContext());
+                MusicServiceController.sendPlayPauseBroadcast(requireContext());
             });
         }
         lyricView.setLyricContent(lyric);

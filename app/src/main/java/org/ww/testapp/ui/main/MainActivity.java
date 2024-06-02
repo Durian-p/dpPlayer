@@ -53,7 +53,7 @@ public class MainActivity extends BaseMusicActivity {
         // 这里是bottomNavigationView的点击事件
         bottomNavigation.setOnItemSelectedListener(naviListener);
 
-        Music defaultMusic = new Music("<未播放>", "", "");
+        Music defaultMusic = new Music("[无歌曲播放中]", "", "");
         updateUIMusicList(new ArrayList<Music>() {{
             add(defaultMusic);
         }});

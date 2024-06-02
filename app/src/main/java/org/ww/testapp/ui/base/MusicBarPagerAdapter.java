@@ -42,7 +42,7 @@ public class MusicBarPagerAdapter extends RecyclerView.Adapter<MusicBarPagerAdap
         holder.musicInfoContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (musicList == null || musicList.size() == 0 || Objects.equals(musicList.get(0).getTitle(), "<未播放>"))
+                if (musicList == null || musicList.size() == 0 || Objects.equals(musicList.get(0).getAlbum(), "[无歌曲播放中]"))
                     return;
                 Intent playerIntent = new Intent(v.getContext(), PlayerActivity.class);
                 playerIntent.putExtra("music", music);
@@ -76,7 +76,8 @@ public class MusicBarPagerAdapter extends RecyclerView.Adapter<MusicBarPagerAdap
         public void bind(Music music)
         {
             titleTextView.setText(music.getTitle());
-            artistTextView.setText(" - " + music.getArtist());
+            if (music.getArtist() != null && !music.getArtist().equals(""))
+                artistTextView.setText(" - " + music.getArtist());
             // 设置专辑封面
             if (music.getAlbumArt() != null)
             {

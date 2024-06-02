@@ -10,30 +10,51 @@ import androidx.lifecycle.LiveData;
 import org.ww.testapp.entity.Music;
 import java.util.List;
 
-public class MusicControlSender {
+public class MusicServiceController
+{
 
     private MusicService musicService;
     private boolean bound = false;
     private final Context context;
+    public interface MusicServiceCallback {
+        void onServiceConnected(ComponentName name, IBinder service);
+        void onServiceDisconnected(ComponentName name);
+    }
+    private MusicServiceCallback callback;
+
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             MusicService.LocalBinder binder = (MusicService.LocalBinder) service;
             musicService = binder.getService();
             bound = true;
+            if (callback != null)
+                callback.onServiceConnected(name, service);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             bound = false;
+            if (callback != null)
+                callback.onServiceDisconnected(name);
         }
     };
 
-    public MusicControlSender(Context context) {
+//    public static MusicServiceController getInstance() {
+//        return new MusicServiceController(context);
+//    }
+
+    public MusicServiceController(Context context) {
         this.context = context;
     }
 
     public void bindService() {
+        Intent intent = new Intent(context, MusicService.class);
+        context.bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+
+    public void bindService(MusicServiceCallback callback) {
+        this.callback = callback;
         Intent intent = new Intent(context, MusicService.class);
         context.bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
@@ -82,9 +103,20 @@ public class MusicControlSender {
         return null;
     }
 
+    public void setCurrentMusic(int index)
+    {
+        musicService.setCurrentMusic(index);
+    }
+
+    public void setCurrentMusicId(long id)
+    {
+        musicService.setCurrentMusicId(id);
+    }
+
+
     public List<Music> getMusicList() {
         if (bound && musicService != null) {
-            return musicService.getMusicList();
+            return musicService.getPlayingMusicList();
         }
         return null;
     }
@@ -117,6 +149,11 @@ public class MusicControlSender {
 
     public static void sendPlayPauseBroadcast(Context context){
         Intent intent = new Intent(MusicService.MusicControlActions.ACTION_PLAY_PAUSE);
+        context.sendBroadcast(intent);
+    }
+
+    public static void sendTogglePlayModeBroadcast(Context context){
+        Intent intent = new Intent(MusicService.MusicControlActions.ACTION_TOGGLE_PLAY_MODE);
         context.sendBroadcast(intent);
     }
 }

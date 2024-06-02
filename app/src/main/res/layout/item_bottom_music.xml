@@ -7,16 +7,25 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
-    <ImageView
-            android:id="@+id/albumImageView"
+    <androidx.cardview.widget.CardView
+            android:id="@+id/albumImageCard"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:scaleType="centerCrop"
+            app:cardCornerRadius="24dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="4dp"
-            android:contentDescription="@string/album_cover" />
+            android:layout_marginStart="4dp">
+
+        <ImageView
+                android:id="@+id/albumImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/album_cover" />
+
+    </androidx.cardview.widget.CardView>
+
 
     <TextView
             android:id="@+id/titleTextView"
@@ -27,7 +36,7 @@
             android:text="OMG"
             android:gravity="center_vertical"
             style="@style/SongTitleTextViewStyle"
-            app:layout_constraintLeft_toRightOf="@id/albumImageView"
+            app:layout_constraintLeft_toRightOf="@id/albumImageCard"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginLeft="5dp"/>

@@ -9,12 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
-import org.ww.testapp.player.MusicControlSender;
+import org.ww.testapp.player.MusicServiceController;
 import org.ww.testapp.ui.base.BaseMusicActivity;
 import org.ww.testapp.ui.my.local.adapter.MusicAdapter;
 import org.ww.testapp.util.MusicLoader;
 
-import java.io.IOException;
 import java.util.List;
 
 public class AlbumActivity extends BaseMusicActivity {
@@ -68,7 +67,7 @@ public class AlbumActivity extends BaseMusicActivity {
             public void onItemClick(int position) {
                 // 播放歌曲
                 musicService.setPlaylist(albumMusicList, position);
-                MusicControlSender.sendPlayBroadcast(AlbumActivity.this);
+                MusicServiceController.sendPlayBroadcast(AlbumActivity.this);
             }
         });
         mRecyclerView.setAdapter(musicAdapter);

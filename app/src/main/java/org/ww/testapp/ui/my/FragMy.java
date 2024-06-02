@@ -15,7 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
-import org.ww.testapp.player.MusicControlSender;
+import org.ww.testapp.player.MusicServiceController;
 import org.ww.testapp.player.MusicService;
 import org.ww.testapp.ui.data.MusicViewModel;
 import org.ww.testapp.ui.my.local.LocalActivity;
@@ -105,8 +105,8 @@ public class FragMy extends Fragment {
             public void click(View view, int position) {
                 if (view.getId() == R.id.iv_play) {
                     if (isBound && localMusics != null && !localMusics.isEmpty()) {
-                        musicService.setPlaylist(localMusics);
-                        MusicControlSender.sendPlayBroadcast(requireActivity());
+                        musicService.setOriginalPlaylist(localMusics);
+                        MusicServiceController.sendPlayBroadcast(requireActivity());
                     }
                 } else {
                     Intent intent = new Intent(getActivity(), LocalActivity.class);
