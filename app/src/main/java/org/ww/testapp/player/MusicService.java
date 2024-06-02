@@ -173,12 +173,12 @@ public class MusicService extends Service
 
     public void playMedia()
     {
-        if (originalPlaylist.isEmpty())
+        if (playingPlaylist.isEmpty())
         {
             return;
         }
         currentSongIndex = Math.max(currentSongIndex, 0);
-        Music currentMusic = originalPlaylist.get(currentSongIndex);
+        Music currentMusic = playingPlaylist.get(currentSongIndex);
         MediaItem mediaItem = MediaItem.fromUri(currentMusic.getPath());
 
         if (currentPlayerState == PlayerState.PAUSED)

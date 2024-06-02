@@ -15,9 +15,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.viewpager2.widget.ViewPager2;
+import net.steamcrafted.materialiconlib.MaterialIconView;
 import org.ww.testapp.R;
 import org.ww.testapp.entity.Music;
 import org.ww.testapp.player.MusicService;
+import org.ww.testapp.ui.base.DialogPlaylist;
 import org.ww.testapp.ui.player.fragment.CoverFragment;
 import org.ww.testapp.ui.player.fragment.LyricFragment;
 import org.ww.testapp.ui.widget.DepthPageTransformer;
@@ -51,6 +53,7 @@ public class PlayerActivity extends AppCompatActivity {
     private CheckedTextView rightTv;
     private CheckedTextView leftTv;
     private ImageView backIv;
+    private MaterialIconView playQueueIv;
     private boolean isServiceBound = false;
     private boolean isCoverFragmentReady = false;
     private MusicService.PlaybackInfo pendingPlaybackInfo;
@@ -100,7 +103,6 @@ public class PlayerActivity extends AppCompatActivity {
         playingMusic = getIntent().getParcelableExtra("music", Music.class);
 
         initView();
-        updatePlayMode();
         bindService();
         initData();
         initProgressRunnable();
@@ -123,6 +125,7 @@ public class PlayerActivity extends AppCompatActivity {
         backIv = findViewById(R.id.backIv);
         titleTv = findViewById(R.id.titleTv);
         subTitleTv = findViewById(R.id.subTitleTv);
+        playQueueIv = findViewById(R.id.playQueueIv);
 
         setupViewPager(viewPager);
 
@@ -142,6 +145,27 @@ public class PlayerActivity extends AppCompatActivity {
                     } else {
                         musicService.playMedia();
                     }
+                }
+            }
+        });
+
+        playModeIv.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (musicService != null) {
+                    musicService.togglePlayMode();
+                }
+            }
+        });
+
+        playQueueIv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (musicService != null && musicService.getPlayingMusicList() != null && musicService.getPlayingMusicList().size() > 0)
+                {
+                    DialogPlaylist dialogPlaylist = new DialogPlaylist(musicService.getPlayingMusicList(), musicService.getCurrentMusic().getId());
+                    dialogPlaylist.show(getSupportFragmentManager(), "DialogPlaylist");
                 }
             }
         });
@@ -237,7 +261,7 @@ public class PlayerActivity extends AppCompatActivity {
                 if (musicService != null && musicService.isPlaying()) {
                     long currentPosition = musicService.getCurrentProgress();
                     long duration = musicService.getDuration();
-                    updateProgress(currentPosition, duration);
+                    updateUIProgress(currentPosition, duration);
                 }
                 // Schedule the next update after 0.5 second
                 progressHandler.postDelayed(this, 500);
@@ -261,9 +285,25 @@ public class PlayerActivity extends AppCompatActivity {
         progressHandler.removeCallbacks(progressRunnable);
     }
 
-    private void updatePlayMode() {
-        // UIUtils.updatePlayMode(playModeIv, false);
+    private void updateUIPlayMode() {
+        MusicService.PlayMode playMode = musicService.getPlaybackState().getValue().playMode;
+        if (playMode != null)
+        {
+            if (playMode == MusicService.PlayMode.SEQUENTIAL)
+            {
+                playModeIv.setImageResource(R.drawable.ic_repeat);
+            }
+            else if (playMode == MusicService.PlayMode.REPEAT_ONE)
+            {
+                playModeIv.setImageResource(R.drawable.ic_repeat_one);
+            }
+            else if (playMode == MusicService.PlayMode.SHUFFLE)
+            {
+                playModeIv.setImageResource(R.drawable.ic_shuffle);
+            }
+        }
     }
+
 
     private void updateUI(MusicService.PlaybackInfo playbackInfo) {
         if (musicService != null) {
@@ -272,14 +312,15 @@ public class PlayerActivity extends AppCompatActivity {
                 titleTv.setText(playbackInfo.music.getTitle());
                 subTitleTv.setText(playbackInfo.music.getArtist());
             }
-            updatePlayStatus(isPlaying);
-            updateProgress(playbackInfo.currentPosition, playbackInfo.duration);
+            updateUIPlayStatus(isPlaying);
+            updateUIProgress(playbackInfo.currentPosition, playbackInfo.duration);
+            updateUIPlayMode();
             coverFragment.setPlayingMusic(playbackInfo.music);
             coverFragment.updateViews();
         }
     }
 
-    private void updatePlayStatus(boolean isPlaying) {
+    private void updateUIPlayStatus(boolean isPlaying) {
         if (isPlaying && !playPauseIv.isPlaying()) {
             playPauseIv.play();
             coverFragment.resumeRotateAnimation();
@@ -289,7 +330,7 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
-    private void updateProgress(long progress, long max) {
+    private void updateUIProgress(long progress, long max) {
         progressSb.setProgress((int) progress);
         progressSb.setMax((int) max);
         progressTv.setText(FormatUtil.formatTime(progress));
@@ -303,14 +344,6 @@ public class PlayerActivity extends AppCompatActivity {
 
     public void prevPlay(View view) {
         musicService.playPrev();
-    }
-
-    public void changePlayMode(View view) {
-        // UIUtils.updatePlayMode((ImageView) view, true);
-    }
-
-    public void openPlayQueue(View view) {
-        // PlayQueueDialog.newInstance().showIt(this);
     }
 
     public void collectMusic(View view) {
