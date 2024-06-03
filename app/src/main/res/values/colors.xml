@@ -179,4 +179,5 @@
     <color name="accentColor">#ffb701</color>
     <color name="white_semi_transparent">#56ECE9E9</color>
 
+    <color name="artist_card_background">#BCFFFFFF</color>
 </resources>

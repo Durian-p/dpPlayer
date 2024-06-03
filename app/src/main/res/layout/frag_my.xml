@@ -26,7 +26,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                <org.ww.testapp.ui.widget.MyItemView
+                <org.ww.dpplayer.ui.widget.MyItemView
                         android:id="@+id/localView"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_56"
@@ -37,7 +37,7 @@
                         app:tv_name="@string/item_local" />
 
 
-                <org.ww.testapp.ui.widget.MyItemView
+                <org.ww.dpplayer.ui.widget.MyItemView
                         android:id="@+id/historyView"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_56"
@@ -48,7 +48,7 @@
                         app:tv_name="@string/item_history" />
 
 
-                <org.ww.testapp.ui.widget.MyItemView
+                <org.ww.dpplayer.ui.widget.MyItemView
                         android:id="@+id/favoriteView"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_56"

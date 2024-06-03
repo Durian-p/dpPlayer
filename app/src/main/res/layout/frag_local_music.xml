@@ -24,7 +24,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                <org.ww.testapp.ui.widget.SidebarView
+                <org.ww.dpplayer.ui.widget.SidebarView
                         android:id="@+id/localMusicSide"
                         android:layout_width="20dp"
                         android:layout_height="0dp"

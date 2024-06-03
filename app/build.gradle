@@ -5,11 +5,11 @@ plugins {
 
 
 android {
-    namespace 'org.ww.testapp'
+    namespace 'org.ww.dpplayer'
     compileSdk 34
 
     defaultConfig {
-        applicationId "org.ww.testapp"
+        applicationId "org.ww.dpplayer"
         minSdk 33
         targetSdk 34
         multiDexEnabled true

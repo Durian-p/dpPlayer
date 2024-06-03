@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    <org.ww.testapp.ui.widget.PlayPauseView
+    <org.ww.dpplayer.ui.widget.PlayPauseView
             android:id="@+id/playPauseView"
             android:layout_width="36dp"
             android:layout_height="36dp"

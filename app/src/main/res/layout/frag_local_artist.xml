@@ -27,7 +27,7 @@
                     android:orientation="vertical">
 
 
-                <org.ww.testapp.ui.widget.SidebarView
+                <org.ww.dpplayer.ui.widget.SidebarView
                         android:id="@+id/localArtistSide"
                         android:layout_width="20dp"
                         android:layout_height="0dp"
