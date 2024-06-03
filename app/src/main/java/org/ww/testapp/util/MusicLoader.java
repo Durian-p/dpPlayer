@@ -42,7 +42,7 @@ public class MusicLoader {
                     String album = cursor.getString(albumColumnIndex);
                     int duration = cursor.getInt(durationColumnIndex);
                     String path = cursor.getString(pathColumnIndex);
-                    Bitmap albumArt = getAlbumArt(context, path); // 获取专辑封面
+                    Bitmap albumArt = getAlbumArt(path); // 获取专辑封面
 
 
                     Music music = new Music();
@@ -79,7 +79,7 @@ public class MusicLoader {
         return musicList;
     }
 
-    public static Bitmap getAlbumArt(Context context, String audioFilePath)
+    public static Bitmap getAlbumArt(String audioFilePath)
     {
         try{
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();

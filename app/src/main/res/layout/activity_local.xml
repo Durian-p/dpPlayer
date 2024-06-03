@@ -72,7 +72,7 @@
     <include
             layout="@layout/bottom_player_bar"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="@dimen/bottom_player_height"
             app:layout_constraintTop_toBottomOf="@id/localVp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>

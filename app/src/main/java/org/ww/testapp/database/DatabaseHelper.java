@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Create table statements
     private static final String CREATE_TABLE_HEART_MUSIC = "CREATE TABLE " + TABLE_HEART_MUSIC + " (" +
-            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_SONG_ID + " INTEGER PRIMARY KEY , " +
             COLUMN_TITLE + " TEXT, " +
             COLUMN_ALBUM + " TEXT, " +
             COLUMN_ARTIST + " TEXT, " +

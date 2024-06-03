@@ -35,6 +35,7 @@ public abstract class BaseMusicActivity extends AppCompatActivity
     // ---control---
     private boolean updateService = true;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

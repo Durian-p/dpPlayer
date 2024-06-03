@@ -62,7 +62,7 @@ public class CoverFragment extends Fragment {
     public void setCover(String coverPath)
     {
         this.coverPath = coverPath;
-        this.currentCover = MusicLoader.getAlbumArt(getContext(), coverPath);
+        this.currentCover = MusicLoader.getAlbumArt(coverPath);
     }
 
     public void setPlayingMusic(Music playingMusic)

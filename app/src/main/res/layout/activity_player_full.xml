@@ -233,7 +233,7 @@
                     android:onClick="collectMusic"
 
                     android:scaleType="centerInside"
-                    android:src="@drawable/item_favorite" />
+                    android:src="@drawable/item_heart" />
 
             <ImageView
                     android:id="@+id/equalizerIv"

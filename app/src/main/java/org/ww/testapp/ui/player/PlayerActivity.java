@@ -17,9 +17,11 @@ import androidx.lifecycle.Observer;
 import androidx.viewpager2.widget.ViewPager2;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 import org.ww.testapp.R;
+import org.ww.testapp.database.MusicRepository;
 import org.ww.testapp.entity.Music;
 import org.ww.testapp.player.MusicService;
 import org.ww.testapp.ui.base.DialogPlaylist;
+import org.ww.testapp.ui.my.local.adapter.MusicAdapter;
 import org.ww.testapp.ui.player.fragment.CoverFragment;
 import org.ww.testapp.ui.player.fragment.LyricFragment;
 import org.ww.testapp.ui.widget.DepthPageTransformer;
@@ -36,7 +38,7 @@ public class PlayerActivity extends AppCompatActivity {
     private List<Fragment> fragments = new ArrayList<>();
 
     private ImageView playModeIv;
-    private ImageView collectIv;
+    private ImageView heartIv;
     private SeekBar progressSb;
     private PlayPauseView playPauseIv;
     private ViewPager2 viewPager;
@@ -60,6 +62,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private Handler progressHandler = new Handler();
     private Runnable progressRunnable;
+    MusicRepository musicRepository;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -110,7 +113,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void initView() {
         playModeIv = findViewById(R.id.playModeIv);
-        collectIv = findViewById(R.id.collectIv);
+        heartIv = findViewById(R.id.collectIv);
         progressSb = findViewById(R.id.progressSb);
         playPauseIv = findViewById(R.id.playPauseIv);
         viewPager = findViewById(R.id.viewPager);
@@ -189,6 +192,30 @@ public class PlayerActivity extends AppCompatActivity {
                 if (musicService != null) {
                     musicService.seekTo(seekBar.getProgress());
                     progressHandler.post(progressRunnable); // 用户停止拖动进度条后继续更新
+                }
+            }
+        });
+
+        musicRepository = new MusicRepository(getApplicationContext());
+        if (musicRepository.getHeartMusicBySongId(playingMusic.getId()) != null)
+        {
+            heartIv.setImageResource(R.drawable.item_heart_fill);
+        }
+        else
+        {
+            heartIv.setImageResource(R.drawable.item_heart);
+        }
+        heartIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isHeart = musicRepository.toggleHeartSong(playingMusic);
+                if (isHeart)
+                {
+                    heartIv.setImageResource(R.drawable.item_heart_fill);
+                }
+                else
+                {
+                    heartIv.setImageResource(R.drawable.item_heart);
                 }
             }
         });

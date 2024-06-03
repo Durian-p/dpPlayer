@@ -34,7 +34,7 @@
     <include
             layout="@layout/bottom_player_bar"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="@dimen/bottom_player_height"
             app:layout_constraintTop_toBottomOf="@id/mainVp"
             app:layout_constraintBottom_toTopOf="@id/mainNav"
             app:layout_constraintLeft_toLeftOf="parent"/>

@@ -145,8 +145,11 @@ public class MusicService extends Service
     {
         if (originalPlaylist.size() == 0)
             return;
+
         this.originalPlaylist = new ArrayList<>(originalPlaylist);
         this.playingPlaylist = new ArrayList<>(originalPlaylist);
+        if (currentPlayMode == PlayMode.SHUFFLE)
+            Collections.shuffle(this.playingPlaylist);
         currentSongIndex = 0;
         updatePlaybackState(PlayerState.PLAYING);
         player.setMediaItem(MediaItem.fromUri(originalPlaylist.get(currentSongIndex).getPath()));

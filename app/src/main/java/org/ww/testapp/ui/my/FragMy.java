@@ -18,6 +18,7 @@ import org.ww.testapp.entity.Music;
 import org.ww.testapp.player.MusicServiceController;
 import org.ww.testapp.player.MusicService;
 import org.ww.testapp.ui.data.MusicViewModel;
+import org.ww.testapp.ui.my.heart.HeartActivity;
 import org.ww.testapp.ui.my.local.LocalActivity;
 import org.ww.testapp.ui.widget.MyItemView;
 
@@ -27,7 +28,9 @@ public class FragMy extends Fragment {
 
     private View rootView;
     private MyItemView localView;
+    private MyItemView heartView;
     private List<Music> localMusics;
+    private List<Music> heartMusics;
     private MusicViewModel musicViewModel;
     private MusicService musicService;
     private boolean isBound = false;
@@ -64,7 +67,7 @@ public class FragMy extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         bindViews();
         initData();
-        initFunc();
+        initJump();
         initPlayList();
 
         // 启动并绑定服务
@@ -75,6 +78,7 @@ public class FragMy extends Fragment {
 
     private void bindViews() {
         localView = rootView.findViewById(R.id.localView);
+        heartView = rootView.findViewById(R.id.favoriteView);
     }
 
     private void initData() {
@@ -89,14 +93,24 @@ public class FragMy extends Fragment {
                 localView.setSongsNum(localMusics.size(), 0);
             }
         });
+
+        // 观察收藏音乐列表数据
+        musicViewModel.getHeartMusicList().observe(getViewLifecycleOwner(), new Observer<List<Music>>() {
+            @Override
+            public void onChanged(List<Music> heartMusicList) {
+                heartMusics = heartMusicList;
+                heartView.setSongsNum(heartMusicList.size(), 0);
+            }
+        });
     }
 
-    private void initFunc() {
+    private void initJump() {
         initLocalMusics();
+        initHeartMusics();
     }
 
     private void initPlayList() {
-
+        // 初始化播放列表相关逻辑
     }
 
     private void initLocalMusics() {
@@ -110,7 +124,22 @@ public class FragMy extends Fragment {
                     }
                 } else {
                     Intent intent = new Intent(getActivity(), LocalActivity.class);
-                    intent.putExtra("updateService",false);
+                    intent.putExtra("updateService", false);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    private void initHeartMusics() {
+        heartView.setOnItemClickListener(new MyItemView.OnItemClickListener() {
+            @Override
+            public void click(View view, int position) {
+                if (view.getId() == R.id.iv_play) {
+                    musicService.setOriginalPlaylist(localMusics);
+                    MusicServiceController.sendPlayBroadcast(requireActivity());
+                } else {
+                    Intent intent = new Intent(getActivity(), HeartActivity.class);
                     startActivity(intent);
                 }
             }

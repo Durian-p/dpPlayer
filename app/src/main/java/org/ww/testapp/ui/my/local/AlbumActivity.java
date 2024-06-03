@@ -36,7 +36,7 @@ public class AlbumActivity extends BaseMusicActivity {
         albumMusicList = intent.getParcelableArrayListExtra("albumMusicList", Music.class);
         for (Music music: albumMusicList)
         {
-            music.setAlbumArt(MusicLoader.getAlbumArt(this, music.getPath()));
+            music.setAlbumArt(MusicLoader.getAlbumArt(music.getPath()));
         }
 
 
@@ -48,9 +48,9 @@ public class AlbumActivity extends BaseMusicActivity {
     private void initView()
     {
         // 绑定View
-        mAlbumCover = findViewById(R.id.iv_album_cover);
-        mAlbumTitle = findViewById(R.id.tv_album_name);
-        mAlbumArtist = findViewById(R.id.tv_artist_name);
+        mAlbumCover = findViewById(R.id.iv_info_img);
+        mAlbumTitle = findViewById(R.id.tv_musiclist_name);
+        mAlbumArtist = findViewById(R.id.tv_musiclist_extra);
 
         // 设置View内容
         setTitle(albumTitle);

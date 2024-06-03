@@ -40,7 +40,7 @@ public class ArtistActivity extends BaseMusicActivity {
         artistName = intent.getStringExtra("artistName");
         artistMusicList = intent.getParcelableArrayListExtra("artistMusicList", Music.class);
         for (Music music : artistMusicList) {
-            music.setAlbumArt(MusicLoader.getAlbumArt(this, music.getPath()));
+            music.setAlbumArt(MusicLoader.getAlbumArt(music.getPath()));
         }
 
         initView();
@@ -68,9 +68,9 @@ public class ArtistActivity extends BaseMusicActivity {
     private void initView() {
         // 绑定View
         mArtistImage = findViewById(R.id.iv_artist_image);
-        mArtistName = findViewById(R.id.tv_artist_name);
+        mArtistName = findViewById(R.id.tv_musiclist_extra);
         mArtistInfo = findViewById(R.id.tv_artist_info);
-        albartiBackBtn = findViewById(R.id.albartiBackBtn);
+        albartiBackBtn = findViewById(R.id.heartBackBtn);
         appBarLayout = findViewById(R.id.app_bar_layout);
 
         // 设置View内容
