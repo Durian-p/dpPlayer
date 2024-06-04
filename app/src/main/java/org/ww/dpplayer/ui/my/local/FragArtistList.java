@@ -55,7 +55,7 @@ public class FragArtistList extends Fragment implements SwipeRefreshLayout.OnRef
         musicViewModel = new ViewModelProvider(requireActivity()).get(MusicViewModel.class);
 
         // 观察音乐列表数据
-        musicViewModel.getMusicList().observe(getViewLifecycleOwner(), new Observer<List<Music>>() {
+        musicViewModel.getLocalMusicList().observe(getViewLifecycleOwner(), new Observer<List<Music>>() {
             @Override
             public void onChanged(List<Music> musicList) {
                 // 设置适配器

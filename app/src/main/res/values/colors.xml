@@ -180,4 +180,5 @@
     <color name="white_semi_transparent">#56ECE9E9</color>
 
     <color name="artist_card_background">#BCFFFFFF</color>
+    <color name="dialog_card_background">#ABFFFFFF</color>
 </resources>

@@ -1,22 +1,31 @@
 package org.ww.dpplayer.ui.my;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.player.MusicService;
+
 import org.ww.dpplayer.ui.data.MusicViewModel;
 import org.ww.dpplayer.ui.my.heart.HeartActivity;
 import org.ww.dpplayer.ui.my.local.LocalActivity;
@@ -33,6 +42,8 @@ public class FragMy extends Fragment {
     private List<Music> heartMusics;
     private MusicViewModel musicViewModel;
     private MusicService musicService;
+    private RecyclerView mlistRcv;
+    private ImageView playlistAddIv;
     private boolean isBound = false;
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -49,6 +60,8 @@ public class FragMy extends Fragment {
         }
     };
 
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
+
     public static Fragment newInstance() {
         return new FragMy();
     }
@@ -63,22 +76,31 @@ public class FragMy extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         bindViews();
         initData();
-        initJump();
+        initListener();
         initPlayList();
 
         // 启动并绑定服务
         Intent serviceIntent = new Intent(getActivity(), MusicService.class);
         getActivity().startService(serviceIntent);
         getActivity().bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+
+        imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                CreateMlistDialog dialog = new CreateMlistDialog(requireContext(), imagePickerLauncher);
+                dialog.handleImageResult(result.getData());
+            }
+        });
     }
 
     private void bindViews() {
         localView = rootView.findViewById(R.id.localView);
         heartView = rootView.findViewById(R.id.favoriteView);
+        mlistRcv = rootView.findViewById(R.id.mlistRcv);
+        playlistAddIv = rootView.findViewById(R.id.playlistAddIv);
     }
 
     private void initData() {
@@ -86,7 +108,7 @@ public class FragMy extends Fragment {
         musicViewModel = new ViewModelProvider(this).get(MusicViewModel.class);
 
         // 观察音乐列表数据
-        musicViewModel.getMusicList().observe(getViewLifecycleOwner(), new Observer<List<Music>>() {
+        musicViewModel.getLocalMusicList().observe(getViewLifecycleOwner(), new Observer<List<Music>>() {
             @Override
             public void onChanged(List<Music> musicList) {
                 localMusics = musicList;
@@ -104,9 +126,18 @@ public class FragMy extends Fragment {
         });
     }
 
-    private void initJump() {
+    private void initListener() {
         initLocalMusics();
         initHeartMusics();
+
+        playlistAddIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateMlistDialog dialog = new CreateMlistDialog(requireContext(), imagePickerLauncher);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
     }
 
     private void initPlayList() {

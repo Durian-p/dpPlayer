@@ -17,6 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "id";
 
     // Music table columns
+    public static final String COLUMN_SONG_ID = "song_id";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_ALBUM = "album";
     public static final String COLUMN_ARTIST = "artist";
@@ -29,7 +30,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Playlist songs table columns
     public static final String COLUMN_PLAYLIST_ID = "playlist_id";
-    public static final String COLUMN_SONG_ID = "song_id";
 
     // Create table statements
     private static final String CREATE_TABLE_HEART_MUSIC = "CREATE TABLE " + TABLE_HEART_MUSIC + " (" +
@@ -50,7 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_PLAYLIST_ID + " INTEGER, " +
             COLUMN_SONG_ID + " INTEGER, " +
             "FOREIGN KEY(" + COLUMN_PLAYLIST_ID + ") REFERENCES " + TABLE_PLAYLIST + "(" + COLUMN_ID + "), " +
-            "FOREIGN KEY(" + COLUMN_SONG_ID + ") REFERENCES " + TABLE_HEART_MUSIC + "(" + COLUMN_ID + ")" + ")";
+            "FOREIGN KEY(" + COLUMN_SONG_ID + ") REFERENCES " + TABLE_HEART_MUSIC + "(" + COLUMN_SONG_ID + ")" + ")";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -69,8 +69,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLAYLIST);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLAYLIST_SONGS);
         onCreate(db);
-        //        if (oldVersion < 2) {
-//            db.execSQL("ALTER TABLE " + TABLE_PLAYLIST + " ADD COLUMN " + COLUMN_PLAYLIST_COVER + " BLOB");
-//        }
     }
 }
