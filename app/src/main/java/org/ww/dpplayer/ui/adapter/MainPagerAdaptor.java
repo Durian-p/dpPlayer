@@ -1,4 +1,4 @@
-package org.ww.dpplayer.ui.main;
+package org.ww.dpplayer.ui.adapter;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -8,8 +8,8 @@ import org.ww.dpplayer.ui.discover.FragDiscover;
 import org.ww.dpplayer.ui.my.FragMy;
 import org.ww.dpplayer.ui.rover.FragRover;
 
-public class SectionsPagerAdaptor extends FragmentStateAdapter{
-    public SectionsPagerAdaptor(FragmentActivity fa) {super(fa);};
+public class MainPagerAdaptor extends FragmentStateAdapter{
+    public MainPagerAdaptor(FragmentActivity fa) {super(fa);};
 
 
     @NotNull

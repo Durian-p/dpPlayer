@@ -12,7 +12,7 @@
               xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
-            android:id="@+id/iv_info_img"
+            android:id="@+id/ivMlImg"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:contentDescription="专辑封面"
@@ -31,7 +31,7 @@
 
         <!-- 歌单名 -->
         <TextView
-                android:id="@+id/tv_musiclist_name"
+                android:id="@+id/mlName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="How Sweet"
@@ -40,7 +40,7 @@
 
         <!-- 歌手名等补充信息 -->
         <TextView
-                android:id="@+id/tv_musiclist_extra"
+                android:id="@+id/mlExtra"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="歌手: New Jeans"

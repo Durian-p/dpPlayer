@@ -1,4 +1,4 @@
-package org.ww.dpplayer.ui.my.local.adapter;
+package org.ww.dpplayer.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ViewHolder> implements SectionIndexer {
+public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.ViewHolder> implements SectionIndexer {
 
     private Context context;
     private List<List<Music>> artistList;
@@ -44,7 +44,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ViewHolder
         this.onItemClickListener = listener;
     }
 
-    public ArtistAdapter(Context context, List<Music> musicList) {
+    public ArtistListAdapter(Context context, List<Music> musicList) {
         this.context = context;
         this.artistList = extractArtists(musicList);
 

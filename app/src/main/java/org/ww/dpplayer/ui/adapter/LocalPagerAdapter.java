@@ -1,4 +1,4 @@
-package org.ww.dpplayer.ui.my.local.adapter;
+package org.ww.dpplayer.ui.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

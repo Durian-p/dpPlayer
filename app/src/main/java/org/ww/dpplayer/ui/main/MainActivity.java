@@ -19,6 +19,7 @@ import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicService;
+import org.ww.dpplayer.ui.adapter.MainPagerAdaptor;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class MainActivity extends BaseMusicActivity {
     private static final int REQUEST_CODE = 1024;
     private ViewPager2 mainVp;
     private BottomNavigationView bottomNavigation;
-    SectionsPagerAdaptor sectionsPagerAdaptor;
+    MainPagerAdaptor mainPagerAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +49,8 @@ public class MainActivity extends BaseMusicActivity {
     private void initView() {
         mainVp = findViewById(R.id.mainVp);
         bottomNavigation = findViewById(R.id.mainNav);
-        sectionsPagerAdaptor = new SectionsPagerAdaptor(this);
-        mainVp.setAdapter(sectionsPagerAdaptor);
+        mainPagerAdaptor = new MainPagerAdaptor(this);
+        mainVp.setAdapter(mainPagerAdaptor);
         mainVp.registerOnPageChangeCallback(pageChangeCallBack);
         // 这里是bottomNavigationView的点击事件
         bottomNavigation.setOnItemSelectedListener(naviListener);

@@ -9,7 +9,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
 import org.ww.dpplayer.ui.data.MusicViewModel;
-import org.ww.dpplayer.ui.my.local.adapter.LocalPagerAdapter;
+import org.ww.dpplayer.ui.adapter.LocalPagerAdapter;
 
 public class LocalActivity extends BaseMusicActivity
 {

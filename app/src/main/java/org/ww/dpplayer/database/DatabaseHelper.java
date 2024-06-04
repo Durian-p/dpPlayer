@@ -6,9 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "music.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2; // 更新数据库版本
 
     // Table names
+    public static final String TABLE_LOCAL_MUSIC = "local_music";
     public static final String TABLE_HEART_MUSIC = "heart_music";
     public static final String TABLE_PLAYLIST = "playlist";
     public static final String TABLE_PLAYLIST_SONGS = "playlist_songs";
@@ -16,7 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Common columns
     public static final String COLUMN_ID = "id";
 
-    // Music table columns
+    // Local music table columns
     public static final String COLUMN_SONG_ID = "song_id";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_ALBUM = "album";
@@ -32,13 +33,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PLAYLIST_ID = "playlist_id";
 
     // Create table statements
-    private static final String CREATE_TABLE_HEART_MUSIC = "CREATE TABLE " + TABLE_HEART_MUSIC + " (" +
-            COLUMN_SONG_ID + " INTEGER PRIMARY KEY , " +
+    private static final String CREATE_TABLE_LOCAL_MUSIC = "CREATE TABLE " + TABLE_LOCAL_MUSIC + " (" +
+            COLUMN_SONG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_TITLE + " TEXT, " +
             COLUMN_ALBUM + " TEXT, " +
             COLUMN_ARTIST + " TEXT, " +
             COLUMN_DURATION + " INTEGER, " +
             COLUMN_PATH + " TEXT" + ")";
+
+    private static final String CREATE_TABLE_HEART_MUSIC = "CREATE TABLE " + TABLE_HEART_MUSIC + " (" +
+            COLUMN_SONG_ID + " INTEGER, " +
+            "FOREIGN KEY(" + COLUMN_SONG_ID + ") REFERENCES " + TABLE_LOCAL_MUSIC + "(" + COLUMN_SONG_ID + ") ON DELETE CASCADE" + ")";
 
     private static final String CREATE_TABLE_PLAYLIST = "CREATE TABLE " + TABLE_PLAYLIST + " (" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -49,8 +54,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_PLAYLIST_ID + " INTEGER, " +
             COLUMN_SONG_ID + " INTEGER, " +
-            "FOREIGN KEY(" + COLUMN_PLAYLIST_ID + ") REFERENCES " + TABLE_PLAYLIST + "(" + COLUMN_ID + "), " +
-            "FOREIGN KEY(" + COLUMN_SONG_ID + ") REFERENCES " + TABLE_HEART_MUSIC + "(" + COLUMN_SONG_ID + ")" + ")";
+            "FOREIGN KEY(" + COLUMN_PLAYLIST_ID + ") REFERENCES " + TABLE_PLAYLIST + "(" + COLUMN_ID + ") ON DELETE CASCADE, " +
+            "FOREIGN KEY(" + COLUMN_SONG_ID + ") REFERENCES " + TABLE_LOCAL_MUSIC + "(" + COLUMN_SONG_ID + ") ON DELETE CASCADE" + ")";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -58,6 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_TABLE_LOCAL_MUSIC);
         db.execSQL(CREATE_TABLE_HEART_MUSIC);
         db.execSQL(CREATE_TABLE_PLAYLIST);
         db.execSQL(CREATE_TABLE_PLAYLIST_SONGS);
@@ -65,9 +71,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HEART_MUSIC);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLAYLIST);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLAYLIST_SONGS);
-        onCreate(db);
+        if (oldVersion < 2) {
+            db.execSQL(CREATE_TABLE_LOCAL_MUSIC);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_HEART_MUSIC);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLAYLIST_SONGS);
+            db.execSQL(CREATE_TABLE_HEART_MUSIC);
+            db.execSQL(CREATE_TABLE_PLAYLIST_SONGS);
+        }
     }
 }

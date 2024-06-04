@@ -1,4 +1,4 @@
-package org.ww.dpplayer.ui.base;
+package org.ww.dpplayer.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.ComponentName;

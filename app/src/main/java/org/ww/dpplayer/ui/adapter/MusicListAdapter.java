@@ -1,5 +1,5 @@
-// MusicAdapter.java
-package org.ww.dpplayer.ui.my.local.adapter;
+// MusicListAdapter.java
+package org.ww.dpplayer.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,13 +20,13 @@ import org.ww.dpplayer.util.ChineseToPinyin;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> implements SectionIndexer{
+public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.ViewHolder> implements SectionIndexer{
 
     private Context context;
     private List<Music> musicList; // 歌曲列表数据
     private OnItemClickListener onItemClickListener;
 
-    public MusicAdapter(Context context, List<Music> musicList) {
+    public MusicListAdapter(Context context, List<Music> musicList) {
         this.context = context;
         this.musicList = musicList;
     }

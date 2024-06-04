@@ -14,7 +14,7 @@ import java.util.List;
 public class MusicViewModel extends AndroidViewModel {
     private MutableLiveData<List<Music>> localMusicList;
     private MutableLiveData<List<Music>> heartMusicList;
-    private MutableLiveData<MusicList> musicList;
+    private MutableLiveData<List<MusicList>> musicList;
     private final MusicRepository musicRepository;
 
     public MusicViewModel(Application application) {
@@ -25,11 +25,18 @@ public class MusicViewModel extends AndroidViewModel {
             public void onHeartMusicChanged() {
                 loadHeartMusics();
             }
+
+            @Override
+            public void onMusicListsChanged() {
+                loadMusicList();
+            }
         });
+
     }
 
     public LiveData<List<Music>> getLocalMusicList() {
-        if (localMusicList == null) {
+        if (localMusicList == null)
+        {
             localMusicList = new MutableLiveData<>();
             loadMusics();
         }
@@ -37,47 +44,55 @@ public class MusicViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Music>> getHeartMusicList() {
-        if (heartMusicList == null) {
+        if (heartMusicList == null)
+        {
             heartMusicList = new MutableLiveData<>();
             loadHeartMusics();
         }
         return heartMusicList;
     }
 
-    public LiveData<MusicList> getMusicList(String playlistName) {
-        if (musicList == null) {
+    public LiveData<List<MusicList>> getMusicLists() {
+        if (musicList == null)
+        {
             musicList = new MutableLiveData<>();
-            loadMusicList(playlistName);
+            loadMusicList();
         }
         return musicList;
     }
 
-    private void loadMusicList(String playlistName)
+    public void loadMusicList()
     {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                MusicList musicList = musicRepository.getMusicListByName(playlistName);
+                List<MusicList> musicList = musicRepository.getAllMusicLists();
+                if (musicList == null)
+                    MusicViewModel.this.musicList = new MutableLiveData<>();
                 MusicViewModel.this.musicList.postValue(musicList);
             }
         }).start();
     }
 
-    private void loadMusics() {
+    public void loadMusics() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 List<Music> musics = MusicLoader.findLocalMusic(getApplication().getApplicationContext());
+                if (localMusicList == null)
+                    localMusicList = new MutableLiveData<>();
                 localMusicList.postValue(musics);
             }
         }).start();
     }
 
-    private void loadHeartMusics() {
+    public void loadHeartMusics() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 List<Music> musics = musicRepository.getAllHeartMusic();
+                if (heartMusicList == null)
+                    heartMusicList = new MutableLiveData<>();
                 heartMusicList.postValue(musics);
             }
         }).start();

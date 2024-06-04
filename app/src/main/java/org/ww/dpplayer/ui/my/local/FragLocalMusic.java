@@ -18,19 +18,19 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicServiceController;
+import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
 import org.ww.dpplayer.ui.data.MusicViewModel;
-import org.ww.dpplayer.ui.my.local.adapter.MusicAdapter;
 import org.ww.dpplayer.ui.widget.SidebarView;
 import org.ww.dpplayer.util.MusicLoader;
 
 import java.util.List;
 
-public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MusicAdapter.OnItemClickListener, SidebarView.OnLetterClickedListener {
+public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MusicListAdapter.OnItemClickListener, SidebarView.OnLetterClickedListener {
 
     private  BaseMusicActivity baseMusicActivity;
     private RecyclerView recyclerView;
-    private MusicAdapter adapter;
+    private MusicListAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private MusicViewModel musicViewModel;
 
@@ -78,7 +78,7 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
             @Override
             public void onChanged(List<Music> musicList) {
                 // 设置适配器
-                adapter = new MusicAdapter(requireContext(), musicList);
+                adapter = new MusicListAdapter(requireContext(), musicList);
                 adapter.setOnItemClickListener(FragLocalMusic.this);
                 recyclerView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false); // 停止刷新动画

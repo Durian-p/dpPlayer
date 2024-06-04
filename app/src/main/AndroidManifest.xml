@@ -31,6 +31,7 @@
         <activity android:name=".ui.my.local.ArtistActivity"/>
         <activity android:name=".ui.player.PlayerActivity" />
         <activity android:name=".ui.my.heart.HeartActivity" />
+        <activity android:name=".ui.my.mlist.MusicListActivity" />
         <service
                 android:name=".player.MusicService"
                 android:enabled="true"

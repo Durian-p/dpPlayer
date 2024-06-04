@@ -16,14 +16,14 @@ import org.ww.dpplayer.R;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
-import org.ww.dpplayer.ui.my.local.adapter.MusicAdapter;
+import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.util.MusicLoader;
 
 import java.util.List;
 
 public class ArtistActivity extends BaseMusicActivity {
     private String artistName;
-    private MusicAdapter musicAdapter;
+    private MusicListAdapter musicListAdapter;
     private List<Music> artistMusicList;
     private ImageView mArtistImage;
     private TextView mArtistName;
@@ -78,7 +78,7 @@ public class ArtistActivity extends BaseMusicActivity {
     private void initView() {
         // 绑定View
         mArtistImage = findViewById(R.id.iv_artist_image);
-        mArtistName = findViewById(R.id.tv_musiclist_extra);
+        mArtistName = findViewById(R.id.mlExtra);
         mArtistInfo = findViewById(R.id.tv_artist_info);
         albartiBackBtn = findViewById(R.id.heartBackBtn);
         appBarLayout = findViewById(R.id.app_bar_layout);
@@ -102,8 +102,8 @@ public class ArtistActivity extends BaseMusicActivity {
         // 初始化 RecyclerView
         mMusicList = findViewById(R.id.rv_musics);
         mMusicList.setLayoutManager(new LinearLayoutManager(this));
-        musicAdapter = new MusicAdapter(ArtistActivity.this, artistMusicList);
-        musicAdapter.setOnItemClickListener(new MusicAdapter.OnItemClickListener() {
+        musicListAdapter = new MusicListAdapter(ArtistActivity.this, artistMusicList);
+        musicListAdapter.setOnItemClickListener(new MusicListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 // 播放歌曲
@@ -111,7 +111,7 @@ public class ArtistActivity extends BaseMusicActivity {
                 MusicServiceController.sendPlayBroadcast(ArtistActivity.this);
             }
         });
-        mMusicList.setAdapter(musicAdapter);
+        mMusicList.setAdapter(musicListAdapter);
     }
 
     @Override

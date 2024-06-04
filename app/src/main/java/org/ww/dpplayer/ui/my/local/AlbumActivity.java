@@ -12,15 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicServiceController;
+import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
-import org.ww.dpplayer.ui.my.local.adapter.MusicAdapter;
 import org.ww.dpplayer.util.MusicLoader;
 
 import java.util.List;
 
 public class AlbumActivity extends BaseMusicActivity {
     private String albumTitle;
-    private MusicAdapter musicAdapter;
+    private MusicListAdapter musicListAdapter;
     private List<Music> albumMusicList;
     private RecyclerView mRecyclerView;
 
@@ -51,9 +51,9 @@ public class AlbumActivity extends BaseMusicActivity {
     private void initView()
     {
         // 绑定View
-        mAlbumCover = findViewById(R.id.iv_info_img);
-        mAlbumTitle = findViewById(R.id.tv_musiclist_name);
-        mAlbumArtist = findViewById(R.id.tv_musiclist_extra);
+        mAlbumCover = findViewById(R.id.ivMlImg);
+        mAlbumTitle = findViewById(R.id.mlName);
+        mAlbumArtist = findViewById(R.id.mlExtra);
         mAlbumBackBtn = findViewById(R.id.albumBackBtn);
 
         // 设置View内容
@@ -65,8 +65,8 @@ public class AlbumActivity extends BaseMusicActivity {
         // 初始化 RecyclerView
         mRecyclerView = findViewById(R.id.rv_musics);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        musicAdapter = new MusicAdapter(AlbumActivity.this, albumMusicList);
-        musicAdapter.setOnItemClickListener(new MusicAdapter.OnItemClickListener() {
+        musicListAdapter = new MusicListAdapter(AlbumActivity.this, albumMusicList);
+        musicListAdapter.setOnItemClickListener(new MusicListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 // 播放歌曲
@@ -74,7 +74,7 @@ public class AlbumActivity extends BaseMusicActivity {
                 MusicServiceController.sendPlayBroadcast(AlbumActivity.this);
             }
         });
-        mRecyclerView.setAdapter(musicAdapter);
+        mRecyclerView.setAdapter(musicListAdapter);
 
         mAlbumBackBtn.setOnClickListener(new View.OnClickListener()
         {

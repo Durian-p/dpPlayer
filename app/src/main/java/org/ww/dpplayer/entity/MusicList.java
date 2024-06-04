@@ -10,7 +10,7 @@ public class MusicList {
     private long id;
     private String name;
     private Bitmap cover;
-    private List<String> musicIdList = new ArrayList<>();
+    private List<Long> musicIdList = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -36,11 +36,11 @@ public class MusicList {
         this.cover = cover;
     }
 
-    public List<String> getMusicIdList() {
+    public List<Long> getMusicIdList() {
         return musicIdList;
     }
 
-    public void setMusicIdList(List<String> musicIdList) {
+    public void setMusicIdList(List<Long> musicIdList) {
         this.musicIdList = musicIdList;
     }
 

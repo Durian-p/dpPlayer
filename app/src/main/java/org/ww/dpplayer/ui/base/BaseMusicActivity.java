@@ -16,6 +16,7 @@ import org.ww.dpplayer.R;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.player.MusicService;
+import org.ww.dpplayer.ui.adapter.MusicBarPagerAdapter;
 import org.ww.dpplayer.ui.widget.PlayPauseView;
 
 import java.util.ArrayList;
