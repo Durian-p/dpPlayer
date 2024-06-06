@@ -1,23 +1,18 @@
 package org.ww.dpplayer.ui.my;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import org.ww.dpplayer.R;
@@ -27,7 +22,7 @@ import org.ww.dpplayer.entity.MusicList;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class CreateMlistDialog extends Dialog {
+public class DialogNewMlist extends Dialog {
 
     private EditText editTextPlaylistName;
     private ImageView imageViewPlaylistCover;
@@ -36,7 +31,7 @@ public class CreateMlistDialog extends Dialog {
     private MusicRepository musicRepository;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
 
-    public CreateMlistDialog(@NonNull Context context, ActivityResultLauncher<Intent> imagePickerLauncher) {
+    public DialogNewMlist(@NonNull Context context, ActivityResultLauncher<Intent> imagePickerLauncher) {
         super(context);
         this.imagePickerLauncher = imagePickerLauncher;
         musicRepository = MusicRepository.getInstance();

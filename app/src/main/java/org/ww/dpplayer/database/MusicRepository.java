@@ -59,6 +59,10 @@ public class MusicRepository {
         }
     }
 
+
+
+
+
     // Local Music CRUD operations
     public long addLocalMusic(Music music) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -272,6 +276,7 @@ public class MusicRepository {
                 playlist.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ID)));
                 playlist.setName(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_PLAYLIST_NAME)));
                 playlist.setCoverFromByteArray(cursor.getBlob(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_PLAYLIST_COVER)));
+                playlist.setMusicIdList(getMusicIdsByPlaylistId(playlist.getId()));
                 playlistList.add(playlist);
             }
             cursor.close();
@@ -348,11 +353,11 @@ public class MusicRepository {
         List<Long> musicIds = getMusicIdsByPlaylistId(id);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         for (Long musicId : musicIds) {
-            Cursor cursor = db.query(DatabaseHelper.TABLE_LOCAL_MUSIC, null, DatabaseHelper.COLUMN_ID + " = ?", new String[]{String.valueOf(musicId)}, null, null, null);
+            Cursor cursor = db.query(DatabaseHelper.TABLE_LOCAL_MUSIC, null, DatabaseHelper.COLUMN_SONG_ID + " = ?", new String[]{String.valueOf(musicId)}, null, null, null);
             if (cursor != null) {
                 if (cursor.moveToNext()) {
                     Music music = new Music();
-                    music.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ID)));
+                    music.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SONG_ID)));
                     loadMusic(cursor, music);
                     musics.add(music);
                 }
@@ -363,16 +368,35 @@ public class MusicRepository {
         return musics;
     }
 
-    public void addMusicToPlaylist(long playlistId, long songId) {
+    public boolean addMusicToPlaylist(long playlistId, long songId) {
         if (getLocalMusicById(songId) == null) {
             throw new IllegalArgumentException("Song ID not found in local music table");
         }
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
+        // 检查歌曲是否存在
+        if (isMusicInMlist(songId, playlistId)) {
+            return false;
+        }
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         values.put(DatabaseHelper.COLUMN_PLAYLIST_ID, playlistId);
         values.put(DatabaseHelper.COLUMN_SONG_ID, songId);
         db.insert(DatabaseHelper.TABLE_PLAYLIST_SONGS, null, values);
         db.close();
+        return true;
+    }
+
+    public boolean isMusicInMlist(long songId, long playlistId)
+    {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(DatabaseHelper.TABLE_PLAYLIST_SONGS, null, DatabaseHelper.COLUMN_PLAYLIST_ID + " = ? AND " + DatabaseHelper.COLUMN_SONG_ID + " = ?", new String[]{String.valueOf(playlistId), String.valueOf(songId)}, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToNext()) {
+                cursor.close();
+                return true;
+            }
+            cursor.close();
+        }
+        return false;
     }
 
     public void removeMusicFromPlaylist(long playlistId, long songId) {
@@ -380,4 +404,39 @@ public class MusicRepository {
         db.delete(DatabaseHelper.TABLE_PLAYLIST_SONGS, DatabaseHelper.COLUMN_PLAYLIST_ID + " = ? AND " + DatabaseHelper.COLUMN_SONG_ID + " = ?", new String[]{String.valueOf(playlistId), String.valueOf(songId)});
         db.close();
     }
+
+    public ArrayList<Music> getMusicsByAlbum(String album)
+    {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        ArrayList<Music> musicList = new ArrayList<>();
+        Cursor cursor = db.query(DatabaseHelper.TABLE_LOCAL_MUSIC, null, DatabaseHelper.COLUMN_ALBUM + " = ?", new String[]{album}, null, null, null);
+        if (cursor != null)
+        {
+            while (cursor.moveToNext()) {
+                Music music = new Music();
+                music.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SONG_ID)));
+                loadMusic(cursor, music);
+                musicList.add(music);
+            }
+        }
+        return musicList;
+    }
+
+    public ArrayList<Music> getMusicsByArtist(String artist)
+    {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        ArrayList<Music> musicList = new ArrayList<>();
+        Cursor cursor = db.query(DatabaseHelper.TABLE_LOCAL_MUSIC, null, DatabaseHelper.COLUMN_ARTIST + " = ?", new String[]{artist}, null, null, null);
+        if (cursor != null)
+        {
+            while (cursor.moveToNext()) {
+                Music music = new Music();
+                music.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SONG_ID)));
+                loadMusic(cursor, music);
+                musicList.add(music);
+            }
+        }
+        return musicList;
+    }
+
 }

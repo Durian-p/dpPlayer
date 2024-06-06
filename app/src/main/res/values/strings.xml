@@ -59,6 +59,14 @@
     <string name="play_list">播放列表</string>
     <string name="heart">我的收藏</string>
     <string name="save_mlist">创建歌单</string>
+    <string name="add2mlist">添加到歌单</string>
+    <string name="add2mlist_fail">添加失败，歌曲已存在</string>
+    <string name="add2mlist_success">添加成功</string>
+    <string name="play_song_next">下一首播放</string>
+    <string name="check_album">查看专辑</string>
+    <string name="check_artist">查看歌手</string>
+    <string name="delet">删除</string>
+    <string name="share">分享</string>
 
 
 </resources>

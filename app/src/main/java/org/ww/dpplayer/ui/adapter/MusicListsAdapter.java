@@ -42,7 +42,7 @@ public class MusicListsAdapter extends RecyclerView.Adapter<MusicListsAdapter.Vi
         MusicList musicList = musicListList.get(position);
         holder.id = musicList.getId();
         holder.tvTitle.setText(musicList.getName());
-        holder.tvExtra.setText("(" + musicList.getMusicIdList().size() + ")");
+        holder.tvExtra.setText(" " + musicList.getMusicIdList().size() + "首");
         Bitmap cover  = musicList.getCover();
         if (cover == null)
             holder.ivCover.setImageResource(R.drawable.default_cover);

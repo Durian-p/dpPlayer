@@ -19,7 +19,9 @@ import net.steamcrafted.materialiconlib.MaterialIconView;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
+import org.ww.dpplayer.entity.MusicList;
 import org.ww.dpplayer.player.MusicService;
+import org.ww.dpplayer.ui.base.DialogAdd2Mlist;
 import org.ww.dpplayer.ui.base.DialogPlaylist;
 import org.ww.dpplayer.ui.player.fragment.CoverFragment;
 import org.ww.dpplayer.ui.player.fragment.LyricFragment;
@@ -57,6 +59,8 @@ public class PlayerActivity extends AppCompatActivity
     private CheckedTextView leftTv;
     private ImageView backIv;
     private MaterialIconView playQueueIv;
+    private ImageView playlistAddIv;
+
     private boolean isServiceBound = false;
     private boolean isCoverFragmentReady = false;
     private MusicService.PlaybackInfo pendingPlaybackInfo;
@@ -140,6 +144,7 @@ public class PlayerActivity extends AppCompatActivity
         titleTv = findViewById(R.id.titleTv);
         subTitleTv = findViewById(R.id.subTitleTv);
         playQueueIv = findViewById(R.id.playQueueIv);
+        playlistAddIv = findViewById(R.id.playlistAddIv);
 
         setupViewPager(viewPager);
 
@@ -244,6 +249,17 @@ public class PlayerActivity extends AppCompatActivity
                 {
                     heartIv.setImageResource(R.drawable.item_heart);
                 }
+            }
+        });
+
+        // 添加歌单
+        playlistAddIv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                DialogAdd2Mlist dialogAdd2Mlist = new DialogAdd2Mlist(PlayerActivity.this, playingMusic);
+                dialogAdd2Mlist.show(getSupportFragmentManager(), "DialogAdd2Mlist");
             }
         });
     }

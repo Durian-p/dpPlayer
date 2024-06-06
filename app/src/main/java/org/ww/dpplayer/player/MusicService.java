@@ -20,13 +20,6 @@ import java.util.*;
 
 public class MusicService extends Service
 {
-
-
-    public void seekTo(int progress)
-    {
-        player.seekTo(progress);
-    }
-
     public enum PlayerState
     {
         None,
@@ -139,6 +132,30 @@ public class MusicService extends Service
                 break;
             }
         }
+    }
+
+
+    public void seekTo(int progress)
+    {
+        player.seekTo(progress);
+    }
+
+    public void setToNextPlay(Music music)
+    {
+        if (originalPlaylist.size() == 0)
+            return;
+
+        int index = playingPlaylist.indexOf(music);
+        if (index != - 1)
+        {
+            playingPlaylist.remove(index);
+            playingPlaylist.add((currentSongIndex + 1) % playingPlaylist.size(), music);
+        } else
+        {
+            playingPlaylist.add((currentSongIndex + 1) % playingPlaylist.size(), music);
+            originalPlaylist.add(music);
+        }
+
     }
 
     public void setOriginalPlaylist(List<Music> originalPlaylist)

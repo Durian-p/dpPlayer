@@ -17,6 +17,7 @@ import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
+import org.ww.dpplayer.ui.base.DialogItemLongPress;
 import org.ww.dpplayer.util.MusicLoader;
 
 import java.util.List;
@@ -109,6 +110,13 @@ public class ArtistActivity extends BaseMusicActivity {
                 // 播放歌曲
                 musicService.setPlaylist(artistMusicList, position);
                 MusicServiceController.sendPlayBroadcast(ArtistActivity.this);
+            }
+        });
+        musicListAdapter.setOnItemLongClickListener(new MusicListAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(int position) {
+                DialogItemLongPress dialog = new DialogItemLongPress(artistMusicList.get(position));
+                dialog.show(getSupportFragmentManager(), "dialog");
             }
         });
         mMusicList.setAdapter(musicListAdapter);

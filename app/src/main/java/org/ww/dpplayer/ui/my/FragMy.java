@@ -53,8 +53,9 @@ public class FragMy extends Fragment {
     private MusicService musicService;
     private RecyclerView mlistRcv;
     private ImageView playlistAddIv;
+    private ImageView multiSelectIv;
 
-    private CreateMlistDialog dialog;
+    private DialogNewMlist dialog;
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -99,7 +100,7 @@ public class FragMy extends Fragment {
 
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-//                CreateMlistDialog dialog = new CreateMlistDialog(requireContext(), imagePickerLauncher);
+//                DialogNewMlist dialog = new DialogNewMlist(requireContext(), imagePickerLauncher);
                 dialog.handleImageResult(result.getData());
             }
         });
@@ -110,6 +111,7 @@ public class FragMy extends Fragment {
         heartView = rootView.findViewById(R.id.favoriteView);
         mlistRcv = rootView.findViewById(R.id.mlistRcv);
         playlistAddIv = rootView.findViewById(R.id.playlistAddIv);
+        multiSelectIv = rootView.findViewById(R.id.multiSelectIv);
     }
 
     private void initData() {
@@ -134,6 +136,7 @@ public class FragMy extends Fragment {
             }
         });
 
+        // 设置rv
         musicLists = musicViewModel.getMusicLists().getValue();
         musicListsAdapter = new MusicListsAdapter(musicLists);
         musicListsAdapter.setListener(new MusicListsAdapter.OnItemClickListener() {
@@ -158,6 +161,15 @@ public class FragMy extends Fragment {
                 }
             }
         });
+
+        multiSelectIv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+            }
+        });
     }
 
     private void initListener() {
@@ -167,7 +179,7 @@ public class FragMy extends Fragment {
         playlistAddIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog = new CreateMlistDialog(requireContext(), imagePickerLauncher);
+                dialog = new DialogNewMlist(requireContext(), imagePickerLauncher);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }

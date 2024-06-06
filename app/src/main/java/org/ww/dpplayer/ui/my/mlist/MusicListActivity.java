@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
+import org.ww.dpplayer.databinding.DialogLongpressBinding;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.entity.MusicList;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
+import org.ww.dpplayer.ui.base.DialogItemLongPress;
 
 import java.util.List;
 
@@ -46,6 +48,22 @@ public class MusicListActivity extends BaseMusicActivity
         this.musics = musicRepository.getMusicInMlistByMlistId(musicList.getId());
 
         musicListAdapter = new MusicListAdapter(this, musics);
+        musicListAdapter.setOnItemClickListener(new MusicListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position)
+            {
+                updateServiceMusicList(musics, position);
+            }
+        });
+        musicListAdapter.setOnItemLongClickListener(new MusicListAdapter.OnItemLongClickListener()
+        {
+            @Override
+            public void onItemLongClick(int position)
+            {
+                DialogItemLongPress dialog = new DialogItemLongPress(musics.get(position));
+                dialog.show(getSupportFragmentManager(), "dialog");
+            }
+        });
     }
 
      private void initView()

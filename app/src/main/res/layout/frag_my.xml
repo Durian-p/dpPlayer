@@ -34,7 +34,7 @@
                         app:iv_icon="@drawable/item_music"
                         app:iv_icon_color="@color/logo_blue"
                         app:tv_desc="@string/default_num"
-                        app:tv_name="@string/item_local" />
+                        app:tv_name="@string/item_local"/>
 
 
                 <org.ww.dpplayer.ui.widget.MyItemView
@@ -45,7 +45,7 @@
                         app:iv_icon="@drawable/ic_history_black"
                         app:iv_icon_color="@color/amber"
                         app:tv_desc="@string/default_num"
-                        app:tv_name="@string/item_history" />
+                        app:tv_name="@string/item_history"/>
 
 
                 <org.ww.dpplayer.ui.widget.MyItemView
@@ -56,7 +56,7 @@
                         app:iv_icon="@drawable/item_heart"
                         app:iv_icon_color="@color/pink_pressed"
                         app:tv_desc="@string/default_num"
-                        app:tv_name="@string/item_favorite" />
+                        app:tv_name="@string/item_favorite"/>
 
                 <!--                <org.ww.testapp.ui.widget.MyItemView-->
                 <!--                        android:id="@+id/videoView"-->
@@ -68,15 +68,15 @@
                 <!--                        app:tv_desc="@string/default_num"-->
                 <!--                        app:tv_name="@string/item_video" />-->
 
-<!--                <org.ww.testapp.ui.widget.MyItemView-->
-<!--                        android:id="@+id/downloadView"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="@dimen/dp_56"-->
-<!--                        android:gravity="center_vertical"-->
-<!--                        app:iv_icon="@drawable/item_download"-->
-<!--                        app:iv_icon_color="@color/colorAccentDarkTheme"-->
-<!--                        app:tv_desc="@string/default_num"-->
-<!--                        app:tv_name="@string/item_download" />-->
+                <!--                <org.ww.testapp.ui.widget.MyItemView-->
+                <!--                        android:id="@+id/downloadView"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="@dimen/dp_56"-->
+                <!--                        android:gravity="center_vertical"-->
+                <!--                        app:iv_icon="@drawable/item_download"-->
+                <!--                        app:iv_icon_color="@color/colorAccentDarkTheme"-->
+                <!--                        app:tv_desc="@string/default_num"-->
+                <!--                        app:tv_name="@string/item_download" />-->
 
             </LinearLayout>
 
@@ -97,74 +97,116 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                <LinearLayout
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content">
 
-                    <LinearLayout
+                    <TextView
+                            android:id="@+id/playlistTv"
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginVertical="10dp"
+                            android:layout_marginBottom="20dp"
+                            android:text="歌单"
+                            android:gravity="center_vertical"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toLeftOf="@id/playlistAddIv"
+                            style="@style/TitleMlist"/>
+
+                    <ImageView
+                            android:id="@+id/playlistAddIv"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"
+                            android:layout_marginVertical="10dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="?android:attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_add"
+                            app:tint="@color/iconColor"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toLeftOf="@id/multiSelectIv"/>
+
+                    <ImageView
+                            android:id="@+id/multiSelectIv"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginVertical="10dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="?android:attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_multi_select"
+                            app:tint="@color/iconColor"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"/>
+
+                    <Button
+                            android:id="@+id/cancelBtn"
+                            android:layout_width="72dp"
+                            android:layout_height="42dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_gravity="center_vertical"
+                            app:tint="@color/iconColor"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toLeftOf="@id/deleteBtn"
+                            android:text="取消"
+                            android:visibility="gone"/>
+
+                    <Button
+                            android:id="@+id/deleteBtn"
+                            android:layout_width="72dp"
+                            android:layout_height="42dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_gravity="center_vertical"
+                            app:tint="@color/iconColor"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:text="删除"
+                            android:visibility="gone"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/divider_line"/>
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/mlistRcv"
                             android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clipToPadding="false"
+                            android:minHeight="@dimen/dp_200"
+                            android:paddingTop="@dimen/dp_8"
+                            tools:listitem="@layout/item_musiclist"/>
+
+                    <ProgressBar
+                            android:id="@+id/loading_progress_bar"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical">
+                            android:layout_centerInParent="true"
+                            android:indeterminate="true"
+                            android:visibility="gone"
+                            tools:visibility="visible"/>
 
-                        <com.google.android.material.tabs.TabLayout
-                                android:id="@+id/playlistTab"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginEnd="@dimen/dp_16"
-                                android:layout_weight="1"
-                                app:tabIndicatorHeight="0dp"
-                                app:tabSelectedTextColor="@color/accentColor"/>
-
-                        <ImageView
-                                android:id="@+id/playlistAddIv"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center_vertical"
-                                android:background="?android:attr/selectableItemBackgroundBorderless"
-                                android:src="@drawable/ic_add"
-                                app:tint="@color/iconColor" />
-
-                        <ImageView
-                                android:id="@+id/multiSelectIv"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_margin="@dimen/dp_16"
-                                android:background="?android:attr/selectableItemBackgroundBorderless"
-                                android:src="@drawable/ic_multi_select"
-                                app:tint="@color/iconColor" />
-                    </LinearLayout>
-
-                    <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_1"
-                            android:background="@color/divider_line" />
-
-                    <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                        <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/mlistRcv"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:clipToPadding="false"
-                                android:minHeight="@dimen/dp_200"
-                                android:paddingTop="@dimen/dp_8" />
-
-                        <ProgressBar
-                                android:id="@+id/loading_progress_bar"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:indeterminate="true"
-                                android:visibility="gone"
-                                tools:visibility="visible" />
-
-                    </RelativeLayout>
-                </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
+
 
         </androidx.cardview.widget.CardView>
 

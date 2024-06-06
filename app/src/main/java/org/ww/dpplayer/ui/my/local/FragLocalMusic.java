@@ -20,6 +20,7 @@ import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
+import org.ww.dpplayer.ui.base.DialogItemLongPress;
 import org.ww.dpplayer.ui.data.MusicViewModel;
 import org.ww.dpplayer.ui.widget.SidebarView;
 import org.ww.dpplayer.util.MusicLoader;
@@ -80,6 +81,15 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
                 // 设置适配器
                 adapter = new MusicListAdapter(requireContext(), musicList);
                 adapter.setOnItemClickListener(FragLocalMusic.this);
+                adapter.setOnItemLongClickListener(new MusicListAdapter.OnItemLongClickListener()
+                {
+                    @Override
+                    public void onItemLongClick(int position)
+                    {
+                        DialogItemLongPress dialog = new DialogItemLongPress(musicList.get(position));
+                        dialog.show(requireActivity().getSupportFragmentManager(), "dialog");
+                    }
+                });
                 recyclerView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
             }

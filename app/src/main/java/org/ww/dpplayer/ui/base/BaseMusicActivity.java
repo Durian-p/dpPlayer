@@ -31,7 +31,7 @@ public abstract class BaseMusicActivity extends AppCompatActivity
 
     private boolean isBound = false;
     private MusicBarPagerAdapter adapter;
-    private List<Music> musicList = new ArrayList<>();
+    protected List<Music> musicList = new ArrayList<>();
 
     // ---control---
     private boolean updateService = true;
@@ -65,7 +65,11 @@ public abstract class BaseMusicActivity extends AppCompatActivity
                 {
                     musicService.setCurrentMusic(position);
                     //MusicServiceController.sendPlayBroadcast(BaseMusicActivity.this);
+                }else if (!updateService)
+                {
+                    updateService = true;
                 }
+
             }
         });
 
@@ -204,6 +208,15 @@ public abstract class BaseMusicActivity extends AppCompatActivity
         adapter.notifyDataSetChanged();
     }
 
+    public void setToNextPlay(Music music)
+    {
+        // 插入歌曲至下一个播放
+        musicService.setToNextPlay(music);
+        adapter.setToNext(music, musicService.getCurrentMusicIndex());
+        adapter.notifyDataSetChanged();
+    }
+
+
     protected abstract int getContentId();
 
     @Override
@@ -216,4 +229,6 @@ public abstract class BaseMusicActivity extends AppCompatActivity
             isBound = false;
         }
     }
+
+
 }

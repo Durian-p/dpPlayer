@@ -6,6 +6,12 @@
         <item name="android:textColor">@color/darker_gray</item>
     </style>
 
+    <style name="TitleMlist" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="ArtistTextViewStyle" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">9sp</item>
         <item name="android:textColor">@color/light_gray</item>

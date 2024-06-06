@@ -2,11 +2,13 @@
 package org.ww.dpplayer.ui.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.jetbrains.annotations.NotNull;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.entity.Music;
+import org.ww.dpplayer.ui.base.DialogItemLongPress;
 import org.ww.dpplayer.util.ChineseToPinyin;
 
 import java.util.ArrayList;
@@ -25,15 +28,16 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
     private Context context;
     private List<Music> musicList; // 歌曲列表数据
     private OnItemClickListener onItemClickListener;
+    private OnItemLongClickListener onItemLongClickListener;
 
     public MusicListAdapter(Context context, List<Music> musicList) {
         this.context = context;
         this.musicList = musicList;
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
+    public void setOnItemClickListener(OnItemClickListener listener) { this.onItemClickListener = listener; }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) { this.onItemLongClickListener = listener; }
 
     @NonNull
     @Override
@@ -70,6 +74,17 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
                 }
             }
         });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int position = holder.getBindingAdapterPosition();
+                if (onItemLongClickListener != null && position != RecyclerView.NO_POSITION) {
+                    onItemLongClickListener.onItemLongClick(position);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -99,6 +114,10 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
 
     public interface OnItemClickListener {
         void onItemClick(int position);
+    }
+
+    public interface OnItemLongClickListener {
+        void onItemLongClick(int position);
     }
 
     @Override

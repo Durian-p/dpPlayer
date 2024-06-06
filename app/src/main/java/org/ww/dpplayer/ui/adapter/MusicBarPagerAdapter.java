@@ -57,6 +57,12 @@ public class MusicBarPagerAdapter extends RecyclerView.Adapter<MusicBarPagerAdap
         return musicList.size();
     }
 
+
+    public void setToNext(Music music, int currentIndex)
+    {
+        musicList.add((currentIndex + 1 ) % musicList.size(), music);
+    }
+
     static class MusicInfoViewHolder extends RecyclerView.ViewHolder
     {
         private ConstraintLayout musicInfoContainer;
