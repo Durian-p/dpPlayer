@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="120dp"
+              android:layout_height="wrap_content"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:padding="8dp">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/album_art"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_cover"
+            app:riv_corner_radius="12dp"/>
+
+    <TextView
+            android:id="@+id/album_title"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingTop="4dp"
+            android:text="Album TitleAlbum TitleAlbum TitleAlbum TitleAlbum TitleAlbum TitleAlbum TitleAlbum TitleAlbum TitleAlbum Title"
+            android:textAppearance="?attr/textAppearanceBody1" />
+</LinearLayout>

@@ -1,10 +1,7 @@
 package org.ww.dpplayer.ui.my.mlist;
 
 import android.os.Bundle;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextClock;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.ww.dpplayer.R;
@@ -12,11 +9,14 @@ import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.databinding.DialogLongpressBinding;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.entity.MusicList;
+import org.ww.dpplayer.player.MusicService;
+import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
 import org.ww.dpplayer.ui.base.DialogItemLongPress;
 
 import java.util.List;
+import java.util.Random;
 
 public class MusicListActivity extends BaseMusicActivity
 {
@@ -31,6 +31,7 @@ public class MusicListActivity extends BaseMusicActivity
     ImageView ivMlImg;
     TextView mlName;
     TextView mlExtra;
+    LinearLayout llShufflePlay;
 
      @Override
      protected void onCreate(Bundle savedInstanceState)
@@ -61,6 +62,23 @@ public class MusicListActivity extends BaseMusicActivity
             public void onItemLongClick(int position)
             {
                 DialogItemLongPress dialog = new DialogItemLongPress(musics.get(position));
+                dialog.setOnItemDeleteListener(new DialogItemLongPress.OnItemDeleteListener(){
+                    @Override
+                    public void onItemDelete(Music music)
+                    {
+                        if (musicRepository.removeMusicFromPlaylist(musicList.getId(), music.getId()))
+                        {
+                            musics.remove(music);
+                            Toast.makeText(MusicListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            musicListAdapter.notifyItemRemoved(position);
+                            Toast.makeText(MusicListActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
                 dialog.show(getSupportFragmentManager(), "dialog");
             }
         });
@@ -74,6 +92,7 @@ public class MusicListActivity extends BaseMusicActivity
          ivMlImg = findViewById(R.id.ivMlImg);
          mlName = findViewById(R.id.mlName);
          mlExtra = findViewById(R.id.mlExtra);
+         llShufflePlay = findViewById(R.id.llShufflePlay);
 
          mlRv.setAdapter(musicListAdapter);
          mlRv.setLayoutManager(new LinearLayoutManager(this));
@@ -83,6 +102,12 @@ public class MusicListActivity extends BaseMusicActivity
          mlName.setText(musicList.getName());
          mlExtra.setText("(" + musicList.getMusicIdList().size() + "首)");
          ivMlImg.setImageBitmap(musicList.getCover());
+
+         llShufflePlay.setOnClickListener(v -> {
+             updateServiceMusicList(musics, new Random().nextInt(musics.size()));
+             musicService.setPlayMode(MusicService.PlayMode.SHUFFLE);
+             MusicServiceController.sendPlayBroadcast(this);
+         });
      }
 
     @Override

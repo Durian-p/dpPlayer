@@ -14,24 +14,32 @@ import java.util.List;
 public class MusicViewModel extends AndroidViewModel {
     private MutableLiveData<List<Music>> localMusicList;
     private MutableLiveData<List<Music>> heartMusicList;
+    private MutableLiveData<List<Music>> playHistory;
     private MutableLiveData<List<MusicList>> musicList;
     private final MusicRepository musicRepository;
+    private MusicRepository.MusicRepositoryListener musicRepositoryListener = new MusicRepository.MusicRepositoryListener() {
+        @Override
+        public void onHeartMusicChanged() {
+        loadHeartMusics();
+    }
+
+        @Override
+        public void onMusicListsChanged() {
+            loadMusicList();
+        }
+
+        @Override
+        public void onHistoryMusicChanged() { loadHistoryMusics(); }};
 
     public MusicViewModel(Application application) {
         super(application);
         musicRepository = MusicRepository.getInstance();
-        musicRepository.setMusicRepositoryListener(new MusicRepository.MusicRepositoryListener() {
-            @Override
-            public void onHeartMusicChanged() {
-                loadHeartMusics();
-            }
+        musicRepository.setMusicRepositoryListener(musicRepositoryListener);
+    }
 
-            @Override
-            public void onMusicListsChanged() {
-                loadMusicList();
-            }
-        });
-
+    public void bindListenerToRepository()
+    {
+        musicRepository.setMusicRepositoryListener(musicRepositoryListener);
     }
 
     public LiveData<List<Music>> getLocalMusicList() {
@@ -52,6 +60,15 @@ public class MusicViewModel extends AndroidViewModel {
         return heartMusicList;
     }
 
+    public LiveData<List<Music>> getHistoryMusicList() {
+        if (playHistory == null)
+        {
+            playHistory = new MutableLiveData<>();
+            loadHistoryMusics();
+        }
+        return playHistory;
+    }
+
     public LiveData<List<MusicList>> getMusicLists() {
         if (musicList == null)
         {
@@ -67,7 +84,7 @@ public class MusicViewModel extends AndroidViewModel {
             @Override
             public void run() {
                 List<MusicList> musicList = musicRepository.getAllMusicLists();
-                if (musicList == null)
+                if (MusicViewModel.this.musicList == null)
                     MusicViewModel.this.musicList = new MutableLiveData<>();
                 MusicViewModel.this.musicList.postValue(musicList);
             }
@@ -94,6 +111,18 @@ public class MusicViewModel extends AndroidViewModel {
                 if (heartMusicList == null)
                     heartMusicList = new MutableLiveData<>();
                 heartMusicList.postValue(musics);
+            }
+        }).start();
+    }
+
+    public void loadHistoryMusics(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Music> musics = musicRepository.getPlayHistory();
+                if (playHistory == null)
+                    playHistory = new MutableLiveData<>();
+                playHistory.postValue(musics);
             }
         }).start();
     }

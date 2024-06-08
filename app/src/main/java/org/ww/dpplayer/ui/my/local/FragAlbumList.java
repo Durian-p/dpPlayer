@@ -1,5 +1,6 @@
 package org.ww.dpplayer.ui.my.local;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import org.ww.dpplayer.R;
@@ -24,7 +26,7 @@ import org.ww.dpplayer.util.MusicLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragAlbumList extends Fragment implements SwipeRefreshLayout.OnRefreshListener, AlbumListAdapter.OnItemClickListener
+public class FragAlbumList extends Fragment implements SwipeRefreshLayout.OnRefreshListener, AlbumListAdapter.OnItemClickListener, SidebarView.OnLetterClickedListener
 {
 
     private RecyclerView recyclerView;
@@ -68,15 +70,7 @@ public class FragAlbumList extends Fragment implements SwipeRefreshLayout.OnRefr
         });
 
         // 设置sideBar
-        sidebarView.setOnLetterClickedListener(new SidebarView.OnLetterClickedListener()
-        {
-            @Override
-            public void onLetterClicked(String str)
-            {
-                int position = adapter.getPositionForSection(str.charAt(0));
-                recyclerView.smoothScrollToPosition(position);
-            }
-        });
+        sidebarView.setOnLetterClickedListener(this);
 
         // 设置SwipeRefreshLayout的Listener
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -122,5 +116,30 @@ public class FragAlbumList extends Fragment implements SwipeRefreshLayout.OnRefr
         intent.putParcelableArrayListExtra("albumMusicList", artistMusicList);
         intent.putExtra("albumTitle",artistMusicList.get(0).getAlbum());
         startActivity(intent);
+    }
+
+    @Override
+    public void onLetterClicked(String str) {
+        int position = adapter.getPositionForSection(str.charAt(0));
+        if (position != RecyclerView.NO_POSITION) {
+            // 使用自定义的 LinearSmoothScroller 将目标项平滑滚动到顶部
+            RecyclerView.SmoothScroller smoothScroller = new TopSnappedSmoothScroller(requireContext());
+            smoothScroller.setTargetPosition(position);
+            recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);
+        }
+    }
+
+    public class TopSnappedSmoothScroller extends LinearSmoothScroller
+    {
+
+        public TopSnappedSmoothScroller(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected int getVerticalSnapPreference() {
+            return SNAP_TO_START; // 将目标项平滑滚动到顶部
+        }
+
     }
 }

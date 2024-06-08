@@ -12,13 +12,14 @@
             android:orientation="horizontal"
             android:padding="10dp">
 
-        <ImageView
+        <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/ivMlistCover"
                 android:layout_width="44dp"
                 android:layout_height="44dp"
                 android:scaleType="centerCrop"
                 android:layout_marginLeft="8dp"
-                android:src="@drawable/default_cover"/>
+                android:src="@drawable/default_cover"
+                app:riv_corner_radius="5dp"/>
 
         <LinearLayout
                 android:layout_width="0dp"

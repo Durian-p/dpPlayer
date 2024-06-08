@@ -16,6 +16,12 @@ public class MusicServiceController
     private MusicService musicService;
     private boolean bound = false;
     private final Context context;
+
+    public void updateServiceMusicList(List<Music> localList, int i)
+    {
+        musicService.setPlaylist(localList, i);
+    }
+
     public interface MusicServiceCallback {
         void onServiceConnected(ComponentName name, IBinder service);
         void onServiceDisconnected(ComponentName name);
@@ -93,6 +99,14 @@ public class MusicServiceController
     public void togglePlayMode() {
         if (bound && musicService != null) {
             musicService.togglePlayMode();
+        }
+    }
+
+    public void setPlayMode(MusicService.PlayMode playMode)
+    {
+        if (bound && musicService != null)
+        {
+            musicService.setPlayMode(playMode);
         }
     }
 

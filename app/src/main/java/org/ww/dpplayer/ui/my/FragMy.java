@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.ww.dpplayer.R;
+import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.entity.MusicList;
 import org.ww.dpplayer.player.MusicServiceController;
@@ -31,6 +32,7 @@ import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.ui.adapter.MusicListsAdapter;
 import org.ww.dpplayer.ui.data.MusicViewModel;
 import org.ww.dpplayer.ui.my.heart.HeartActivity;
+import org.ww.dpplayer.ui.my.history.HistoryActivity;
 import org.ww.dpplayer.ui.my.local.LocalActivity;
 import org.ww.dpplayer.ui.my.mlist.MusicListActivity;
 import org.ww.dpplayer.ui.widget.MyItemView;
@@ -41,6 +43,7 @@ public class FragMy extends Fragment {
 
     private List<Music> localMusics;
     private List<Music> heartMusics;
+    private List<Music> historyMusics;
     private List<MusicList> musicLists;
     private boolean isBound = false;
     private MusicListsAdapter musicListsAdapter;
@@ -49,6 +52,7 @@ public class FragMy extends Fragment {
     private View rootView;
     private MyItemView localView;
     private MyItemView heartView;
+    private MyItemView historyView;
     private MusicViewModel musicViewModel;
     private MusicService musicService;
     private RecyclerView mlistRcv;
@@ -109,6 +113,7 @@ public class FragMy extends Fragment {
     private void bindViews() {
         localView = rootView.findViewById(R.id.localView);
         heartView = rootView.findViewById(R.id.favoriteView);
+        historyView = rootView.findViewById(R.id.historyView);
         mlistRcv = rootView.findViewById(R.id.mlistRcv);
         playlistAddIv = rootView.findViewById(R.id.playlistAddIv);
         multiSelectIv = rootView.findViewById(R.id.multiSelectIv);
@@ -133,6 +138,16 @@ public class FragMy extends Fragment {
             public void onChanged(List<Music> heartMusicList) {
                 heartMusics = heartMusicList;
                 heartView.setSongsNum(heartMusicList.size(), 0);
+            }
+        });
+
+        musicViewModel.getHistoryMusicList().observe(getViewLifecycleOwner(), new Observer<List<Music>>()
+        {
+            @Override
+            public void onChanged(List<Music> historyMusics)
+            {
+                FragMy.this.historyMusics = historyMusics;
+                historyView.setSongsNum(historyMusics.size(), 0);
             }
         });
 
@@ -175,6 +190,7 @@ public class FragMy extends Fragment {
     private void initListener() {
         initLocalMusics();
         initHeartMusics();
+        initHistoryMusics();
 
         playlistAddIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,13 +235,37 @@ public class FragMy extends Fragment {
         });
     }
 
+    private void initHistoryMusics()
+    {
+        historyView.setOnItemClickListener(new MyItemView.OnItemClickListener() {
+            @Override
+            public void click(View view, int position)
+            {
+                if (view.getId() == R.id.iv_play)
+                {
+                    musicService.setOriginalPlaylist(historyMusics);
+                    MusicServiceController.sendPlayBroadcast(requireActivity());
+                }
+                else
+                {
+                    Intent intent = new Intent(getActivity(), HistoryActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
     @Override
     public void onResume()
     {
         super.onResume();
         if (isBound) {
-            musicViewModel.loadMusics();
+            musicViewModel.bindListenerToRepository();
             musicViewModel.loadHeartMusics();
+            musicViewModel.loadMusics();
+            musicViewModel.loadHistoryMusics();
+            musicViewModel.loadMusicList();
+
         }
     }
 

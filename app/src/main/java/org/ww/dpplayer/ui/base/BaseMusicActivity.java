@@ -216,6 +216,10 @@ public abstract class BaseMusicActivity extends AppCompatActivity
         adapter.notifyDataSetChanged();
     }
 
+    public void setPlayMode(MusicService.PlayMode playMode)
+    {
+        musicService.setPlayMode(playMode);
+    }
 
     protected abstract int getContentId();
 

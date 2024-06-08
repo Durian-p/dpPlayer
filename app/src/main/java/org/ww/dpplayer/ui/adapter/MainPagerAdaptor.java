@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import org.jetbrains.annotations.NotNull;
-import org.ww.dpplayer.ui.discover.FragDiscover;
+import org.ww.dpplayer.ui.index.FragIndex;
 import org.ww.dpplayer.ui.my.FragMy;
 import org.ww.dpplayer.ui.rover.FragRover;
 
@@ -18,7 +18,7 @@ public class MainPagerAdaptor extends FragmentStateAdapter{
     {
         switch (position){
             case 0:
-                return FragDiscover.newInstance();
+                return FragIndex.newInstance();
             case 1:
                 return FragRover.newInstance();
             case 2:

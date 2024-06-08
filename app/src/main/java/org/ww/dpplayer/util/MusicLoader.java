@@ -6,11 +6,14 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -42,7 +45,6 @@ public class MusicLoader {
                     String path = cursor.getString(pathColumnIndex);
                     Bitmap albumArt = getAlbumArt(path); // 获取专辑封面
 
-
                     Music music = new Music();
                     music.setId(id);
                     music.setTitle(title);
@@ -66,20 +68,17 @@ public class MusicLoader {
             }
         }
         // 根据首字母进行排序
-        musicList.sort(new Comparator<Music>()
-        {
+        musicList.sort(new Comparator<Music>() {
             @Override
-            public int compare(Music music1, Music music2)
-            {
+            public int compare(Music music1, Music music2) {
                 return SortUtil.compare(music1.getTitle(), music2.getTitle());
             }
         });
         return musicList;
     }
 
-    public static Bitmap getAlbumArt(String audioFilePath)
-    {
-        try{
+    public static Bitmap getAlbumArt(String audioFilePath) {
+        try {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             retriever.setDataSource(audioFilePath);
             byte[] albumArt = retriever.getEmbeddedPicture();
@@ -90,9 +89,7 @@ public class MusicLoader {
                 // 未找到专辑封面
                 return null;
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
@@ -118,5 +115,42 @@ public class MusicLoader {
                 selectionArgs,
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
     }
-}
 
+    public static boolean deleteMusic(Context context, Music music) {
+        String path = music.getPath();
+        ContentResolver contentResolver = context.getContentResolver();
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        String selection = MediaStore.Audio.Media.DATA + "=?";
+        String[] selectionArgs = new String[]{path};
+
+        Cursor cursor = null;
+        try {
+            cursor = contentResolver.query(uri, new String[]{MediaStore.Audio.Media._ID}, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+                Uri contentUri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
+                int rowsDeleted = contentResolver.delete(contentUri, null, null);
+
+                // 删除文件系统中的文件
+                File file = new File(path);
+                if (file.exists() && !file.delete()) {
+                    Log.e(TAG, "File deletion failed: " + path);
+                    return false;
+                }
+                if (rowsDeleted > 0)
+                {
+                    MusicRepository.getInstance().deleteLocalMusic(music.getId());
+                    return true;
+                }
+                return false;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error deleting music", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return false;
+    }
+}

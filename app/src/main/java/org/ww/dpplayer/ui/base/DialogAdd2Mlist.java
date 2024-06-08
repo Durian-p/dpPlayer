@@ -19,7 +19,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -67,7 +66,7 @@ public class DialogAdd2Mlist extends BottomSheetDialogFragment {
             @Override
             public void onItemClick(int position, long id)
             {
-                if (MusicRepository.getInstance().addMusicToPlaylist(id, music.getId()))
+                if (MusicRepository.getInstance().addMusicToMlist(id, music.getId()))
                 {
                     Toast.makeText(context, getResources().getString(R.string.add2mlist_success), Toast.LENGTH_SHORT).show();
                     dismiss();

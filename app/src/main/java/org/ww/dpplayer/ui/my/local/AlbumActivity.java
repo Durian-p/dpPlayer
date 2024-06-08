@@ -4,13 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.entity.Music;
+import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
@@ -18,6 +17,7 @@ import org.ww.dpplayer.ui.base.DialogItemLongPress;
 import org.ww.dpplayer.util.MusicLoader;
 
 import java.util.List;
+import java.util.Random;
 
 public class AlbumActivity extends BaseMusicActivity {
     private String albumTitle;
@@ -29,6 +29,7 @@ public class AlbumActivity extends BaseMusicActivity {
     private TextView mAlbumTitle;
     private TextView mAlbumArtist;
     private ImageButton mAlbumBackBtn;
+    private LinearLayout llShufflePlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class AlbumActivity extends BaseMusicActivity {
         mAlbumTitle = findViewById(R.id.mlName);
         mAlbumArtist = findViewById(R.id.mlExtra);
         mAlbumBackBtn = findViewById(R.id.albumBackBtn);
+        llShufflePlay = findViewById(R.id.llShufflePlay);
 
         // 设置View内容
         setTitle(albumTitle);
@@ -79,8 +81,21 @@ public class AlbumActivity extends BaseMusicActivity {
             @Override
             public void onItemLongClick(int position) {
                 // 长按弹出菜单
-                DialogItemLongPress dialogItemLongPress = new DialogItemLongPress(albumMusicList.get(position));
-                dialogItemLongPress.show(getSupportFragmentManager(), "dialog");
+                DialogItemLongPress dialog = new DialogItemLongPress(albumMusicList.get(position));
+                dialog.setOnItemDeleteListener(new DialogItemLongPress.OnItemDeleteListener(){
+                    @Override
+                    public void onItemDelete(Music music)
+                    {
+                        if (MusicLoader.deleteMusic(AlbumActivity.this, music))
+                        {
+                            musicList.remove(music);
+                            musicListAdapter.notifyItemRemoved(position);
+                        }
+                        else
+                            Toast.makeText(AlbumActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialog.show(getSupportFragmentManager(), "dialog");
             }
         });
         mRecyclerView.setAdapter(musicListAdapter);
@@ -93,7 +108,16 @@ public class AlbumActivity extends BaseMusicActivity {
                 finish();
             }
         });
+
+        // 播放栏header随机播放
+        llShufflePlay.setOnClickListener(v -> {
+            updateServiceMusicList(albumMusicList, new Random().nextInt(albumMusicList.size()));
+            musicService.setPlayMode(MusicService.PlayMode.SHUFFLE);
+            MusicServiceController.sendPlayBroadcast(this);
+        });
     }
+
+
 
     @Override
     protected int getContentId() {

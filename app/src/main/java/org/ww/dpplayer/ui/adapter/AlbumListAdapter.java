@@ -95,27 +95,71 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.View
         return albumList.size();
     }
 
-    @Override
     public Object[] getSections() {
-        return sections;
+        List<String> sections = new ArrayList<>();
+        for (char i = 'A';i < 'Z';i++)
+        {
+            sections.add(String.valueOf(i));
+        }
+        sections.add("#");
+        return sections.toArray(new String[0]);
     }
 
     @Override
     public int getPositionForSection(int sectionIndex) {
-        if (sectionIndex >= sections.length) {
-            return getItemCount() - 1;
+        if (sectionIndex == '#') sectionIndex = 26;
+        else sectionIndex -= 'A';
+        String section = (String) getSections()[sectionIndex];
+
+        // 用于保存上一个有效位置
+        int lastValidPosition = 0;
+
+        for (int i = 0; i < getItemCount(); i++) {
+            String title = albumList.get(i).get(0).getTitle();
+            if (title != null && title.length() > 0) {
+                char firstChar = title.charAt(0);
+                if (Character.isLetter(firstChar)) {
+                    if (Character.toUpperCase(firstChar) == section.charAt(0)) {
+                        return i;
+                    } else if (Character.toUpperCase(firstChar) < section.charAt(0)) {
+                        lastValidPosition = i;
+                    }
+                } else if (isChinese(firstChar)) {
+                    String pinyinFirstChar = ChineseToPinyin.convert(String.valueOf(firstChar));
+                    if (pinyinFirstChar != null && !pinyinFirstChar.isEmpty()) {
+                        if (Character.toUpperCase(pinyinFirstChar.charAt(0)) == section.charAt(0)) {
+                            return i;
+                        } else if (Character.toUpperCase(pinyinFirstChar.charAt(0)) < section.charAt(0)) {
+                            lastValidPosition = i;
+                        }
+                    }
+                } else {
+                    if ('#' == section.charAt(0)) {
+                        lastValidPosition = i;
+                    }
+                }
+            }
         }
-        return sectionPositions[sectionIndex];
+        // 如果没有找到完全匹配的项，返回最后一个有效位置
+        return lastValidPosition;
     }
+
 
     @Override
     public int getSectionForPosition(int position) {
-        for (int i = sections.length - 1; i >= 0; i--) {
-            if (position >= sectionPositions[i]) {
-                return i;
+        String title = albumList.get(position).get(0).getTitle();
+        if (title != null && title.length() > 0) {
+            char firstChar = title.charAt(0);
+            if (Character.isLetter(firstChar)) {
+                return Character.toUpperCase(firstChar) - 'A';
+            } else if (isChinese(firstChar)) {
+                String pinyinFirstChar = ChineseToPinyin.convert(String.valueOf(firstChar));
+                if (pinyinFirstChar != null && !pinyinFirstChar.isEmpty()) {
+                    return Character.toUpperCase(pinyinFirstChar.charAt(0)) - 'A';
+                }
             }
         }
-        return 0;
+        return 26; // '#' 的索引
     }
 
     @SuppressLint("NotifyDataSetChanged")
