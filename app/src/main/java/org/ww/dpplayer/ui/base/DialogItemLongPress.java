@@ -28,10 +28,18 @@ import java.util.ArrayList;
 
 public class DialogItemLongPress extends BottomSheetDialogFragment {
     private Music music;
+    private OnItemDeleteListener deleteListener;
+    public interface OnItemDeleteListener {
+        void onItemDelete(Music music);
+    }
 
 
     public DialogItemLongPress(Music music) {
         this.music = music;
+    }
+
+    public void setOnItemDeleteListener(OnItemDeleteListener listener) {
+        this.deleteListener = listener;
     }
 
     @Nullable
@@ -114,6 +122,8 @@ public class DialogItemLongPress extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 // TODO:
+                if (deleteListener != null)
+                    deleteListener.onItemDelete(music);
                 dismiss();
             }
         });

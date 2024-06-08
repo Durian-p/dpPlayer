@@ -39,6 +39,17 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
 
     public void setOnItemLongClickListener(OnItemLongClickListener listener) { this.onItemLongClickListener = listener; }
 
+    public void deleteItem(int position) {
+        musicList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void deleteItem(Music music)
+    {
+        musicList.remove(music);
+        notifyItemRemoved(musicList.indexOf(music));
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -123,22 +134,11 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
     @Override
     public Object[] getSections() {
         List<String> sections = new ArrayList<>();
-        for (Music music : musicList) {
-            String title = music.getTitle();
-            if (title != null && title.length() > 0) {
-                char firstChar = title.charAt(0);
-                if (Character.isLetter(firstChar)) {
-                    sections.add(String.valueOf(Character.toUpperCase(firstChar)));
-                } else if (isChinese(firstChar)) {
-                    String pinyinFirstChar = ChineseToPinyin.convert(String.valueOf(firstChar));
-                    if (pinyinFirstChar != null && !pinyinFirstChar.isEmpty()) {
-                        sections.add(String.valueOf(Character.toUpperCase(pinyinFirstChar.charAt(0))));
-                    }
-                } else {
-                    sections.add("#");
-                }
-            }
+        for (char i = 'A';i < 'Z';i++)
+        {
+            sections.add(String.valueOf(i));
         }
+        sections.add("#");
         return sections.toArray(new String[0]);
     }
 
@@ -147,6 +147,10 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
         if (sectionIndex == '#') sectionIndex = 26;
         else sectionIndex -= 'A';
         String section = (String) getSections()[sectionIndex];
+
+        // 用于保存上一个有效位置
+        int lastValidPosition = 0;
+
         for (int i = 0; i < getItemCount(); i++) {
             String title = musicList.get(i).getTitle();
             if (title != null && title.length() > 0) {
@@ -154,21 +158,29 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
                 if (Character.isLetter(firstChar)) {
                     if (Character.toUpperCase(firstChar) == section.charAt(0)) {
                         return i;
+                    } else if (Character.toUpperCase(firstChar) < section.charAt(0)) {
+                        lastValidPosition = i;
                     }
                 } else if (isChinese(firstChar)) {
                     String pinyinFirstChar = ChineseToPinyin.convert(String.valueOf(firstChar));
                     if (pinyinFirstChar != null && !pinyinFirstChar.isEmpty()) {
                         if (Character.toUpperCase(pinyinFirstChar.charAt(0)) == section.charAt(0)) {
                             return i;
+                        } else if (Character.toUpperCase(pinyinFirstChar.charAt(0)) < section.charAt(0)) {
+                            lastValidPosition = i;
                         }
                     }
                 } else {
-                    return 0;
+                    if ('#' == section.charAt(0)) {
+                        lastValidPosition = i;
+                    }
                 }
             }
         }
-        return 0;
+        // 如果没有找到完全匹配的项，返回最后一个有效位置
+        return lastValidPosition;
     }
+
 
     @Override
     public int getSectionForPosition(int position) {
@@ -191,3 +203,4 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
         return c >= 0x4E00 && c <= 0x9FA5;
     }
 }
+

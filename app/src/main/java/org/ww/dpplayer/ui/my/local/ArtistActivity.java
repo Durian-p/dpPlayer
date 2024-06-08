@@ -6,14 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.entity.Music;
+import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
@@ -21,6 +20,7 @@ import org.ww.dpplayer.ui.base.DialogItemLongPress;
 import org.ww.dpplayer.util.MusicLoader;
 
 import java.util.List;
+import java.util.Random;
 
 public class ArtistActivity extends BaseMusicActivity {
     private String artistName;
@@ -32,6 +32,7 @@ public class ArtistActivity extends BaseMusicActivity {
     private RecyclerView mMusicList;
     private ImageButton albartiBackBtn;
     private AppBarLayout appBarLayout;
+    private LinearLayout llShufflePlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +82,9 @@ public class ArtistActivity extends BaseMusicActivity {
         mArtistImage = findViewById(R.id.iv_artist_image);
         mArtistName = findViewById(R.id.mlExtra);
         mArtistInfo = findViewById(R.id.tv_artist_info);
-        albartiBackBtn = findViewById(R.id.heartBackBtn);
+        albartiBackBtn = findViewById(R.id.historyBackBtn);
         appBarLayout = findViewById(R.id.app_bar_layout);
+        llShufflePlay = findViewById(R.id.llShufflePlay);
 
         // 设置View内容
         setTitle(artistName);
@@ -116,10 +118,30 @@ public class ArtistActivity extends BaseMusicActivity {
             @Override
             public void onItemLongClick(int position) {
                 DialogItemLongPress dialog = new DialogItemLongPress(artistMusicList.get(position));
+                dialog.setOnItemDeleteListener(new DialogItemLongPress.OnItemDeleteListener() {
+                    @Override
+                    public void onItemDelete(Music music) {
+                        // 删除歌曲
+                        if (MusicLoader.deleteMusic(ArtistActivity.this, music))
+                        {
+                            musicList.remove(music);
+                            musicListAdapter.notifyItemRemoved(position);
+                        }
+                        else
+                            Toast.makeText(ArtistActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 dialog.show(getSupportFragmentManager(), "dialog");
             }
         });
         mMusicList.setAdapter(musicListAdapter);
+
+        // 播放栏header随机播放
+        llShufflePlay.setOnClickListener(v -> {
+            updateServiceMusicList(artistMusicList, new Random().nextInt(artistMusicList.size()));
+            musicService.setPlayMode(MusicService.PlayMode.SHUFFLE);
+            MusicServiceController.sendPlayBroadcast(this);
+        });
     }
 
     @Override

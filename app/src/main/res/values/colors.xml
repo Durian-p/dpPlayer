@@ -8,7 +8,13 @@
 
 
     <!--应用基础色-->
-    <color name="colorPrimary">#4285f5</color>
+    <color name="colorPrimary">#ffd803</color>
+    <color name="colorPrimaryVariant">#ffd803</color>
+    <color name="colorOnPrimary">#272343</color>
+    <color name="colorSecondary">#bae8e8</color>
+    <color name="colorSecondaryVariant">#e3f6f5</color>
+    <color name="colorOnSecondary">#272343</color>
+
     <color name="colorPrimaryDark">#4285f5</color>
     <color name="colorAccent">#ffb701</color>
     <color name="window_background">#fffafafa</color>
@@ -181,4 +187,6 @@
 
     <color name="artist_card_background">#BCFFFFFF</color>
     <color name="dialog_card_background">#ABFFFFFF</color>
+    <color name="twenty_percent_black_overlay">#34000000</color>
+    <color name="m3_accent_color">#00668b</color>
 </resources>

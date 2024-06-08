@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.CollapsingToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                            xmlns:tools="http://schemas.android.com/tools"
+                                                            android:id="@+id/collapsingToolbarLayout"
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            app:expandedTitleMarginBottom="24dp"
+                                                            app:expandedTitleMarginEnd="24dp"
+                                                            app:expandedTitleMarginStart="24dp"
+                                                            app:layout_scrollFlags="scroll|snap|enterAlwaysCollapsed|exitUntilCollapsed"
+                                                            app:expandedTitleTextAppearance="@style/CustomToolbarTitleTextAppearance"
+                                                            app:collapsedTitleTextAppearance="@style/CustomToolbarTitleTextAppearance">
+    <!--    app:collapsedTitleTextAppearance="@style/TextViewHeadline6" -->
+    <!--    app:expandedTitleTextAppearance="@style/TextViewHeadline4"-->
+    <!--        style="?attr/collapsingToolbarLayoutLargeStyle"-->
+
+
+    <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            app:layout_collapseMode="pin"
+            app:navigationIcon="@drawable/ic_search"
+            tools:title="@string/app_name"
+            style="@style/CustomToolbarStyle"/>
+    <!--    style="@style/Toolbar"-->
+    <!--    app:titleTextAppearance="@style/ToolbarTextAppearanceNormal"-->
+</com.google.android.material.appbar.CollapsingToolbarLayout>

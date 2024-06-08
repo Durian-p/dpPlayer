@@ -6,8 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.main.MainActivity"
-        android:id="@+id/coordinatorLayout"
-        android:fitsSystemWindows="true">
+        android:id="@+id/coordinatorLayout">
+<!--    android:fitsSystemWindows="true"-->
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/playerBarContainer"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:background="@color/purple_200">
+            android:background="@color/white_pressed">
     </androidx.viewpager2.widget.ViewPager2>
 
     <include
