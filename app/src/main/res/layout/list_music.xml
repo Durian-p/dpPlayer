@@ -7,14 +7,13 @@
         android:layout_height="match_parent"
         app:cardCornerRadius="12dp"
         android:padding="5dp"
-        app:cardUseCompatPadding="true"
-        app:cardPreventCornerOverlap="true"
-        app:cardElevation="0dp">
+        app:cardElevation="1dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:orientation="vertical">
         <!-- 歌曲列表 -->
         <include
                 layout="@layout/header_local_list"
@@ -30,9 +29,8 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_musics"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:padding="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:overScrollMode="ifContentScrolls"
@@ -41,5 +39,5 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:listitem="@layout/item_local_music"
                 android:background="@color/white" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   xmlns:tools="http://schemas.android.com/tools"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="match_parent">
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                     xmlns:tools="http://schemas.android.com/tools"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="match_parent"
+                                                     android:background="@color/white_pressed">
 
+    <!-- AppBarLayout 包含 Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
     <!-- Toolbar 包含返回按钮 -->
 
     <androidx.appcompat.widget.Toolbar
@@ -40,37 +46,52 @@
                 style="@style/TitleText"/>
 
     </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/item_musiclist_info_img"
-             android:id="@+id/include_album_info"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             app:layout_constraintLeft_toLeftOf="parent"
-             app:layout_constraintTop_toBottomOf="@id/toolbar"
-             android:layout_marginStart="16dp"
-             android:layout_marginEnd="16dp"
-             android:layout_marginTop="16dp"/>
 
-    <!-- 歌曲列表 -->
-    <include
-            layout="@layout/list_music"
+    <!-- NestedScrollView 用于实现二级滑动 -->
+    <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/include_album_info"
-            app:layout_constraintBottom_toTopOf="@id/playerBarContainer"
-            android:layout_marginTop="14dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/bottom_player_height"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp">
+
+            <include
+                    layout="@layout/item_musiclist_info_img"
+                    android:id="@+id/include_album_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            <!-- 歌曲列表 -->
+            <include
+                    layout="@layout/list_music"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/include_album_info"
+                    app:layout_constraintBottom_toTopOf="@id/playerBarContainer"
+                    android:layout_marginTop="12dp"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 
     <include
             layout="@layout/bottom_player_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_player_height"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_gravity="bottom"/>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

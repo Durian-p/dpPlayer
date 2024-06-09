@@ -59,14 +59,14 @@ public class ArtistActivity extends BaseMusicActivity {
             int scrollRange = -1;
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    toolbar.setTitle(artistName);
-                    toolbar.setVisibility(View.VISIBLE);
-                    isShow = true;
-                }
+//                if (scrollRange == -1) {
+//                    scrollRange = appBarLayout.getTotalScrollRange();
+//                }
+//                if (scrollRange + verticalOffset == 0) {
+//                    toolbar.setTitle(artistName);
+//                    toolbar.setVisibility(View.VISIBLE);
+//                    isShow = true;
+//                }
             }
         });
     }

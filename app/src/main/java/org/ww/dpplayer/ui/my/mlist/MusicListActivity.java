@@ -33,14 +33,14 @@ public class MusicListActivity extends BaseMusicActivity
     TextView mlExtra;
     LinearLayout llShufflePlay;
 
-     @Override
-     protected void onCreate(Bundle savedInstanceState)
-     {
-         super.onCreate(savedInstanceState);
-         initData();
-         initView();
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        initData();
+        initView();
 
-     }
+    }
 
     private void initData()
     {
@@ -84,31 +84,31 @@ public class MusicListActivity extends BaseMusicActivity
         });
     }
 
-     private void initView()
-     {
-         mlBackBtn = findViewById(R.id.mlBackBtn);
-         mlTitle = findViewById(R.id.mlTitle);
-         mlRv = findViewById(R.id.rv_musics);
-         ivMlImg = findViewById(R.id.ivMlImg);
-         mlName = findViewById(R.id.mlName);
-         mlExtra = findViewById(R.id.mlExtra);
-         llShufflePlay = findViewById(R.id.llShufflePlay);
+    private void initView()
+    {
+        mlBackBtn = findViewById(R.id.mlBackBtn);
+        mlTitle = findViewById(R.id.mlTitle);
+        mlRv = findViewById(R.id.rv_musics);
+        ivMlImg = findViewById(R.id.ivMlImg);
+        mlName = findViewById(R.id.mlName);
+        mlExtra = findViewById(R.id.mlExtra);
+        llShufflePlay = findViewById(R.id.llShufflePlay);
 
-         mlRv.setAdapter(musicListAdapter);
-         mlRv.setLayoutManager(new LinearLayoutManager(this));
+        mlRv.setAdapter(musicListAdapter);
+        mlRv.setLayoutManager(new LinearLayoutManager(this));
 
-         mlBackBtn.setOnClickListener(v -> finish());
-         mlTitle.setText("歌单");
-         mlName.setText(musicList.getName());
-         mlExtra.setText("(" + musicList.getMusicIdList().size() + "首)");
-         ivMlImg.setImageBitmap(musicList.getCover());
+        mlBackBtn.setOnClickListener(v -> finish());
+        mlTitle.setText("歌单");
+        mlName.setText(musicList.getName());
+        mlExtra.setText("(" + musicList.getMusicIdList().size() + "首)");
+        ivMlImg.setImageBitmap(musicList.getCover());
 
-         llShufflePlay.setOnClickListener(v -> {
-             updateServiceMusicList(musics, new Random().nextInt(musics.size()));
-             musicService.setPlayMode(MusicService.PlayMode.SHUFFLE);
-             MusicServiceController.sendPlayBroadcast(this);
-         });
-     }
+        llShufflePlay.setOnClickListener(v -> {
+            updateServiceMusicList(musics, new Random().nextInt(musics.size()));
+            musicService.setPlayMode(MusicService.PlayMode.SHUFFLE);
+            MusicServiceController.sendPlayBroadcast(this);
+        });
+    }
 
     @Override
     protected int getContentId()

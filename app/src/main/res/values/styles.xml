@@ -45,9 +45,16 @@
 
     <style name="TitleText">
         <item name="android:textColor">@android:color/white</item>
+
         <item name="android:textSize">20sp</item> <!-- Adjust the text size as needed -->
         <item name="fontFamily">@font/sans</item>
+    </style>
 
+    <style name="MusicListTitleText">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/sans</item>
     </style>
 
     <style name="TextViewHeadline6" parent="TextAppearance.MaterialComponents.Headline6">

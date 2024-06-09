@@ -1,76 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   xmlns:tools="http://schemas.android.com/tools"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="match_parent">
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                     xmlns:tools="http://schemas.android.com/tools"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="match_parent"
+                                                     android:background="@color/white_pressed">
 
-    <!-- Toolbar 包含返回按钮 -->
-
-    <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+    <!-- AppBarLayout 包含 Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            app:titleTextColor="@android:color/white"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent">
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <ImageButton
-                android:id="@+id/mlBackBtn"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:scaleType="fitCenter"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_gravity="start|center_vertical"
-                android:contentDescription="@string/back"
-                android:src="@drawable/ic_back"
-                app:tint="@android:color/white"
-                android:padding="8dp"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-                android:layout_width="wrap_content"
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/mlTitle"
-                app:layout_constraintLeft_toRightOf="@id/localBackButton"
-                android:text="@string/album"
-                android:layout_marginStart="20dp"
-                style="@style/TitleText"/>
+                android:background="?attr/colorPrimary"
+                app:titleTextColor="@android:color/white">
 
-    </androidx.appcompat.widget.Toolbar>
+            <ImageButton
+                    android:id="@+id/mlBackBtn"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:scaleType="fitCenter"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/back"
+                    android:src="@drawable/ic_back"
+                    app:tint="@android:color/white"
+                    android:padding="8dp"
+                    android:layout_gravity="start|center_vertical"/>
 
-    <include layout="@layout/item_musiclist_info_img"
-             android:id="@+id/include_album_info"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             app:layout_constraintLeft_toLeftOf="parent"
-             app:layout_constraintTop_toBottomOf="@id/toolbar"
-             android:layout_marginStart="16dp"
-             android:layout_marginEnd="16dp"
-             android:layout_marginTop="16dp"/>
+            <TextView
+                    android:id="@+id/mlTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/album"
+                    android:layout_marginStart="20dp"
+                    style="@style/TitleText"/>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- 歌曲列表 -->
-    <include
-            layout="@layout/list_music"
+    <!-- NestedScrollView 用于实现二级滑动 -->
+    <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/include_album_info"
-            app:layout_constraintBottom_toTopOf="@id/playerBarContainer"
-            android:layout_marginTop="14dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/bottom_player_height"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp">
+
+            <include layout="@layout/item_musiclist_info_img"
+                     android:id="@+id/include_album_info"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     app:layout_constraintTop_toTopOf="parent"/>
+
+            <!-- 歌曲列表 -->
+            <include
+                    layout="@layout/list_music"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/include_album_info"
+                    app:layout_constraintBottom_toTopOf="@id/playerBarContainer"
+                    android:layout_marginTop="12dp"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <include
             layout="@layout/bottom_player_bar"
+            android:id="@+id/playerBarContainer"
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_player_height"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_gravity="bottom"/>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

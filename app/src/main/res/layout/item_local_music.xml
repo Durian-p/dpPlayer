@@ -26,6 +26,8 @@
                 android:layout_height="wrap_content"
                 android:text="Song Title"
                 style="@style/SongTitleTextViewStyle"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textSize="16sp"/>
 
         <TextView
@@ -34,8 +36,18 @@
                 android:layout_height="wrap_content"
                 android:text="Album Name"
                 style="@style/ArtistTextViewStyle"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textSize="16sp"/>
 
     </LinearLayout>
+
+    <TextView
+            android:id="@+id/tvTimes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:text="124遍"
+            android:visibility="gone"/>
 
 </LinearLayout>

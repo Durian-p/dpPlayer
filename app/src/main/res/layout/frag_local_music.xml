@@ -6,11 +6,9 @@
              android:layout_height="match_parent"
              app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/localMusicSwipe"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/dp_8">
+
+    <!-- 使用布局权重 -->
+
 
         <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -19,57 +17,57 @@
                 app:cardCornerRadius="@dimen/dp_2"
                 app:cardElevation="@dimen/dp_2">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <!-- 加载动画视图 -->
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottieAnimationView"
+                    android:layout_width="170dp"
+                    android:layout_height="170dp"
+                    android:elevation="3dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
+
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-
-                <org.ww.dpplayer.ui.widget.SidebarView
-                        android:id="@+id/localMusicSide"
-                        android:layout_width="20dp"
-                        android:layout_height="0dp"
-                        android:layout_alignParentEnd="true"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/localMusicReView"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/localMusicReView"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginBottom="8dp"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                        app:fastScrollAutoHide="true"
-                        app:fastScrollAutoHideDelay="1500"
-                        app:fastScrollPopupBackgroundSize="88dp"
-                        app:fastScrollPopupBgColor="?colorPrimary"
-                        app:fastScrollPopupPosition="adjacent"
-                        app:fastScrollPopupTextColor="@android:color/white"
-                        app:fastScrollPopupTextSize="56sp"
-                        app:fastScrollThumbColor="@color/colorAccent"
-                        app:fastScrollThumbEnabled="true"
-                        app:fastScrollTrackColor="#1f000000"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/localMusicHeader"
-                        app:layout_constraintRight_toLeftOf="@+id/localMusicSide"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        style="@style/FastScrollStyle"/>
 
 
                 <include
                         android:id="@+id/localMusicHeader"
                         layout="@layout/header_local_list"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_40"
                         app:layout_constraintBottom_toTopOf="@+id/localMusicReView"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/localMusicReView"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginBottom="8dp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                            style="@style/FastScrollStyle"/>
+
+                    <org.ww.dpplayer.ui.widget.SidebarView
+                            android:id="@+id/localMusicSide"
+                            android:layout_width="20dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>

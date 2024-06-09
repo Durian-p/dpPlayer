@@ -3,10 +3,11 @@ package org.ww.dpplayer.ui.my.local;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -17,7 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
@@ -33,13 +35,13 @@ import org.ww.dpplayer.util.MusicLoader;
 import java.util.List;
 import java.util.Random;
 
-public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MusicListAdapter.OnItemClickListener, SidebarView.OnLetterClickedListener {
+public class FragLocalMusic extends Fragment implements MusicListAdapter.OnItemClickListener, SidebarView.OnLetterClickedListener {
 
     private LinearLayout llShufflePlay;
     private  BaseMusicActivity baseMusicActivity;
     private RecyclerView recyclerView;
     private MusicListAdapter adapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private LottieAnimationView lottieAnimationView;
 
     private MusicViewModel musicViewModel;
     private MusicRepository repository;
@@ -71,9 +73,9 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.localMusicReView);
-        swipeRefreshLayout = view.findViewById(R.id.localMusicSwipe);
         SidebarView sidebarView = view.findViewById(R.id.localMusicSide);
         llShufflePlay = view.findViewById(R.id.llShufflePlay);
+        lottieAnimationView = view.findViewById(R.id.lottieAnimationView);
 
         // data
         controller = new MusicServiceController(requireContext());
@@ -82,7 +84,7 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
         repository = MusicRepository.getInstance();
 
         // 显示加载动画
-        swipeRefreshLayout.setRefreshing(true);
+        showLoadingAnimationLottie();
 
         // 设置布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -134,15 +136,14 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
                     }
                 });
                 recyclerView.setAdapter(adapter);
-                swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
+                applyFadeInAnimation();
+                hideLoadingAnimationLottie();
             }
         });
 
         // 设置sideBar
         sidebarView.setOnLetterClickedListener(this);
 
-        // 设置SwipeRefreshLayout的Listener
-        swipeRefreshLayout.setOnRefreshListener(this);
 
         // 播放栏header随机播放
         llShufflePlay.setOnClickListener(v -> {
@@ -158,31 +159,6 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
             baseMusicActivity.updateServiceMusicList(musicViewModel.getLocalMusicList().getValue(), position);
             MusicServiceController.sendPlayBroadcast(baseMusicActivity);
         }
-    }
-
-    @Override
-    public void onRefresh() {
-        // 显示刷新动画
-        swipeRefreshLayout.setRefreshing(true);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // 执行耗时操作
-                final List<Music> musicList = MusicLoader.findLocalMusic(requireContext());
-
-                // 将结果发送到主线程更新UI
-                new Handler(requireContext().getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // 更新适配器数据
-                        adapter.updateData(musicList);
-                        // 停止刷新动画
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
-            }
-        }).start();
     }
 
     @Override
@@ -215,5 +191,45 @@ public class FragLocalMusic extends Fragment implements SwipeRefreshLayout.OnRef
     {
         controller.unbindService();
         super.onDestroy();
+    }
+
+    private void showLoadingAnimationLottie() {
+        lottieAnimationView.setVisibility(View.VISIBLE);
+        lottieAnimationView.setAnimation(R.raw.loading_anim_1);
+        lottieAnimationView.setRepeatCount(LottieDrawable.INFINITE);
+        lottieAnimationView.playAnimation();
+    }
+
+    private void hideLoadingAnimationLottie() {
+        // 创建一个 AlphaAnimation 对象，使透明度从 1.0 变为 0.0
+        AlphaAnimation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
+        fadeOutAnimation.setDuration(400); // 设置动画持续时间为 500 毫秒
+
+        // 添加动画结束监听器，当动画结束时隐藏加载动画并停止动画播放
+        fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                // 动画开始时不需要做任何操作
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                lottieAnimationView.setVisibility(View.GONE);
+                lottieAnimationView.cancelAnimation();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                // 动画重复时不需要做任何操作
+            }
+        });
+        // 启动动画
+        lottieAnimationView.startAnimation(fadeOutAnimation);
+    }
+
+    private void applyFadeInAnimation() {
+        AlphaAnimation fadeInAnimation = new AlphaAnimation(0.0f, 1.0f);
+        fadeInAnimation.setDuration(1000); // Set duration as per your requirement
+        recyclerView.startAnimation(fadeInAnimation);
     }
 }
