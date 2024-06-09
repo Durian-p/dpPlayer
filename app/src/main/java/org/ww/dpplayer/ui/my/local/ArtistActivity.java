@@ -2,14 +2,19 @@ package org.ww.dpplayer.ui.my.local;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.exoplayer2.C;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.appbar.MaterialToolbar;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicService;
@@ -17,6 +22,7 @@ import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.DialogItemLongPress;
+import org.ww.dpplayer.util.ColorUtil;
 import org.ww.dpplayer.util.MusicLoader;
 
 import java.util.List;
@@ -27,12 +33,10 @@ public class ArtistActivity extends BaseMusicActivity {
     private MusicListAdapter musicListAdapter;
     private List<Music> artistMusicList;
     private ImageView mArtistImage;
-    private TextView mArtistName;
-    private TextView mArtistInfo;
     private RecyclerView mMusicList;
-    private ImageButton albartiBackBtn;
     private AppBarLayout appBarLayout;
     private LinearLayout llShufflePlay;
+    private MaterialToolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,28 +54,19 @@ public class ArtistActivity extends BaseMusicActivity {
 
         // 设置 AppBarLayout 的滚动监听器
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+
+            boolean isShow = false;
+            int scrollRange = -1;
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                // 根据偏移量改变返回按钮的颜色
-                int totalScrollRange = appBarLayout.getTotalScrollRange();
-                float percentage = (float) Math.abs(verticalOffset) / totalScrollRange;
-
-                if (percentage >= 0.7f) {
-                    // 当滚动超过 70% 时，将按钮颜色改为黑色
-                    albartiBackBtn.setColorFilter(Color.BLACK);
-                } else {
-                    // 否则设置为白色
-                    albartiBackBtn.setColorFilter(Color.WHITE);
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
                 }
-            }
-        });
-
-        albartiBackBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                finish();
+                if (scrollRange + verticalOffset == 0) {
+                    toolbar.setTitle(artistName);
+                    toolbar.setVisibility(View.VISIBLE);
+                    isShow = true;
+                }
             }
         });
     }
@@ -80,16 +75,15 @@ public class ArtistActivity extends BaseMusicActivity {
     private void initView() {
         // 绑定View
         mArtistImage = findViewById(R.id.iv_artist_image);
-        mArtistName = findViewById(R.id.mlExtra);
-        mArtistInfo = findViewById(R.id.tv_artist_info);
-        albartiBackBtn = findViewById(R.id.historyBackBtn);
+
         appBarLayout = findViewById(R.id.app_bar_layout);
         llShufflePlay = findViewById(R.id.llShufflePlay);
+        toolbar = findViewById(R.id.toolbar);
 
         // 设置View内容
         setTitle(artistName);
-        mArtistName.setText(artistName);
-        mArtistInfo.setText("补充信息: " + artistMusicList.get(0).getArtist());
+        toolbar.setTitle(artistName);
+
         // 寻找第一个非null的封面
         Bitmap albumArt = null;
         for (Music music : artistMusicList)
@@ -97,10 +91,36 @@ public class ArtistActivity extends BaseMusicActivity {
                 albumArt = music.getAlbumArt();
                 break;
             }
+
+        setSupportActionBar(toolbar);
+        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout);
+        collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.colorPrimary, null));
+        collapsingToolbarLayout.setTitle(artistName);
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorOnPrimary, null));
+//        collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.create());
+        collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.DEFAULT_BOLD);
+
         if (albumArt != null)
+        {
             mArtistImage.setImageBitmap(albumArt);
+            if (ColorUtil.isDarkColor(ColorUtil.getAverageColor(albumArt)))
+            {
+                toolbar.setTitleTextColor(getResources().getColor(R.color.white, null));
+                collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white, null));
+            }
+            else
+            {
+                toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary, null));
+                collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.colorOnPrimary, null));
+            }
+
+        }
         else
+        {
             mArtistImage.setImageDrawable(getDrawable(R.drawable.default_artist_avatar));
+            toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary, null));
+            collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorOnPrimary, null));
+        }
 
         // 初始化 RecyclerView
         mMusicList = findViewById(R.id.rv_musics);

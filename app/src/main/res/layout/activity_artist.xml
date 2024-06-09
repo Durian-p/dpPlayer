@@ -19,20 +19,23 @@
                 android:id="@+id/app_bar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:contentScrim="@color/transparent"
-                android:background="@color/transparent">
+
+                android:background="@color/transparent"
+                app:contentScrim="@color/transparent" >
+<!--            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/collapsing_toolbar_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed"
                     app:contentScrim="@color/transparent"
-                    android:background="@color/transparent"
                     app:expandedTitleMarginStart="48dp"
-                    app:expandedTitleMarginEnd="64dp">
+                    app:expandedTitleMarginEnd="64dp"
+                    app:expandedTitleTextAppearance="@style/TextAppearance.Collapsed">
 
                 <!-- 歌手大图 -->
+
                 <ImageView
                         android:id="@+id/iv_artist_image"
                         android:layout_width="match_parent"
@@ -40,90 +43,32 @@
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/artist_image"
                         android:src="@drawable/default_artist_avatar"
-                        app:layout_collapseMode="parallax"
-                        android:layout_marginBottom="24dp" />
+                        app:layout_collapseMode="parallax"/>
 
-                <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|bottom"
-                        app:cardBackgroundColor="@color/artist_card_background"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="5dp"
-                        app:cardPreventCornerOverlap="true"
-                        app:cardUseCompatPadding="true">
-                    <!-- 歌手名 -->
-                    <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="6dp"
-                            android:paddingBottom="6dp"
-                            android:paddingStart="30dp"
-                            android:paddingEnd="30dp"
-                            android:background="@color/artist_card_background">
-                        <TextView
-                                android:id="@+id/mlExtra"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="歌手名"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:textColor="@android:color/black"
-                                app:layout_collapseMode="parallax"
-                                app:layout_constraintTop_toBottomOf="@id/iv_artist_image"
-                                app:layout_constraintLeft_toLeftOf="parent"
-                                android:gravity="center_horizontal" />
-
-                        <TextView
-                                android:id="@+id/tv_artist_info"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="补充信息"
-                                android:textSize="12sp"
-                                android:textStyle="normal"
-                                android:textColor="@android:color/darker_gray"
-                                app:layout_collapseMode="parallax"
-                                app:layout_constraintTop_toBottomOf="@id/mlExtra"
-                                app:layout_constraintLeft_toLeftOf="parent"
-                                android:gravity="center_horizontal"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                <!-- Toolbar 用于显示折叠状态下的信息 -->
+                <com.google.android.material.appbar.MaterialToolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        app:layout_collapseMode="pin"
+                        app:navigationIcon="@drawable/ic_arrow_back"
+                        app:title="Artist Name"
+                        android:visibility="visible" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
         <include
                 layout="@layout/list_music"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <!-- 返回按钮 -->
-    <ImageButton
-            android:id="@+id/historyBackBtn"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:scaleType="fitCenter"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/back"
-            android:src="@drawable/ic_back"
-            app:tint="@android:color/white"
-            android:padding="8dp"
-            android:layout_gravity="top|start"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp" />
-
     <include
+            android:visibility="visible"
             android:id="@+id/bar_include"
             layout="@layout/bottom_player_bar"
             android:layout_width="match_parent"

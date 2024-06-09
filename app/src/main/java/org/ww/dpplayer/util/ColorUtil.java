@@ -52,4 +52,13 @@ public class ColorUtil
         return Color.rgb(red / pixels.length , green / pixels.length, blue / pixels.length);
     }
 
+    public static boolean isDarkColor(int color) {
+        // 计算输入颜色的相对亮度
+        double relativeLuminance = Color.luminance(color);
+
+        // 简单判断，如果亮度高于某个阈值（这里取中间值0.5作为示例），则认为颜色较亮，返回黑色；否则返回白色
+        // 这里的阈值可以根据实际情况调整以适应不同的需求
+        return relativeLuminance < 0.5;
+    }
+
 }

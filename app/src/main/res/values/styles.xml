@@ -111,4 +111,10 @@
     </style>
 
 
+    <style name="TextAppearance.Collapsed"
+           parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:textSize">38sp</item>
+    </style>
+
 </resources>
