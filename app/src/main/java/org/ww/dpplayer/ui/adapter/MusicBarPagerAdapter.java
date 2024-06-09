@@ -84,6 +84,8 @@ public class MusicBarPagerAdapter extends RecyclerView.Adapter<MusicBarPagerAdap
             titleTextView.setText(music.getTitle());
             if (music.getArtist() != null && !music.getArtist().equals(""))
                 artistTextView.setText(" - " + music.getArtist());
+            else
+                artistTextView.setText("");
             // 设置专辑封面
             if (music.getAlbumArt() != null)
             {

@@ -9,7 +9,7 @@
 
     <!--应用基础色-->
     <color name="colorPrimary">#ffd803</color>
-    <color name="colorPrimaryVariant">#ffd803</color>
+    <color name="colorPrimaryVariant">#74FFD803</color>
     <color name="colorOnPrimary">#272343</color>
     <color name="colorSecondary">#bae8e8</color>
     <color name="colorSecondaryVariant">#e3f6f5</color>
@@ -40,7 +40,7 @@
     <!--占位图背景色-->
     <color name="default_cover_bg">#EAF0FC</color>
 
-    <color name="white">#ffffff</color>
+    <color name="white">#fafafa</color>
     <color name="gray">#9e9e9e</color>
     <color name="colorPrimaryDarkTheme">#111111</color>
     <color name="colorPrimaryDarkDarkTheme">#111111</color>
@@ -79,7 +79,7 @@
     <color name="black">#0F0F0F</color>
 
     <color name="black_semi_transparent">#B2000000</color>
-    <color name="background">#f7f7f6</color>
+    <color name="background">#EAF1F1</color>
     <color name="half_black">#808080</color>
     <color name="white_pressed">#f1f1f1</color>
 

@@ -1,14 +1,18 @@
 package org.ww.dpplayer.ui.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import org.ww.dpplayer.R;
+import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
+import org.ww.dpplayer.ui.my.local.AlbumActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -40,6 +44,19 @@ public class HomeAlbumAdapter extends RecyclerView.Adapter<HomeAlbumAdapter.Albu
         } else {
             holder.albumArt.setImageResource(R.drawable.default_cover);
         }
+        holder.container.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (album.getAlbum() != null) {
+                    Intent intent = new Intent(v.getContext(), AlbumActivity.class);
+                    intent.putExtra("albumTitle", album.getAlbum());
+                    intent.putExtra("albumMusicList", MusicRepository.getInstance().getMusicsByAlbum(album.getAlbum()));
+                    v.getContext().startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override
@@ -50,11 +67,13 @@ public class HomeAlbumAdapter extends RecyclerView.Adapter<HomeAlbumAdapter.Albu
     static class AlbumViewHolder extends RecyclerView.ViewHolder {
         TextView albumTitle;
         RoundedImageView albumArt;
+        LinearLayout container;
 
         AlbumViewHolder(View itemView) {
             super(itemView);
             albumTitle = itemView.findViewById(R.id.album_title);
             albumArt = itemView.findViewById(R.id.album_art);
+            container = itemView.findViewById(R.id.home_album_container);
         }
     }
 

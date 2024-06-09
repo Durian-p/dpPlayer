@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Toast;
+import android.widget.Toolbar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -60,6 +62,7 @@ public class FragIndex extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         localMusics = MusicRepository.getInstance().getAllLocalMusic();
+        Collections.shuffle(localMusics);
 
         nestedScrollView = view.findViewById(R.id.container);
         ShapeableImageView userImage = view.findViewById(R.id.userImage);
@@ -93,6 +96,8 @@ public class FragIndex extends Fragment {
 
         appBarLayout.setTitle(getResources().getString(R.string.app_name));
         appBarLayout.setExpanded(true);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle(getResources().getString(R.string.app_name));
 
         // 初始化推荐曲目
         musicsSuList = new ArrayList<>();
@@ -244,7 +249,7 @@ public class FragIndex extends Fragment {
 
         List<Music> albumList = new ArrayList<>();
         List<Music> artistList = new ArrayList<>();
-        List<Music> recentPlayList = MusicRepository.getInstance().getLatest15Songs();
+        List<Music> recentPlayList = MusicRepository.getInstance().getRecent10Songs();
 
         // Populate albumList and artistList
         for (Music music : recentPlayList) {

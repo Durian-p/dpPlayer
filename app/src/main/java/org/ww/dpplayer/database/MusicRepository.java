@@ -550,5 +550,19 @@ public class MusicRepository {
         return musicList;
     }
 
+    // 获取最近听的10首歌
+    public List<Music> getRecent10Songs() {
+        List<Music> musicList = new ArrayList<>();
+        String query = "SELECT * FROM " + DatabaseHelper.TABLE_PLAY_HISTORY +
+                " ORDER BY " + DatabaseHelper.COLUMN_PLAYED_AT + " DESC LIMIT 10";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                Music music = getLocalMusicById(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SONG_ID)));
+                musicList.add(music);
+            }
+        }
+        return musicList;
+    }
 
 }

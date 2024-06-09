@@ -81,5 +81,6 @@
     <dimen name="subTitleTextSize">10sp</dimen>
     <dimen name="mini_player_height">56dp</dimen>
     <dimen name="m3_card_corner_radius">16dp</dimen>
+    <dimen name="fade_effect_heigth">100dp</dimen>
 
 </resources>

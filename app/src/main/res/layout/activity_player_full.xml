@@ -10,20 +10,22 @@
             android:id="@+id/playingBgIv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#1f000000"
+
             android:scaleType="centerCrop"
-            android:src="@color/card_dark"
+
             android:transitionName="@string/transition_cover"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:background="#1f000000" />
+            app:layout_constraintTop_toTopOf="parent"/>
+<!--    android:src="@color/card_dark"-->
+<!--    android:background="#1f000000"-->
+<!--    tools:background="#1f000000"-->
 
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#1f000000" />
+<!--    <View-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:background="#1f000000" />-->
 
 
     <androidx.viewpager2.widget.ViewPager2
@@ -170,11 +172,10 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/dp_8"
-                        android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:elevation="@dimen/dp_10"
                         android:scaleType="fitXY"
                         app:anim_duration="300"
-                        app:bg_color="@color/translucent"
+                        app:bg_color="@color/transparent"
                         app:btn_color="@color/white"
                         app:elevation="10dp" />
 
@@ -288,18 +289,18 @@
                     app:materialIconColor="@color/white"
                     app:materialIconSize="24dp" />
 
-            <net.steamcrafted.materialiconlib.MaterialIconView
-                    android:id="@+id/songCommentTv"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:gravity="center"
-                    android:onClick="showSongComment"
-                    app:materialIcon="comment_multiple_outline"
-                    app:materialIconColor="@color/white"
-                    app:materialIconSize="24dp" />
+<!--            <net.steamcrafted.materialiconlib.MaterialIconView-->
+<!--                    android:id="@+id/songCommentTv"-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:background="?android:attr/selectableItemBackgroundBorderless"-->
+<!--                    android:gravity="center"-->
+<!--                    android:onClick="showSongComment"-->
+<!--                    app:materialIcon="comment_multiple_outline"-->
+<!--                    app:materialIconColor="@color/white"-->
+<!--                    app:materialIconSize="24dp" />-->
 
         </LinearLayout>
 
@@ -380,13 +381,13 @@
                         android:src="@drawable/ic_more"
                         app:tint="@color/white" />
 
-                <ImageView
-                        android:id="@+id/searchLyricIv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/search_lyric"
-                        android:src="@drawable/ic_search_lyric"
-                        android:visibility="gone" />
+<!--                <ImageView-->
+<!--                        android:id="@+id/searchLyricIv"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:contentDescription="@string/search_lyric"-->
+<!--                        android:src="@drawable/ic_search_lyric"-->
+<!--                        android:visibility="gone" />-->
 
             </FrameLayout>
         </LinearLayout>

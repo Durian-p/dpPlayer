@@ -1,19 +1,20 @@
 package org.ww.dpplayer.ui.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import org.ww.dpplayer.R;
+import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
+import org.ww.dpplayer.ui.my.local.ArtistActivity;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class HomeArtistAdapter extends RecyclerView.Adapter<HomeArtistAdapter.ArtistViewHolder> {
 
@@ -21,6 +22,7 @@ public class HomeArtistAdapter extends RecyclerView.Adapter<HomeArtistAdapter.Ar
 
     public HomeArtistAdapter(List<Music> artists) {
         this.artists = getUniqueArtists(artists);
+        Collections.shuffle(this.artists);
     }
 
     @NonNull
@@ -40,6 +42,15 @@ public class HomeArtistAdapter extends RecyclerView.Adapter<HomeArtistAdapter.Ar
         } else {
             holder.artistImage.setImageResource(R.drawable.default_artist_avatar);
         }
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), ArtistActivity.class);
+                intent.putExtra("artistName", artist.getArtist());
+                intent.putExtra("artistMusicList", MusicRepository.getInstance().getMusicsByArtist(artist.getArtist()));
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -50,11 +61,13 @@ public class HomeArtistAdapter extends RecyclerView.Adapter<HomeArtistAdapter.Ar
     static class ArtistViewHolder extends RecyclerView.ViewHolder {
         TextView artistName;
         RoundedImageView artistImage;
+        LinearLayout container;
 
         ArtistViewHolder(View itemView) {
             super(itemView);
             artistName = itemView.findViewById(R.id.artist_name);
             artistImage = itemView.findViewById(R.id.artist_image);
+            container = itemView.findViewById(R.id.home_artist_container);
         }
     }
 

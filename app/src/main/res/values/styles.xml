@@ -5,17 +5,20 @@
         <item name="android:textSize">13sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/darker_gray</item>
+        <item name="fontFamily">@font/sans</item>
     </style>
 
     <style name="TitleMlist" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/sans</item>
     </style>
 
     <style name="ArtistTextViewStyle" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">9sp</item>
         <item name="android:textColor">@color/light_gray</item>
+        <item name="fontFamily">@font/sans</item>
     </style>
 
     <style name="SelectedTextViewColorStyle" parent="Widget.AppCompat.TextView">
@@ -43,6 +46,7 @@
     <style name="TitleText">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">20sp</item> <!-- Adjust the text size as needed -->
+        <item name="fontFamily">@font/sans</item>
 
     </style>
 
@@ -53,6 +57,12 @@
     <style name="TextViewNormal" parent="">
         <item name="android:textSize">14sp</item>
         <item name="fontFamily">@font/sans</item>
+    </style>
+
+    <style name="TextSu" parent="">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/sans</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
     </style>
 
     <style name="TextViewBody2" parent="TextAppearance.MaterialComponents.Body2">
@@ -93,7 +103,7 @@
 
     <!-- Custom toolbar title text appearance -->
     <style name="CustomToolbarTitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
         <item name="android:textSize">20sp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_width">match_parent</item>

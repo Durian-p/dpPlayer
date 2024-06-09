@@ -20,4 +20,20 @@
     <style name="Theme.TestApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="Theme.TestApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+
+    <style name="Base.Theme.Laughf" parent="Theme.Material3.DayNight.NoActionBar">
+        <!--全屏后顶部状态栏将不显示-->
+        <item name="android:windowFullscreen">true</item>
+
+        <!--使屏幕顶部的状态栏透明-->
+        <item name="android:windowTranslucentStatus">true</item>
+
+        <!--使屏幕底部的导航栏透明，有的手机是半透明-->
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="Theme.Laughf" parent="Base.Theme.Laughf" />
+
+
+
 </resources>

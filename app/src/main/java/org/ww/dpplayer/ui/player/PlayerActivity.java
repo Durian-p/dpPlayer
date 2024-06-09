@@ -3,10 +3,18 @@ package org.ww.dpplayer.ui.player;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.*;
@@ -15,6 +23,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.viewpager2.widget.ViewPager2;
+import androidx.core.graphics.ColorUtils;
+import jp.wasabeef.blurry.Blurry;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
@@ -27,7 +37,9 @@ import org.ww.dpplayer.ui.player.fragment.CoverFragment;
 import org.ww.dpplayer.ui.player.fragment.LyricFragment;
 import org.ww.dpplayer.ui.widget.DepthPageTransformer;
 import org.ww.dpplayer.ui.widget.PlayPauseView;
+import org.ww.dpplayer.util.ColorUtil;
 import org.ww.dpplayer.util.FormatUtil;
+import org.ww.dpplayer.util.MusicLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,12 +66,12 @@ public class PlayerActivity extends AppCompatActivity
     private TextView subTitleTv;
     private MusicService musicService;
     private LinearLayout bottomOpView;
-
     private CheckedTextView rightTv;
     private CheckedTextView leftTv;
     private ImageView backIv;
     private MaterialIconView playQueueIv;
     private ImageView playlistAddIv;
+    private ImageView playingBgIv;
 
     private boolean isServiceBound = false;
     private boolean isCoverFragmentReady = false;
@@ -115,9 +127,11 @@ public class PlayerActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        hideBottomStatusBar();
         setContentView(R.layout.activity_player_full);
 
         playingMusic = getIntent().getParcelableExtra("music", Music.class);
+
 
         initView();
         bindService();
@@ -133,7 +147,7 @@ public class PlayerActivity extends AppCompatActivity
         playPauseIv = findViewById(R.id.playPauseIv);
         viewPager = findViewById(R.id.viewPager);
         detailView = findViewById(R.id.detailView);
-        searchLyricIv = findViewById(R.id.searchLyricIv);
+//        searchLyricIv = findViewById(R.id.searchLyricIv);
         operateSongIv = findViewById(R.id.operateSongIv);
         progressTv = findViewById(R.id.progressTv);
         durationTv = findViewById(R.id.durationTv);
@@ -145,6 +159,7 @@ public class PlayerActivity extends AppCompatActivity
         subTitleTv = findViewById(R.id.subTitleTv);
         playQueueIv = findViewById(R.id.playQueueIv);
         playlistAddIv = findViewById(R.id.playlistAddIv);
+        playingBgIv = findViewById(R.id.playingBgIv);
 
         setupViewPager(viewPager);
 
@@ -262,7 +277,27 @@ public class PlayerActivity extends AppCompatActivity
                 dialogAdd2Mlist.show(getSupportFragmentManager(), "DialogAdd2Mlist");
             }
         });
+
+        // 动态颜色设置
+        setDynamicColor();
+
     }
+
+    private void setDynamicColor()
+    {
+        // 设置背景
+        if (playingMusic.getAlbumArt() == null)
+            playingMusic.setAlbumArt(MusicLoader.getAlbumArt(playingMusic.getPath())) ;
+//        setGradientBackground(playingBgIv, playingMusic.getAlbumArt());
+        Blurry.with(this).radius(20).color(Color.argb(60, 0, 0, 0)).from(playingMusic.getAlbumArt()).into(playingBgIv);
+        getWindow().setStatusBarColor(ColorUtil.getAverageColorWithBlackOverlay(playingMusic.getAlbumArt(), true));
+
+        // 设置进度条播放按钮
+        int themeColor = ColorUtil.getAverageColor(playingMusic.getAlbumArt());
+        progressSb.setThumbTintList(ColorStateList.valueOf(themeColor));
+        playPauseIv.setBgColor(themeColor);
+    }
+
 
     private void setupViewPager(ViewPager2 viewPager)
     {
@@ -278,48 +313,38 @@ public class PlayerActivity extends AppCompatActivity
         viewPager.setOffscreenPageLimit(2);
         viewPager.setCurrentItem(0);
 
-        int height = bottomOpView.getHeight();
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback()
         {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
             {
-                if (positionOffset <= 1 && position == 0)
+                if (positionOffset < 1 && position == 0)
                 {
-                    if (bottomOpView.getVisibility() == View.GONE)
-                    {
-                        bottomOpView.startAnimation(moveToViewLocation());
-                        bottomOpView.setVisibility(View.VISIBLE);
-                    }
-                    detailView.setTranslationY(height * positionOffset);
-                } else
+                    detailView.setTranslationY(bottomOpView.getHeight() * positionOffset);
+                }
+                else
                 {
-                    if (bottomOpView.getVisibility() == View.VISIBLE)
-                    {
-                        bottomOpView.startAnimation(moveToViewBottom());
-                        bottomOpView.setVisibility(View.GONE);
-                    }
-                    detailView.setTranslationY(height * 1f);
+                    detailView.setTranslationY(bottomOpView.getHeight() * 1f);
                 }
             }
 
             @Override
             public void onPageSelected(int position)
             {
-                if (position == 0)
-                {
-                    searchLyricIv.setVisibility(View.GONE);
-                    operateSongIv.setVisibility(View.VISIBLE);
-                    lyricFragment.getLyricView().setIndicatorShow(false);
-                    rightTv.setChecked(false);
-                    leftTv.setChecked(true);
-                } else
-                {
-                    searchLyricIv.setVisibility(View.VISIBLE);
-                    operateSongIv.setVisibility(View.GONE);
-                    rightTv.setChecked(true);
-                    leftTv.setChecked(false);
-                }
+//                if (position == 0)
+//                {
+//                    searchLyricIv.setVisibility(View.GONE);
+//                    operateSongIv.setVisibility(View.VISIBLE);
+//                    lyricFragment.getLyricView().setIndicatorShow(false);
+//                    rightTv.setChecked(false);
+//                    leftTv.setChecked(true);
+//                } else
+//                {
+//                    searchLyricIv.setVisibility(View.VISIBLE);
+//                    operateSongIv.setVisibility(View.GONE);
+//                    rightTv.setChecked(true);
+//                    leftTv.setChecked(false);
+//                }
             }
 
             @Override
@@ -419,6 +444,7 @@ public class PlayerActivity extends AppCompatActivity
             updateUIPlayStatus(isPlaying);
             updateUIProgress(playbackInfo.currentPosition, playbackInfo.duration);
             updateUIPlayMode();
+            setDynamicColor();
             coverFragment.setPlayingMusic(playbackInfo.music);
             coverFragment.updateViews();
         }
@@ -458,31 +484,6 @@ public class PlayerActivity extends AppCompatActivity
         musicService.playPrev();
     }
 
-    public void collectMusic(View view)
-    {
-        // UIUtils.collectMusic((ImageView) view, playingMusic);
-    }
-
-    public void addToPlaylist(View view)
-    {
-        // PlaylistManagerUtils.addToPlaylist(this, playingMusic);
-    }
-
-    public void showSongComment(View view)
-    {
-        // startActivity(new Intent(this, SongCommentActivity.class).putExtra("SONG", playingMusic));
-    }
-
-    public void shareMusic(View view)
-    {
-        // Tools.qqShare(this, musicService.getPlayingMusic());
-    }
-
-    public void downloadMusic(View view)
-    {
-        // QualitySelectDialog.newInstance(playingMusic).show(this);
-    }
-
     // 底部上移动画
     private TranslateAnimation moveToViewLocation()
     {
@@ -495,17 +496,6 @@ public class PlayerActivity extends AppCompatActivity
         return hiddenAction;
     }
 
-    // 底部下移动画
-    private TranslateAnimation moveToViewBottom()
-    {
-        TranslateAnimation hiddenAction = new TranslateAnimation(
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 1.0f);
-        hiddenAction.setDuration(300);
-        return hiddenAction;
-    }
 
     public void notifyCoverFragmentReady()
     {
@@ -516,4 +506,23 @@ public class PlayerActivity extends AppCompatActivity
             pendingPlaybackInfo = null;
         }
     }
+
+    /**
+     * 隐藏 NavigationBar和StatusBar
+     */
+    protected void hideBottomStatusBar() {
+        //隐藏虚拟按键，并且全屏
+        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+            View v = this.getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            //for new api versions.
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY ;
+            decorView.setSystemUiVisibility(uiOptions);
+
+        }
+    }
+
 }

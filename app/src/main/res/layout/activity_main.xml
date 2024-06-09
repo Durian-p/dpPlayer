@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/playerBarContainer"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:background="@color/white_pressed">
+            android:background="@color/background">
     </androidx.viewpager2.widget.ViewPager2>
 
     <include
