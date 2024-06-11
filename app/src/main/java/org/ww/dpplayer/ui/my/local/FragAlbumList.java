@@ -3,6 +3,7 @@ package org.ww.dpplayer.ui.my.local;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,7 +125,7 @@ public class FragAlbumList extends Fragment implements AlbumListAdapter.OnItemCl
     private void hideLoadingAnimationLottie() {
         // 创建一个 AlphaAnimation 对象，使透明度从 1.0 变为 0.0
         AlphaAnimation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
-        fadeOutAnimation.setDuration(400); // 设置动画持续时间为 500 毫秒
+        fadeOutAnimation.setDuration(300); // 设置动画持续时间为 300 毫秒
 
         // 添加动画结束监听器，当动画结束时隐藏加载动画并停止动画播放
         fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -146,6 +147,13 @@ public class FragAlbumList extends Fragment implements AlbumListAdapter.OnItemCl
         });
         // 启动动画
         lottieAnimationView.startAnimation(fadeOutAnimation);
+        // 延迟300ms再设置一次GONE以免动画没有被取消
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                lottieAnimationView.setVisibility(View.GONE);
+            }
+        }, 300);
     }
 
     private void applyFadeInAnimation() {

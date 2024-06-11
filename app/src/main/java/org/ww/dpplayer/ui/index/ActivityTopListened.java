@@ -60,10 +60,10 @@ public class ActivityTopListened extends BaseMusicActivity implements MusicListA
         llShufflePlay = findViewById(R.id.llShufflePlay);
 
         iv_info_img.setImageResource(R.drawable.trending_img);
-        iv_info_img.setScaleX(0.7f);
-        iv_info_img.setScaleY(0.7f);
 
         tv_title.setText("最多收听");
+        TextView mlTitle = findViewById(R.id.mlTitle);
+        mlTitle.setText("最多收听");
         tv_extra.setText("共" + heartList.size() + "首");
 
         rv_list.setLayoutManager(new LinearLayoutManager(this));

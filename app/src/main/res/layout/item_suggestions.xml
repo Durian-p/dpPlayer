@@ -29,6 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/round_selector"
+        app:tint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_refresh" />
 
     <com.google.android.material.card.MaterialCardView

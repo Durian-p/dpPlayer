@@ -188,5 +188,5 @@
     <color name="artist_card_background">#BCFFFFFF</color>
     <color name="dialog_card_background">#ABFFFFFF</color>
     <color name="twenty_percent_black_overlay">#34000000</color>
-    <color name="m3_accent_color">#00668b</color>
+    <color name="m3_accent_color">@color/colorOnPrimary</color>
 </resources>

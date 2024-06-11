@@ -3,6 +3,7 @@ package org.ww.dpplayer.ui.my.local;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,6 +144,13 @@ public class FragArtistList extends Fragment implements ArtistListAdapter.OnItem
         });
         // 启动动画
         lottieAnimationView.startAnimation(fadeOutAnimation);
+        // 延迟300ms再设置一次GONE以免动画没有被取消
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                lottieAnimationView.setVisibility(View.GONE);
+            }
+        }, 300);
     }
 
     private void applyFadeInAnimation() {

@@ -20,8 +20,6 @@ public class MainPagerAdaptor extends FragmentStateAdapter{
             case 0:
                 return FragIndex.newInstance();
             case 1:
-                return FragRover.newInstance();
-            case 2:
                 return FragMy.newInstance();
             default:
                 return null;
@@ -30,7 +28,7 @@ public class MainPagerAdaptor extends FragmentStateAdapter{
 
     @Override
     public int getItemCount(){
-        return 3;
+        return 2;
     }
 
 }

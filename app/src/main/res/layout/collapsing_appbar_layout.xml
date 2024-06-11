@@ -4,13 +4,12 @@
                                                             xmlns:tools="http://schemas.android.com/tools"
                                                             android:id="@+id/collapsingToolbarLayout"
                                                             android:layout_width="match_parent"
-                                                            android:layout_height="wrap_content"
-                                                            app:expandedTitleMarginBottom="24dp"
-                                                            app:expandedTitleMarginEnd="24dp"
-                                                            app:expandedTitleMarginStart="24dp"
-                                                            app:layout_scrollFlags="scroll|snap|enterAlwaysCollapsed|exitUntilCollapsed"
-                                                            app:expandedTitleTextAppearance="@style/CustomToolbarTitleTextAppearance"
-                                                            app:collapsedTitleTextAppearance="@style/CustomToolbarTitleTextAppearance">
+                                                            android:layout_height="match_parent"
+                                                            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                                                            app:contentScrim="@color/transparent"
+                                                            app:expandedTitleMarginStart="48dp"
+                                                            app:expandedTitleMarginEnd="64dp"
+                                                            app:expandedTitleTextAppearance="@style/TextAppearance.Collapsed">
     <!--    app:collapsedTitleTextAppearance="@style/TextViewHeadline6" -->
     <!--    app:expandedTitleTextAppearance="@style/TextViewHeadline4"-->
     <!--        style="?attr/collapsingToolbarLayoutLargeStyle"-->
@@ -19,11 +18,11 @@
     <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="?attr/actionBarSize"
             app:layout_collapseMode="pin"
             app:navigationIcon="@drawable/ic_search"
-            tools:title="@string/app_name"
-            style="@style/CustomToolbarStyle"/>
+            app:title="Artist Name"
+            android:visibility="visible"/>
     <!--    style="@style/Toolbar"-->
     <!--    app:titleTextAppearance="@style/ToolbarTextAppearanceNormal"-->
 </com.google.android.material.appbar.CollapsingToolbarLayout>

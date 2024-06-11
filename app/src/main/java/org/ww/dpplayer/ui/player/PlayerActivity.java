@@ -6,6 +6,7 @@ import android.content.ServiceConnection;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -41,9 +43,12 @@ import org.ww.dpplayer.util.ColorUtil;
 import org.ww.dpplayer.util.FormatUtil;
 import org.ww.dpplayer.util.MusicLoader;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PlayerActivity extends AppCompatActivity
 {
@@ -112,6 +117,7 @@ public class PlayerActivity extends AppCompatActivity
             {
                 titleTv.setText(playbackInfo.getValue().music.getTitle());
                 subTitleTv.setText(playbackInfo.getValue().music.getArtist());
+                lyricFragment.setLyricPath(playbackInfo.getValue().music.getPath());
             }
         }
 
@@ -289,13 +295,23 @@ public class PlayerActivity extends AppCompatActivity
         if (playingMusic.getAlbumArt() == null)
             playingMusic.setAlbumArt(MusicLoader.getAlbumArt(playingMusic.getPath())) ;
 //        setGradientBackground(playingBgIv, playingMusic.getAlbumArt());
-        Blurry.with(this).radius(20).color(Color.argb(60, 0, 0, 0)).from(playingMusic.getAlbumArt()).into(playingBgIv);
-        getWindow().setStatusBarColor(ColorUtil.getAverageColorWithBlackOverlay(playingMusic.getAlbumArt(), true));
+        if (playingMusic.getAlbumArt() != null)
+        {
+            Blurry.with(this).radius(20).color(Color.argb(60, 0, 0, 0)).from(playingMusic.getAlbumArt()).into(playingBgIv);
+            getWindow().setStatusBarColor(ColorUtil.getAverageColorWithBlackOverlay(playingMusic.getAlbumArt(), true));
+            // 设置进度条播放按钮
+            int themeColor = ColorUtil.getAverageColor(playingMusic.getAlbumArt());
+            progressSb.setThumbTintList(ColorStateList.valueOf(themeColor));
+            playPauseIv.setBgColor(themeColor);
+        }
+        else
+        {
+            Blurry.with(this).radius(20).color(Color.argb(60, 0, 0, 0)).from(((BitmapDrawable) ResourcesCompat.getDrawable(getResources(), R.drawable.banner, null)).getBitmap()).into(playingBgIv);
+            int themeColor = ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null);
+            progressSb.setThumbTintList(ColorStateList.valueOf(themeColor));
+            playPauseIv.setBgColor(themeColor);
+        }
 
-        // 设置进度条播放按钮
-        int themeColor = ColorUtil.getAverageColor(playingMusic.getAlbumArt());
-        progressSb.setThumbTintList(ColorStateList.valueOf(themeColor));
-        playPauseIv.setBgColor(themeColor);
     }
 
 
@@ -331,20 +347,20 @@ public class PlayerActivity extends AppCompatActivity
             @Override
             public void onPageSelected(int position)
             {
-//                if (position == 0)
-//                {
+                if (position == 0)
+                {
 //                    searchLyricIv.setVisibility(View.GONE);
 //                    operateSongIv.setVisibility(View.VISIBLE);
 //                    lyricFragment.getLyricView().setIndicatorShow(false);
 //                    rightTv.setChecked(false);
 //                    leftTv.setChecked(true);
-//                } else
-//                {
+                } else
+                {
 //                    searchLyricIv.setVisibility(View.VISIBLE);
 //                    operateSongIv.setVisibility(View.GONE);
 //                    rightTv.setChecked(true);
 //                    leftTv.setChecked(false);
-//                }
+                }
             }
 
             @Override
@@ -375,6 +391,7 @@ public class PlayerActivity extends AppCompatActivity
                     long currentPosition = musicService.getCurrentProgress();
                     long duration = musicService.getDuration();
                     updateUIProgress(currentPosition, duration);
+                    lyricFragment.setCurrentTimeMilles(currentPosition);
                 }
                 // Schedule the next update after 0.5 second
                 progressHandler.postDelayed(this, 500);
@@ -439,6 +456,8 @@ public class PlayerActivity extends AppCompatActivity
                     {
                         heartIv.setImageResource(R.drawable.item_heart);
                     }
+                    lyricFragment.setLyricPath(playbackInfo.music.getPath());
+
                 }
             }
             updateUIPlayStatus(isPlaying);

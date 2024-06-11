@@ -28,8 +28,7 @@
                 android:paddingBottom="2dp"
                 android:text="标准"
                 android:textColor="@color/white"
-                android:textSize="12sp"
-                app:drawableEndCompat="@drawable/ic_arrow_down_small"/>
+                android:textSize="12sp"/>
 
         <TextView
                 android:id="@+id/tv_source"
@@ -46,18 +45,6 @@
                 android:textColor="@color/white"
                 android:textSize="12sp"/>
 
-        <TextView
-                android:id="@+id/tv_sound_effect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_play_select"
-                android:paddingLeft="10dp"
-                android:paddingTop="2dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="2dp"
-                android:text="音效"
-                android:textColor="@color/white"
-                android:textSize="12sp"/>
 
     </LinearLayout>
 

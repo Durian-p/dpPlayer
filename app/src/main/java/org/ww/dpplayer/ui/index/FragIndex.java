@@ -2,18 +2,31 @@ package org.ww.dpplayer.ui.index;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.os.CancellationSignal;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.TextAppearanceSpan;
+import android.text.style.TypefaceSpan;
+import android.view.*;
 
+import android.view.translation.ViewTranslationCallback;
 import android.widget.Toast;
 import android.widget.Toolbar;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -35,6 +48,7 @@ import org.ww.dpplayer.ui.widget.insets.InsetsRecyclerView;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class FragIndex extends Fragment {
 
@@ -68,7 +82,6 @@ public class FragIndex extends Fragment {
         ShapeableImageView userImage = view.findViewById(R.id.userImage);
         MaterialTextView textView = view.findViewById(R.id.titleWelcome);
         AppCompatImageView bannerImage = view.findViewById(R.id.bannerImage);
-        TopAppBarLayout appBarLayout = view.findViewById(R.id.appBarLayout);
         AccentIcon refreshBtn = view.findViewById(R.id.refresh_button);
         MaterialButton historyBtn = view.findViewById(R.id.history);
         MaterialButton topBtn = view.findViewById(R.id.topPlayed);
@@ -94,10 +107,51 @@ public class FragIndex extends Fragment {
         }
         bannerImage.setImageResource(R.drawable.banner);
 
-        appBarLayout.setTitle(getResources().getString(R.string.app_name));
-        appBarLayout.setExpanded(true);
+        AppBarLayout appBarLayout = view.findViewById(R.id.app_bar_layout);
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle(getResources().getString(R.string.app_name));
+        CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar_layout);
+//       Spanned appName = Html.fromHtml("<font color=#bae8e8;font-family:sans;font-weight:bold'>dp</span><span style='color:#272343;font-family:sans'>Player</span>", Html.FROM_HTML_MODE_LEGACY);
+        String appName = getResources().getString(R.string.app_name);
+        SpannableString appNameSpannable = new SpannableString(appName);
+        appNameSpannable.setSpan(new TextAppearanceSpan(getContext(), R.style.AppName1), 0, 2, 0 );
+        appNameSpannable.setSpan(new TextAppearanceSpan(getContext(), R.style.AppName2), 2, appName.length(), 0 );
+
+        // 设置View内容
+//        toolbar.setTitle(appNameSpannable);
+        collapsingToolbarLayout.setTitle(appNameSpannable);
+
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) requireActivity()).getWindow().setStatusBarColor(getResources().getColor(R.color.transparent, null));
+        collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorOnPrimary, null)));
+        collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.colorPrimary, null));
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white, null));
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary, null));
+        toolbar.setNavigationIconTint(getResources().getColor(R.color.colorPrimary, null));
+
+
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            int max = 0;
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                max = Math.min(max, Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange());
+
+                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0)
+                {
+                    //  Collapsed 不加空格不更新
+                    collapsingToolbarLayout.setTitle(appName+" ");
+                    toolbar.setNavigationIconTint(getResources().getColor(R.color.white, null));
+
+                }
+                else if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() < 0 && Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() > -30)
+                {
+                    //Expanded
+                    collapsingToolbarLayout.setTitle(appNameSpannable);
+                    toolbar.setNavigationIconTint(getResources().getColor(R.color.colorPrimary, null));
+                }
+            }
+        });
+
 
         // 初始化推荐曲目
         musicsSuList = new ArrayList<>();

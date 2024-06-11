@@ -62,6 +62,8 @@ public class ActivityLastAdded extends BaseMusicActivity implements MusicListAda
         iv_info_img.setImageResource(R.drawable.history_img);
 
         tv_title.setText("最近添加");
+        TextView mlTitle = findViewById(R.id.mlTitle);
+        mlTitle.setText("最多添加");
         tv_extra.setText("共" + heartList.size() + "首");
 
         rv_list.setLayoutManager(new LinearLayoutManager(this));

@@ -25,6 +25,7 @@ public class MusicRepository {
         dbHelper = DatabaseHelper.getInstance(context.getApplicationContext());
         db = dbHelper.getWritableDatabase();
         List<Music> musicList = MusicLoader.findLocalMusic(context);
+//        deleteAllLocalMusic();
         addLocalMusics(musicList);
     }
 
@@ -119,6 +120,11 @@ public class MusicRepository {
         db.delete(DatabaseHelper.TABLE_HEART_MUSIC, DatabaseHelper.COLUMN_SONG_ID + " = ?", new String[]{String.valueOf(id)});
         db.delete(DatabaseHelper.TABLE_PLAYLIST_SONGS, DatabaseHelper.COLUMN_SONG_ID + " = ?", new String[]{String.valueOf(id)});
 //        db.close();
+    }
+
+    public void deleteAllLocalMusic()
+    {
+        db.delete(DatabaseHelper.TABLE_LOCAL_MUSIC, null, null);
     }
 
     public Music getLocalMusicById(long id) {
@@ -561,6 +567,10 @@ public class MusicRepository {
                 Music music = getLocalMusicById(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SONG_ID)));
                 musicList.add(music);
             }
+        }
+        if (musicList.isEmpty())
+        {
+            musicList = getLatest15Songs();
         }
         return musicList;
     }

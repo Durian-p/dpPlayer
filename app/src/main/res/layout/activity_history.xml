@@ -18,10 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            app:titleTextColor="@android:color/white"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent">
+            app:titleTextColor="@android:color/white">
 
         <ImageButton
                 android:id="@+id/historyBackBtn"
@@ -29,18 +26,16 @@
                 android:layout_height="44dp"
                 android:scaleType="fitCenter"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_gravity="start|center_vertical"
                 android:contentDescription="@string/back"
                 android:src="@drawable/ic_back"
                 app:tint="@android:color/white"
                 android:padding="8dp"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:layout_gravity="start|center_vertical"/>
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/historyTitle"
-                app:layout_constraintLeft_toRightOf="@id/localBackButton"
                 android:text="@string/heart"
                 android:layout_marginStart="20dp"
                 style="@style/TitleText"/>
@@ -81,8 +76,6 @@
                     app:layout_constraintBottom_toTopOf="@id/playerBarContainer"
                     android:layout_marginTop="12dp"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

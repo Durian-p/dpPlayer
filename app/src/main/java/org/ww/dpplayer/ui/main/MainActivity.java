@@ -19,10 +19,14 @@ import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicService;
+import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MainPagerAdaptor;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
+import org.ww.dpplayer.ui.player.PlayerActivity;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends BaseMusicActivity {
 
@@ -76,11 +80,12 @@ public class MainActivity extends BaseMusicActivity {
                     bottomNavigation.setSelectedItemId(R.id.action_discover);
                     break;
                 case 1:
-                    bottomNavigation.setSelectedItemId(R.id.action_rover);
-                    break;
-                case 2:
                     bottomNavigation.setSelectedItemId(R.id.action_my);
                     break;
+                case 2:
+                    bottomNavigation.setSelectedItemId(R.id.action_rover);
+                    break;
+
             }
         }
     };
@@ -94,10 +99,20 @@ public class MainActivity extends BaseMusicActivity {
                     mainVp.setCurrentItem(0);
                     break;
                 case R.id.action_rover:
-                    mainVp.setCurrentItem(1);
+//                    mainVp.setCurrentItem(1);
+                    if (musicService.getPlaybackState().getValue().state == MusicService.PlayerState.None)
+                    {
+                        List<Music> tmp = MusicRepository.getInstance().getAllLocalMusic();
+                        updateServiceMusicList(tmp, new Random().nextInt(tmp.size()));
+                        setPlayMode(MusicService.PlayMode.SHUFFLE);
+                        MusicServiceController.sendPlayBroadcast(MainActivity.this);
+                    }
+                    Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
+                    intent.putExtra("music", musicService.getCurrentMusic());
+                    startActivity(intent);
                     break;
                 case R.id.action_my:
-                    mainVp.setCurrentItem(2);
+                    mainVp.setCurrentItem(1);
                     break;
             }
             return true;

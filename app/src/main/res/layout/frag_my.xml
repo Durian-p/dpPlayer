@@ -12,12 +12,19 @@
             android:descendantFocusability="blocksDescendants"
             android:orientation="vertical">
 
+        <org.ww.dpplayer.ui.widget.HomeImageLayout
+                android:id="@+id/imageLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
         <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_4"
                 app:cardBackgroundColor="@color/cardColor"
-                app:cardCornerRadius="@dimen/dp_2"
+                android:padding="3dp"
+                app:cardCornerRadius="8dp"
                 app:cardElevation="@dimen/dp_2"
                 app:cardUseCompatPadding="true">
 

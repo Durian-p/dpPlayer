@@ -63,7 +63,10 @@ public class AlbumActivity extends BaseMusicActivity {
         setTitle(albumTitle);
         mAlbumTitle.setText(albumTitle);
         mAlbumArtist.setText("歌手: " + albumMusicList.get(0).getArtist());
-        mAlbumCover.setImageBitmap(albumMusicList.get(0).getAlbumArt());
+        if (albumMusicList.get(0).getAlbumArt() != null)
+            mAlbumCover.setImageBitmap(albumMusicList.get(0).getAlbumArt());
+        else
+            mAlbumCover.setImageResource(R.drawable.default_cover);
 
         // 初始化 RecyclerView
         mRecyclerView = findViewById(R.id.rv_musics);

@@ -4,12 +4,15 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 import org.ww.dpplayer.R;
@@ -17,6 +20,8 @@ import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.ui.player.PlayerActivity;
 import org.ww.dpplayer.util.MusicLoader;
 import android.util.Log;
+
+import java.io.IOException;
 
 public class CoverFragment extends Fragment {
 
@@ -26,6 +31,7 @@ public class CoverFragment extends Fragment {
     private String coverPath;
     private Bitmap currentCover;
     private Music playingMusic;
+    private TextView tv_quality;
     private Boolean isInitAnimator = false;
 
     private ObjectAnimator coverAnimator;
@@ -53,6 +59,7 @@ public class CoverFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         coverView = view.findViewById(R.id.coverView);
         cover2View = view.findViewById(R.id.cover2View);
+        tv_quality = view.findViewById(R.id.tv_quality);
 
         updateViews();
         initAnimators();
@@ -72,10 +79,40 @@ public class CoverFragment extends Fragment {
     }
 
     public void updateViews() {
+        if (playingMusic != null)
+        {
+            // 判断音质类型
+            // 使用 MediaMetadataRetriever 获取比特率
+            MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+            mmr.setDataSource(playingMusic.getPath());
+            String bitrateStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+            int kbps = Integer.parseInt(bitrateStr) / 1000; // 比特率是以bps为单位的，这里转换为kbps
+
+            // 判断音质类型
+            String quality;
+            if (kbps < 128) {
+                quality = "低音质";
+            } else if (kbps <= 320) {
+                quality = "中等音质";
+            } else {
+                quality = "高音质";
+            }
+            tv_quality.setText(quality);
+            try
+            {
+                mmr.release();
+            }
+            catch (IOException e)
+            {
+                Log.e("CoverFragment", "release error");
+            }
+        }
         if (currentCover != null)
             coverView.setImageBitmap(currentCover);
         else
+        {
             coverView.setImageResource(R.drawable.default_cover);
+        }
         coverView.setVisibility(View.VISIBLE);
         if (currentCover == null) {
             cover2View.setVisibility(View.GONE);

@@ -30,6 +30,7 @@ public class MusicListActivity extends BaseMusicActivity
     RecyclerView mlRv;
     ImageView ivMlImg;
     TextView mlName;
+    TextView tvTitle;
     TextView mlExtra;
     LinearLayout llShufflePlay;
 
@@ -88,6 +89,7 @@ public class MusicListActivity extends BaseMusicActivity
     {
         mlBackBtn = findViewById(R.id.mlBackBtn);
         mlTitle = findViewById(R.id.mlTitle);
+
         mlRv = findViewById(R.id.rv_musics);
         ivMlImg = findViewById(R.id.ivMlImg);
         mlName = findViewById(R.id.mlName);
@@ -101,7 +103,10 @@ public class MusicListActivity extends BaseMusicActivity
         mlTitle.setText("歌单");
         mlName.setText(musicList.getName());
         mlExtra.setText("(" + musicList.getMusicIdList().size() + "首)");
-        ivMlImg.setImageBitmap(musicList.getCover());
+        if (musicList.getCover()  != null)
+            ivMlImg.setImageBitmap(musicList.getCover());
+        else
+            ivMlImg.setImageResource(R.drawable.default_cover);
 
         llShufflePlay.setOnClickListener(v -> {
             updateServiceMusicList(musics, new Random().nextInt(musics.size()));

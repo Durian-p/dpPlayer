@@ -76,7 +76,7 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Vi
             holder.coverImageView.setImageBitmap(artistArt);
         } else {
             // 如果没有艺术家封面，则使用默认图标
-            holder.coverImageView.setImageResource(R.drawable.default_cover);
+            holder.coverImageView.setImageResource(R.drawable.default_artist_avatar);
         }
 
         // 设置点击侦听器
