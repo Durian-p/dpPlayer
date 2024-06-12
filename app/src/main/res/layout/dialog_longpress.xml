@@ -1,231 +1,248 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   xmlns:tools="http://schemas.android.com/tools"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="wrap_content"
-                                                   android:background="@drawable/bg_bottom_popup_container"
-                                                   android:layout_gravity="bottom"
-                                                   android:padding="16dp">
+<!--<org.ww.dpplayer.ui.widget.RadiusCardView-->
+<!--        xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:rcv_topLeftRadiu="12dp"-->
+<!--        app:rcv_topRightRadiu="12dp"-->
+<!--        app:rcv_bottomLeftRadiu="0dp"-->
+<!--        app:rcv_bottomRightRadiu="0dp">-->
 
-    <TextView
-            android:id="@+id/tv_song_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="ASAP"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-            android:id="@+id/tv_song_artist"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="NewJeans - Get Up"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_song_title" />
-
-    <View
-            android:id="@+id/divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/gray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_song_artist"/>
-
-    <!-- Next Play -->
-    <LinearLayout
-            android:id="@+id/ll_play_next"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/divider"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
-
-        <ImageView
-                android:id="@+id/iv_play_next"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleX="0.97"
-                android:scaleY="0.97"
-                android:src="@drawable/ic_play_next"
-                app:tint="@color/black"/>
-
-        <TextView
-                android:id="@+id/tv_play_next"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/play_song_next"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginStart="16dp"
-                android:layout_gravity="center_vertical"/>
-    </LinearLayout>
-
-    <!-- View Album -->
-    <LinearLayout
-            android:id="@+id/ll_view_album"
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/ll_play_next"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
-
-        <ImageView
-                android:id="@+id/iv_view_album"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_album"
-                app:tint="@color/black"/>
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:background="@drawable/bg_bottom_popup_container"
+            android:layout_gravity="bottom"
+            android:padding="16dp">
 
         <TextView
-                android:id="@+id/tv_view_album"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_song_title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/check_album"
+                android:text="ASAP"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginStart="16dp"
-                android:layout_gravity="center_vertical"/>
-    </LinearLayout>
-
-    <!-- View Artist -->
-    <LinearLayout
-            android:id="@+id/ll_view_artist"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/ll_view_album"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
-
-        <ImageView
-                android:id="@+id/iv_view_artist"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleX="0.98"
-                android:scaleY="0.98"
-                android:src="@drawable/ic_artist"
-                app:tint="@color/black"/>
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-                android:id="@+id/tv_view_artist"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_song_artist"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/check_artist"
+                android:text="NewJeans - Get Up"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginStart="16dp"
-                android:layout_gravity="center_vertical"/>
-    </LinearLayout>
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_song_title"/>
 
-    <!-- Edit Info -->
-    <LinearLayout
-            android:id="@+id/ll_add2mlist"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/ll_view_artist"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
+        <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_song_artist"/>
 
-        <ImageView
-                android:id="@+id/iv_add2mlist"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleX="0.95"
-                android:scaleY="0.95"
-                android:src="@drawable/ic_add2mlist"
-                app:tint="@color/black"/>
+        <!-- Next Play -->
+        <LinearLayout
+                android:id="@+id/ll_play_next"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
 
-        <TextView
-                android:id="@+id/tv_add2mlist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/add2mlist"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginStart="16dp"
-                android:layout_gravity="center_vertical"/>
-    </LinearLayout>
+            <ImageView
+                    android:id="@+id/iv_play_next"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:scaleX="0.97"
+                    android:scaleY="0.97"
+                    android:src="@drawable/ic_play_next"
+                    app:tint="@color/black"
+                    android:layout_gravity="center"/>
 
-    <!-- Delete -->
-    <LinearLayout
-            android:id="@+id/ll_delete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/ll_add2mlist"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
+            <TextView
+                    android:id="@+id/tv_play_next"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/play_song_next"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginStart="16dp"
+                    android:layout_gravity="center"/>
+        </LinearLayout>
 
-        <ImageView
-                android:id="@+id/iv_delete"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_delete"
-                app:tint="@color/black"/>
+        <!-- View Album -->
+        <LinearLayout
+                android:id="@+id/ll_view_album"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/ll_play_next"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
 
-        <TextView
-                android:id="@+id/tv_delete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/delet"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginStart="16dp"
-                android:layout_gravity="center_vertical"/>
-    </LinearLayout>
+            <ImageView
+                    android:id="@+id/iv_view_album"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_album"
+                    app:tint="@color/black"
+                    android:layout_gravity="center"/>
 
-    <!-- Share -->
-    <LinearLayout
-            android:id="@+id/ll_share"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/ll_delete"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
+            <TextView
+                    android:id="@+id/tv_view_album"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/check_album"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginStart="16dp"
+                    android:layout_gravity="center_vertical"/>
+        </LinearLayout>
 
-        <ImageView
-                android:id="@+id/iv_share"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
-                android:src="@drawable/ic_share"
-                app:tint="@color/black"/>
+        <!-- View Artist -->
+        <LinearLayout
+                android:id="@+id/ll_view_artist"
+                android:layout_width="0dp"
+                android:layout_height="43dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/ll_view_album"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
 
-        <TextView
-                android:id="@+id/tv_share"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/share"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginStart="16dp"
-                android:layout_gravity="center_vertical"/>
-    </LinearLayout>
+            <ImageView
+                    android:id="@+id/iv_view_artist"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:scaleX="0.98"
+                    android:scaleY="0.98"
+                    android:src="@drawable/ic_artist"
+                    app:tint="@color/black"
+                    android:layout_gravity="center"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                    android:id="@+id/tv_view_artist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/check_artist"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginStart="16dp"
+                    android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <!-- Edit Info -->
+        <LinearLayout
+                android:id="@+id/ll_add2mlist"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/ll_view_artist"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+
+            <ImageView
+                    android:id="@+id/iv_add2mlist"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:scaleX="0.95"
+                    android:scaleY="0.95"
+                    android:src="@drawable/ic_add2mlist"
+                    app:tint="@color/black"
+                    android:layout_gravity="center"/>
+
+            <TextView
+                    android:id="@+id/tv_add2mlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add2mlist"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginStart="16dp"
+                    android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <!-- Delete -->
+        <LinearLayout
+                android:id="@+id/ll_delete"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/ll_add2mlist"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+
+            <ImageView
+                    android:id="@+id/iv_delete"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_delete"
+                    app:tint="@color/black"
+                    android:layout_gravity="center"/>
+
+            <TextView
+                    android:id="@+id/tv_delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delet"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginStart="16dp"
+                    android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <!-- Share -->
+        <LinearLayout
+                android:id="@+id/ll_share"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/ll_delete"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+
+            <ImageView
+                    android:id="@+id/iv_share"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    android:src="@drawable/ic_share"
+                    app:tint="@color/black"
+                    android:layout_gravity="center"/>
+
+            <TextView
+                    android:id="@+id/tv_share"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/share"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginStart="16dp"
+                    android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--</org.ww.dpplayer.ui.widget.RadiusCardView>-->

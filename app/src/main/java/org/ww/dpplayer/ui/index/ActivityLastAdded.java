@@ -2,10 +2,7 @@ package org.ww.dpplayer.ui.index;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.ww.dpplayer.R;
@@ -15,6 +12,8 @@ import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
+import org.ww.dpplayer.ui.base.DialogItemLongPress;
+import org.ww.dpplayer.util.MusicLoader;
 
 import java.util.List;
 import java.util.Random;
@@ -47,6 +46,29 @@ public class ActivityLastAdded extends BaseMusicActivity implements MusicListAda
 
         musicListAdapter = new MusicListAdapter(this, heartList);
         musicListAdapter.setOnItemClickListener(this);
+        musicListAdapter.setOnItemLongClickListener(new MusicListAdapter.OnItemLongClickListener()
+        {
+            @Override
+            public void onItemLongClick(int position)
+            {
+                DialogItemLongPress dialog = new DialogItemLongPress(heartList.get(position));
+                dialog.setOnItemDeleteListener(new DialogItemLongPress.OnItemDeleteListener(){
+                    @Override
+                    public void onItemDelete(Music music)
+                    {
+                        if (MusicLoader.deleteMusic(ActivityLastAdded.this, music))
+                        {
+                            heartList.remove(music);
+                            musicListAdapter.notifyItemRemoved(position);
+                            Toast.makeText(ActivityLastAdded.this, "删除成功", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                            Toast.makeText(ActivityLastAdded.this, "删除失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialog.show(ActivityLastAdded.this.getSupportFragmentManager(), "dialog");
+            }
+        });
     }
 
 
@@ -62,7 +84,7 @@ public class ActivityLastAdded extends BaseMusicActivity implements MusicListAda
         iv_info_img.setImageResource(R.drawable.history_img);
 
         tv_title.setText("最近添加");
-        TextView mlTitle = findViewById(R.id.mlTitle);
+        TextView mlTitle = findViewById(R.id.historyTitle);
         mlTitle.setText("最多添加");
         tv_extra.setText("共" + heartList.size() + "首");
 

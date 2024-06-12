@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+                                                     android:fitsSystemWindows="true" >
 
 <!--    <org.ww.dpplayer.ui.widget.TopAppBarLayout-->
 <!--        android:id="@+id/appBarLayout"-->
@@ -33,7 +33,9 @@
                     app:expandedTitleMarginStart="54dp"
                     app:expandedTitleMarginEnd="0dp"
                     app:expandedTitleMarginBottom="26dp"
-                    app:expandedTitleTextAppearance="@style/TextAppearanceCollapsedHome">
+                    app:expandedTitleTextAppearance="@style/TextAppearanceExpandedHome"
+                    app:collapsedTitleTextAppearance="@style/TextAppearanceCollapsedHome">
+
 
 
                 <!-- Toolbar 用于显示折叠状态下的信息 -->
@@ -44,7 +46,8 @@
                         app:layout_collapseMode="pin"
                         app:navigationIcon="@drawable/ic_logo_small"
                         app:title="Artist Name"
-                        android:visibility="visible" />
+                        android:visibility="visible"
+                        style="@style/myToolbarNavigationButtonStyle"/>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 <!--            -->
         </com.google.android.material.appbar.AppBarLayout>

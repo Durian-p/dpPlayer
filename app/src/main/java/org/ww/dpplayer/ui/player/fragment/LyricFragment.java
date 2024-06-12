@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import me.wcy.lrcview.LrcView;
 import org.ww.dpplayer.R;
-import org.ww.dpplayer.player.MusicServiceController;
-import org.ww.dpplayer.ui.widget.LyricView;
-import org.ww.dpplayer.util.SPUtils;
 
 import java.io.File;
 import java.util.regex.Matcher;
@@ -25,6 +22,12 @@ public class LyricFragment extends Fragment
     {
         return lyricView;
     }
+    public LrcView.OnPlayClickListener listener;
+
+    public void setListener(LrcView.OnPlayClickListener listener)
+    {
+        this.listener = listener;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -37,7 +40,15 @@ public class LyricFragment extends Fragment
     {
         lyricView = view.findViewById(R.id.lyricShow);
         lyricView.setCurrentColor(getResources().getColor(R.color.colorPrimary, null));
-        setLyricFile();
+        showLyrics();
+        lyricView.setDraggable(true, new LrcView.OnPlayClickListener()
+        {
+            @Override
+            public boolean onPlayClick(LrcView view, long time)
+            {
+                return listener.onPlayClick(view, time);
+            }
+        });
     }
 
     public void showLyric(String lyric, boolean init)
@@ -68,19 +79,19 @@ public class LyricFragment extends Fragment
         // TODO: 歌词
     }
 
-    public void setLyricFile(File file, String charsetName)
+    public void showLyrics(File file, String charsetName)
     {
 //        lyricView.setLyricFile(file, charsetName);
         lyricView.loadLrc(file);
     }
 
-    public void setLyricFile(File file, File filech, String charsetName)
+    public void showLyrics(File file, File filech, String charsetName)
     {
 //        lyricView.setLyricFile(file, charsetName);
         lyricView.loadLrc(file, filech);
     }
 
-    public void setLyricFile()
+    public void showLyrics()
     {
 
         try
@@ -106,6 +117,8 @@ public class LyricFragment extends Fragment
             Log.d("PlayerActivity", "Error reading file: " + e.getMessage());
         }
     }
+
+
 
     public void setLyricPath(String path)
     {

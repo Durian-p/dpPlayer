@@ -65,7 +65,7 @@ public class DialogNewMlist extends Dialog {
     private void createPlaylist() {
         String name = editTextPlaylistName.getText().toString().trim();
         if (name.isEmpty()) {
-            Toast.makeText(getContext(), "Playlist name is required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "请输入歌单名", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -79,7 +79,7 @@ public class DialogNewMlist extends Dialog {
         }
 
         musicRepository.addMusicList(playlist);
-        Toast.makeText(getContext(), "Playlist created successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "成功创建歌单", Toast.LENGTH_SHORT).show();
         dismiss();
     }
 

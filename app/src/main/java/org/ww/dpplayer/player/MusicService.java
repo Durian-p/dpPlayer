@@ -203,7 +203,7 @@ public class MusicService extends Service {
         }
     }
 
-    public void seekTo(int progress) {
+    public void seekTo(long progress) {
         player.seekTo(progress);
     }
 

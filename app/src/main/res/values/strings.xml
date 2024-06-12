@@ -75,6 +75,7 @@
     <string name="last_added">最近添加</string>
     <string name="my_top_tracks">最多播放</string>
     <string name="shuffle">随机播放</string>
+    <string name="MlistName">歌单名</string>
 
 
 </resources>

@@ -14,7 +14,7 @@
             android:padding="16dp"
             android:background="@drawable/bg_dialog_radius">
 
-        <ImageView
+        <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/imageViewPlaylistCover"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
@@ -23,13 +23,14 @@
                 android:contentDescription="Playlist Cover"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/default_cover"/>
+                android:src="@drawable/default_cover"
+                app:riv_corner_radius="10dp"/>
 
         <EditText
                 android:id="@+id/editTextPlaylistName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Playlist Name"
+                android:hint="@string/MlistName"
                 android:inputType="textPersonName"
                 app:layout_constraintLeft_toRightOf="@id/imageViewPlaylistCover"
                 app:layout_constraintRight_toRightOf="parent"

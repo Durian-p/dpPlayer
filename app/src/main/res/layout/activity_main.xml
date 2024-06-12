@@ -26,9 +26,10 @@
             tools:layout_editor_absoluteX="1dp"
             android:id="@+id/mainVp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/playerBarContainer"
+            app:layout_constraintBottom_toBottomOf="@id/playerBarContainer"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:background="@color/background">
+            android:background="@color/background"
+            android:paddingBottom="50dp">
     </androidx.viewpager2.widget.ViewPager2>
 
     <include

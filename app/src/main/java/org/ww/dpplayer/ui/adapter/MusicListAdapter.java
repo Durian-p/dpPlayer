@@ -114,12 +114,14 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
         TextView musicNameTextView;
         TextView albumArtistTextView;
         ImageView coverImageView;
+        TextView cntTv;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             musicNameTextView = itemView.findViewById(R.id.tvTitle);
             albumArtistTextView = itemView.findViewById(R.id.tvAlbumArtist);
             coverImageView = itemView.findViewById(R.id.ivCover);
+            cntTv = itemView.findViewById(org.ww.dpplayer.R.id.tvCnt);
         }
     }
 

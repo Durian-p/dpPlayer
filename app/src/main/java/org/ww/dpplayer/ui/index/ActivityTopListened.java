@@ -1,11 +1,9 @@
 package org.ww.dpplayer.ui.index;
 
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.ww.dpplayer.R;
@@ -14,7 +12,9 @@ import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
+import org.ww.dpplayer.ui.adapter.MusicListWithCntAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
+import org.ww.dpplayer.ui.base.DialogItemLongPress;
 
 import java.util.List;
 import java.util.Random;
@@ -28,7 +28,8 @@ public class ActivityTopListened extends BaseMusicActivity implements MusicListA
     private RecyclerView rv_list;
     private ImageButton heartBackBtn;
     MusicRepository musicRepository;
-    List<Music> heartList;
+    List<Music> topList;
+    List<Integer> topCnt;
     MusicListAdapter musicListAdapter;
 
     @Override
@@ -43,10 +44,35 @@ public class ActivityTopListened extends BaseMusicActivity implements MusicListA
     private void initData()
     {
         musicRepository = MusicRepository.getInstance();
-        heartList = musicRepository.getTop100SongsByPlayCount();
+        Pair<List<Music>, List<Integer>> ret = MusicRepository.getInstance().getTop100SongsByPlayCount();;
+        topList = ret.first;
+        topCnt = ret.second;
 
-        musicListAdapter = new MusicListAdapter(this, heartList);
+        musicListAdapter = new MusicListWithCntAdapter(this, topList, topCnt);
         musicListAdapter.setOnItemClickListener(this);
+        musicListAdapter.setOnItemLongClickListener(new MusicListAdapter.OnItemLongClickListener()
+        {
+            @Override
+            public void onItemLongClick(int position)
+            {
+                DialogItemLongPress dialog = new DialogItemLongPress(topList.get(position));
+                dialog.setOnItemDeleteListener(new DialogItemLongPress.OnItemDeleteListener(){
+                    @Override
+                    public void onItemDelete(Music music)
+                    {
+                        if (musicRepository.deleteRecord(music.getId()))
+                        {
+                            topList.remove(music);
+                            musicListAdapter.notifyItemRemoved(position);
+                            Toast.makeText(ActivityTopListened.this, "删除成功", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                            Toast.makeText(ActivityTopListened.this, "删除失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialog.show(ActivityTopListened.this.getSupportFragmentManager(), "dialog");
+            }
+        });
     }
 
 
@@ -62,9 +88,9 @@ public class ActivityTopListened extends BaseMusicActivity implements MusicListA
         iv_info_img.setImageResource(R.drawable.trending_img);
 
         tv_title.setText("最多收听");
-        TextView mlTitle = findViewById(R.id.mlTitle);
+        TextView mlTitle = findViewById(R.id.historyTitle);
         mlTitle.setText("最多收听");
-        tv_extra.setText("共" + heartList.size() + "首");
+        tv_extra.setText("共" + topList.size() + "首");
 
         rv_list.setLayoutManager(new LinearLayoutManager(this));
         rv_list.setAdapter(musicListAdapter);
@@ -76,7 +102,7 @@ public class ActivityTopListened extends BaseMusicActivity implements MusicListA
 
         // 播放栏header随机播放
         llShufflePlay.setOnClickListener(v -> {
-            updateServiceMusicList(heartList, new Random().nextInt(heartList.size()));
+            updateServiceMusicList(topList, new Random().nextInt(topList.size()));
             musicService.setPlayMode(MusicService.PlayMode.SHUFFLE);
             MusicServiceController.sendPlayBroadcast(this);
         });
@@ -91,7 +117,7 @@ public class ActivityTopListened extends BaseMusicActivity implements MusicListA
 
     @Override
     public void onItemClick(int position) {
-        updateServiceMusicList(heartList, position);
+        updateServiceMusicList(topList, position);
         MusicServiceController.sendPlayBroadcast(this);
     }
 }

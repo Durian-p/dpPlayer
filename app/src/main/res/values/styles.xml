@@ -22,7 +22,7 @@
     </style>
 
     <style name="SelectedTextViewColorStyle" parent="Widget.AppCompat.TextView">
-        <item name="android:textColor">#D830F6</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
     <style name="MyTabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
@@ -128,8 +128,19 @@
     <style name="TextAppearanceCollapsedHome"
            parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:fontFamily">sans</item>
-        <item name="android:textSize">30sp</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">right</item>
     </style>
+
+    <style name="TextAppearanceExpandedHome"
+                parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <item name="android:fontFamily">sans</item>
+    <item name="android:textSize">30sp</item>
+        <item name="android:layout_marginLeft">56dp</item>
+</style>
 
     <style name="AppName1">
         <item name="android:textColor">@color/colorPrimary</item>
@@ -144,6 +155,33 @@
         <item name="android:fontFamily">sans</item>
         <item name="android:textSize">28sp</item>
 
+    </style>
+
+    <style name="myToolbarNavigationButtonStyle" parent="@style/Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">-20dp</item>
+    </style>
+
+    <style name="TextMyUsername">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:fontFamily">@font/sans</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MyMaterialCardViewStyle" parent="Widget.MaterialComponents.CardView">
+        <!-- 自定义CardView的样式属性 -->
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardBackgroundColor">@android:color/white</item>
+    </style>
+
+    <!--实现BottomSheetDialog圆角效果-->
+    <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
+    </style>
+    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
 </resources>

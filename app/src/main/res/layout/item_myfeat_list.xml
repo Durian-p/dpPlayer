@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="本地音乐" />
+            android:text="本地音乐"
+            style="@style/TextSu"/>
 
     <TextView
             android:id="@+id/tv_desc"

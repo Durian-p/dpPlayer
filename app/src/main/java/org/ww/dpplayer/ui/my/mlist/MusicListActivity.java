@@ -38,6 +38,7 @@ public class MusicListActivity extends BaseMusicActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        getWindow().setStatusBarColor(getColor(R.color.colorPrimary));
         initData();
         initView();
 

@@ -1,7 +1,10 @@
 package org.ww.dpplayer.ui.base;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -23,7 +27,10 @@ import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.ui.main.MainActivity;
 import org.ww.dpplayer.ui.my.local.AlbumActivity;
 import org.ww.dpplayer.ui.my.local.ArtistActivity;
+import org.ww.dpplayer.ui.player.PlayerActivity;
+import org.ww.dpplayer.util.ShareUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class DialogItemLongPress extends BottomSheetDialogFragment {
@@ -40,6 +47,13 @@ public class DialogItemLongPress extends BottomSheetDialogFragment {
 
     public void setOnItemDeleteListener(OnItemDeleteListener listener) {
         this.deleteListener = listener;
+    }
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog);
     }
 
     @Nullable
@@ -131,8 +145,33 @@ public class DialogItemLongPress extends BottomSheetDialogFragment {
         llShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO:
-                dismiss();
+                try
+                {
+                    File file = new File(music.getPath());
+                    Uri path;
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                    {
+                        path = FileProvider.getUriForFile(requireContext(), ShareUtil.getAuthority(), file);
+                    } else
+                    {
+                        path = Uri.fromFile(file);
+                    }
+                    //注意intent用addFlags 如果intent在这行代码下使用setFlags会导致其他应用没有权限打开你的文件
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    String type = ShareUtil.getMimeType(file);
+                    intent.setDataAndType(path, type);
+                    //如果想让用户每次打开文件都自己选择（方便切换应用打开）加上下面这句代码
+                    intent = Intent.createChooser(intent, "请选择打开此文件的应用");
+                    startActivity(intent);
+                    dismiss();
+
+                }
+                catch (ActivityNotFoundException e)
+                {
+                    Toast.makeText(requireContext(), "此设备没有可以打开此文件的软件", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }

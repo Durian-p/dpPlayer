@@ -41,6 +41,13 @@ public class DialogPlaylist extends BottomSheetDialogFragment {
         this.currentId = currentId;
     }
 
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog);
+    }
+
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
@@ -90,13 +97,18 @@ public class DialogPlaylist extends BottomSheetDialogFragment {
                         }
                         MusicService.PlayMode playMode = playbackInfo.playMode;
                         if (playMode != null) {
-                            if (playMode == MusicService.PlayMode.SEQUENTIAL) {
+                            if (playMode == MusicService.PlayMode.SEQUENTIAL)
+                            {
                                 tv_play_mode.setText("顺序播放");
                                 iv_play_mode.setImageResource(R.drawable.ic_repeat);
-                            } else if (playMode == MusicService.PlayMode.REPEAT_ONE) {
+                            }
+                            else if (playMode == MusicService.PlayMode.REPEAT_ONE)
+                            {
                                 tv_play_mode.setText("单曲循环");
                                 iv_play_mode.setImageResource(R.drawable.ic_repeat_one);
-                            } else if (playMode == MusicService.PlayMode.SHUFFLE) {
+                            }
+                            else if (playMode == MusicService.PlayMode.SHUFFLE)
+                            {
                                 tv_play_mode.setText("随机播放");
                                 iv_play_mode.setImageResource(R.drawable.ic_shuffle);
                             }
@@ -123,7 +135,8 @@ public class DialogPlaylist extends BottomSheetDialogFragment {
 
         // 获取BottomSheetBehavior并设置高度
         BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
-        if (dialog != null) {
+        if (dialog != null)
+        {
             View bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
             BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(bottomSheet);
             behavior.setPeekHeight((int) (screenHeight * 0.9), true); // 调整此比例以设置所需高度

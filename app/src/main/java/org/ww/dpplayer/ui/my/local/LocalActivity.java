@@ -23,6 +23,7 @@ public class LocalActivity extends BaseMusicActivity
 
         musicViewModel = new ViewModelProvider(this).get(MusicViewModel.class);
 
+
         // 绑定返回按钮
         ImageButton backButton = findViewById(R.id.localBackButton);
         backButton.setOnClickListener(new View.OnClickListener() {

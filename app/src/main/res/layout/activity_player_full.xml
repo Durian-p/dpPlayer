@@ -261,7 +261,8 @@
                     android:onClick="downloadMusic"
                     app:materialIcon="arrow_collapse_down"
                     app:materialIconColor="@color/white"
-                    app:materialIconSize="24dp" />
+                    app:materialIconSize="24dp"
+                    android:visibility="gone"/>
 
             <net.steamcrafted.materialiconlib.MaterialIconView
                     android:id="@+id/shareIv"

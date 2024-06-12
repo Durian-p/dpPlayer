@@ -1,38 +1,37 @@
 package org.ww.dpplayer.ui.player;
 
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.viewpager2.widget.ViewPager2;
-import androidx.core.graphics.ColorUtils;
 import jp.wasabeef.blurry.Blurry;
+import me.wcy.lrcview.LrcView;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
-import org.ww.dpplayer.entity.MusicList;
 import org.ww.dpplayer.player.MusicService;
+import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.base.DialogAdd2Mlist;
 import org.ww.dpplayer.ui.base.DialogPlaylist;
 import org.ww.dpplayer.ui.player.fragment.CoverFragment;
@@ -42,13 +41,12 @@ import org.ww.dpplayer.ui.widget.PlayPauseView;
 import org.ww.dpplayer.util.ColorUtil;
 import org.ww.dpplayer.util.FormatUtil;
 import org.ww.dpplayer.util.MusicLoader;
+import org.ww.dpplayer.util.ShareUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PlayerActivity extends AppCompatActivity
 {
@@ -77,6 +75,7 @@ public class PlayerActivity extends AppCompatActivity
     private MaterialIconView playQueueIv;
     private ImageView playlistAddIv;
     private ImageView playingBgIv;
+    private MaterialIconView shareIv;
 
     private boolean isServiceBound = false;
     private boolean isCoverFragmentReady = false;
@@ -118,6 +117,17 @@ public class PlayerActivity extends AppCompatActivity
                 titleTv.setText(playbackInfo.getValue().music.getTitle());
                 subTitleTv.setText(playbackInfo.getValue().music.getArtist());
                 lyricFragment.setLyricPath(playbackInfo.getValue().music.getPath());
+                lyricFragment.showLyrics();
+                lyricFragment.setListener(new LrcView.OnPlayClickListener()
+                {
+                    @Override
+                    public boolean onPlayClick(LrcView view, long time)
+                    {
+                        musicService.seekTo(time);
+                        MusicServiceController.sendPlayBroadcast(PlayerActivity.this);
+                        return true;
+                    }
+                });
             }
         }
 
@@ -138,6 +148,9 @@ public class PlayerActivity extends AppCompatActivity
 
         playingMusic = getIntent().getParcelableExtra("music", Music.class);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//设置透明状态栏
+        }
 
         initView();
         bindService();
@@ -166,6 +179,7 @@ public class PlayerActivity extends AppCompatActivity
         playQueueIv = findViewById(R.id.playQueueIv);
         playlistAddIv = findViewById(R.id.playlistAddIv);
         playingBgIv = findViewById(R.id.playingBgIv);
+        shareIv = findViewById(R.id.shareIv);
 
         setupViewPager(viewPager);
 
@@ -281,6 +295,42 @@ public class PlayerActivity extends AppCompatActivity
             {
                 DialogAdd2Mlist dialogAdd2Mlist = new DialogAdd2Mlist(PlayerActivity.this, playingMusic);
                 dialogAdd2Mlist.show(getSupportFragmentManager(), "DialogAdd2Mlist");
+            }
+        });
+
+        // 分享
+        shareIv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                try
+                {
+                    File file = new File(playingMusic.getPath());
+                    Uri path;
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                    {
+                        path = FileProvider.getUriForFile(PlayerActivity.this, ShareUtil.getAuthority(), file);
+                    } else
+                    {
+                        path = Uri.fromFile(file);
+                    }
+                    //注意intent用addFlags 如果intent在这行代码下使用setFlags会导致其他应用没有权限打开你的文件
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    String type = ShareUtil.getMimeType(file);
+                    intent.setDataAndType(path, type);
+                    //如果想让用户每次打开文件都自己选择（方便切换应用打开）加上下面这句代码
+                    intent = Intent.createChooser(intent, "请选择打开此文件的应用");
+                    startActivity(intent);
+
+
+                }
+                catch (ActivityNotFoundException e)
+                {
+                    Toast.makeText(PlayerActivity.this, "此设备没有可以打开此文件的软件", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
@@ -457,6 +507,7 @@ public class PlayerActivity extends AppCompatActivity
                         heartIv.setImageResource(R.drawable.item_heart);
                     }
                     lyricFragment.setLyricPath(playbackInfo.music.getPath());
+                    lyricFragment.showLyrics();
 
                 }
             }

@@ -2,10 +2,7 @@ package org.ww.dpplayer.ui.my.heart;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.ww.dpplayer.R;
@@ -15,6 +12,8 @@ import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
+import org.ww.dpplayer.ui.base.DialogItemLongPress;
+import org.ww.dpplayer.ui.my.history.HistoryActivity;
 
 import java.util.List;
 import java.util.Random;
@@ -47,6 +46,29 @@ public class HeartActivity extends BaseMusicActivity implements MusicListAdapter
 
         musicListAdapter = new MusicListAdapter(this, heartList);
         musicListAdapter.setOnItemClickListener(this);
+        musicListAdapter.setOnItemLongClickListener(new MusicListAdapter.OnItemLongClickListener()
+        {
+            @Override
+            public void onItemLongClick(int position)
+            {
+                DialogItemLongPress dialog = new DialogItemLongPress(heartList.get(position));
+                dialog.setOnItemDeleteListener(new DialogItemLongPress.OnItemDeleteListener(){
+                    @Override
+                    public void onItemDelete(Music music)
+                    {
+                        if (musicRepository.deleteHeartMusic(music.getId()))
+                        {
+                            heartList.remove(music);
+                            musicListAdapter.notifyItemRemoved(position);
+                            Toast.makeText(HeartActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                            Toast.makeText(HeartActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialog.show(HeartActivity.this.getSupportFragmentManager(), "dialog");
+            }
+        });
     }
 
 

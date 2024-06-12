@@ -10,9 +10,10 @@
     <!--应用基础色-->
     <color name="colorPrimary">#ffd803</color>
     <color name="colorPrimaryVariant">#74FFD803</color>
+    <color name="colorPrimaryTran">#E9FFE603</color>
     <color name="colorOnPrimary">#272343</color>
     <color name="colorSecondary">#bae8e8</color>
-    <color name="colorSecondaryVariant">#e3f6f5</color>
+    <color name="colorSecondaryVariant">#e9f3f2</color>
     <color name="colorOnSecondary">#272343</color>
 
     <color name="colorPrimaryDark">#4285f5</color>
