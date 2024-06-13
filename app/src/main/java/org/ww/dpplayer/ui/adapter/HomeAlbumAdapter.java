@@ -13,6 +13,7 @@ import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.ui.my.local.AlbumActivity;
+import org.ww.dpplayer.util.AnimUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -74,6 +75,8 @@ public class HomeAlbumAdapter extends RecyclerView.Adapter<HomeAlbumAdapter.Albu
             albumTitle = itemView.findViewById(R.id.album_title);
             albumArt = itemView.findViewById(R.id.album_art);
             container = itemView.findViewById(R.id.home_album_container);
+
+            container.setOnTouchListener(AnimUtil.getTouchAnimListener(1.12f));
         }
     }
 

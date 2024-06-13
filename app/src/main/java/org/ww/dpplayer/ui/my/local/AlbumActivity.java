@@ -13,7 +13,7 @@ import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
-import org.ww.dpplayer.ui.base.DialogItemLongPress;
+import org.ww.dpplayer.ui.base.DialogMusicLongPress;
 import org.ww.dpplayer.util.MusicLoader;
 
 import java.util.List;
@@ -35,6 +35,7 @@ public class AlbumActivity extends BaseMusicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getWindow().setStatusBarColor(getColor(R.color.colorPrimary));
         // 获取传入的专辑信息与歌曲列表
         Intent intent = getIntent();
         albumTitle = intent.getStringExtra("albumTitle");
@@ -84,8 +85,8 @@ public class AlbumActivity extends BaseMusicActivity {
             @Override
             public void onItemLongClick(int position) {
                 // 长按弹出菜单
-                DialogItemLongPress dialog = new DialogItemLongPress(albumMusicList.get(position));
-                dialog.setOnItemDeleteListener(new DialogItemLongPress.OnItemDeleteListener(){
+                DialogMusicLongPress dialog = new DialogMusicLongPress(albumMusicList.get(position));
+                dialog.setOnItemDeleteListener(new DialogMusicLongPress.OnItemDeleteListener(){
                     @Override
                     public void onItemDelete(Music music)
                     {

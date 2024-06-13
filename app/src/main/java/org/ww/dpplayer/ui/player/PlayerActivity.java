@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -20,6 +21,9 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -124,7 +128,8 @@ public class PlayerActivity extends AppCompatActivity
                     public boolean onPlayClick(LrcView view, long time)
                     {
                         musicService.seekTo(time);
-                        MusicServiceController.sendPlayBroadcast(PlayerActivity.this);
+//                        MusicServiceController.sendPlayBroadcast(PlayerActivity.this);
+                        musicService.resumePlay();
                         return true;
                     }
                 });
@@ -582,17 +587,26 @@ public class PlayerActivity extends AppCompatActivity
      */
     protected void hideBottomStatusBar() {
         //隐藏虚拟按键，并且全屏
-        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
-            View v = this.getWindow().getDecorView();
-            v.setSystemUiVisibility(View.GONE);
-        } else if (Build.VERSION.SDK_INT >= 19) {
-            //for new api versions.
-            View decorView = getWindow().getDecorView();
-            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY ;
-            decorView.setSystemUiVisibility(uiOptions);
-
+//        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+//            View v = this.getWindow().getDecorView();
+//            v.setSystemUiVisibility(View.GONE);
+//        } else if (Build.VERSION.SDK_INT >= 19) {
+//            //for new api versions.
+//            View decorView = getWindow().getDecorView();
+//            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY ;
+//            decorView.setSystemUiVisibility(uiOptions);
+//
+//        }
+        Window window = getWindow();
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(window, window.getDecorView());
+        if (windowInsetsController == null) {
+            return;
         }
+// Hide the system bars.
+        windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars());
+
     }
 
 }

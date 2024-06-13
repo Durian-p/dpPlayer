@@ -52,6 +52,7 @@ import org.ww.dpplayer.ui.my.history.HistoryActivity;
 import org.ww.dpplayer.ui.widget.AccentIcon;
 import org.ww.dpplayer.ui.widget.TopAppBarLayout;
 import org.ww.dpplayer.ui.widget.insets.InsetsRecyclerView;
+import org.ww.dpplayer.util.AnimUtil;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -136,6 +137,7 @@ public class FragIndex extends Fragment {
         collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorOnPrimary, null)));
         collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.colorPrimary, null));
         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white, null));
+        collapsingToolbarLayout.setExpandedTitleMarginStart(54);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary, null));
         toolbar.setNavigationIconTint(getResources().getColor(R.color.transparent, null));
 
@@ -167,6 +169,9 @@ public class FragIndex extends Fragment {
                     toolbar.setNavigationIconTint(colorPrimary);
                     collapsingToolbarLayout.setContentScrimColor(colorPrimary);
                     requireActivity().getWindow().setStatusBarColor(Color.TRANSPARENT);
+                    toolbar.setNavigationIconTint(Color.TRANSPARENT);
+
+
                 } else if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0) {
                     // Collapsed
                     String playerStr = ((Spanned) collapsingToolbarLayout.getTitle()).toString();
@@ -185,6 +190,7 @@ public class FragIndex extends Fragment {
                     requireActivity().getWindow().setStatusBarColor(colorPrimary);
                 } else {
                     // In between
+
                     float fraction = (float) absVerticalOffset / 132.0f;
                     float adjustedFraction = (float) Math.pow(fraction, 2);
                     int dpColor = (int) argbEvaluator.evaluate(fraction, colorPrimary, colorWhite);
@@ -202,6 +208,7 @@ public class FragIndex extends Fragment {
                             Html.FROM_HTML_MODE_LEGACY
                     ));
                     requireActivity().getWindow().setStatusBarColor(statusBarColor);
+                    toolbar.setNavigationIconTint(Color.TRANSPARENT);
                 }
             }
         });
@@ -299,6 +306,7 @@ public class FragIndex extends Fragment {
                 startActivity(intent);
             }
         });
+        historyBtn.setOnTouchListener(AnimUtil.getTouchAnimListener());
 
         // 最近添加
         lastAddedBtn.setOnClickListener(new View.OnClickListener() {
@@ -308,6 +316,7 @@ public class FragIndex extends Fragment {
                 startActivity(intent);
             }
         });
+        lastAddedBtn.setOnTouchListener(AnimUtil.getTouchAnimListener());
 
         // 最多播放
         topBtn.setOnClickListener(new View.OnClickListener() {
@@ -317,6 +326,7 @@ public class FragIndex extends Fragment {
                 startActivity(intent);
             }
         });
+        topBtn.setOnTouchListener(AnimUtil.getTouchAnimListener());
 
         // 随机播放
         shuffleBtn.setOnClickListener(new View.OnClickListener() {
@@ -328,6 +338,7 @@ public class FragIndex extends Fragment {
                 MusicServiceController.sendPlayBroadcast(requireContext());
             }
         });
+        shuffleBtn.setOnTouchListener(AnimUtil.getTouchAnimListener());
 
         setupRecyclerView(recycler);
     }
@@ -408,6 +419,7 @@ public class FragIndex extends Fragment {
                 MusicServiceController.sendPlayBroadcast(requireContext());
             }
         });
+        suMusicCV.setOnTouchListener(AnimUtil.getTouchAnimListener());
     }
 
     private void setupRecyclerView(InsetsRecyclerView recyclerView) {

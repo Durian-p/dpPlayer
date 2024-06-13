@@ -279,19 +279,28 @@ public class MusicRepository {
 //        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_PLAYLIST_NAME, playlist.getName());
-        values.put(DatabaseHelper.COLUMN_PLAYLIST_COVER, playlist.getCoverAsByteArray());
+        if (playlist.getCoverAsByteArray() != null)
+            values.put(DatabaseHelper.COLUMN_PLAYLIST_COVER, playlist.getCoverAsByteArray());
         int rows = db.update(DatabaseHelper.TABLE_PLAYLIST, values, DatabaseHelper.COLUMN_ID + " = ?", new String[]{String.valueOf(playlist.getId())});
 //        db.close();
         notifyMusicListsChanged();
         return rows;
     }
 
-    public void deleteMusicList(long id) {
+    public boolean deleteMusicList(long id) {
+        try
+        {
 //        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete(DatabaseHelper.TABLE_PLAYLIST, DatabaseHelper.COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
-        db.delete(DatabaseHelper.TABLE_PLAYLIST_SONGS, DatabaseHelper.COLUMN_PLAYLIST_ID + " = ?", new String[]{String.valueOf(id)});
+            db.delete(DatabaseHelper.TABLE_PLAYLIST, DatabaseHelper.COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+            db.delete(DatabaseHelper.TABLE_PLAYLIST_SONGS, DatabaseHelper.COLUMN_PLAYLIST_ID + " = ?", new String[]{String.valueOf(id)});
 //        db.close();
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
         notifyMusicListsChanged();
+        return true;
     }
 
     public List<MusicList> getAllMusicLists() {

@@ -22,7 +22,7 @@ public class LocalActivity extends BaseMusicActivity
         super.onCreate(savedInstanceState);
 
         musicViewModel = new ViewModelProvider(this).get(MusicViewModel.class);
-
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary, null));
 
         // 绑定返回按钮
         ImageButton backButton = findViewById(R.id.localBackButton);

@@ -4,16 +4,24 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
+import android.os.*;
 import android.provider.Settings;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.viewpager2.widget.ViewPager2;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
@@ -27,6 +35,8 @@ import org.ww.dpplayer.ui.player.PlayerActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends BaseMusicActivity {
 
@@ -37,7 +47,12 @@ public class MainActivity extends BaseMusicActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
+
+        hideBottomStatusBar();
+
+
         requestPermission();
         MusicRepository.initInstance(this);
         initView();
@@ -63,6 +78,10 @@ public class MainActivity extends BaseMusicActivity {
         updateUIMusicList(new ArrayList<Music>() {{
             add(defaultMusic);
         }});
+
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView)bottomNavigation.getChildAt(0);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(1);
+        itemView.setIconSize(70); // 设置图标大小
     }
 
     @Override
@@ -100,16 +119,26 @@ public class MainActivity extends BaseMusicActivity {
                     break;
                 case R.id.action_rover:
 //                    mainVp.setCurrentItem(1);
-                    if (musicService.getPlaybackState().getValue().state == MusicService.PlayerState.None)
-                    {
+                    playPauseView.setLoading(true);
+
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    Handler handler = new Handler(Looper.getMainLooper());
+
+                    executor.execute(() -> {
+                        // Execute the time-consuming task in a background thread
                         List<Music> tmp = MusicRepository.getInstance().getAllLocalMusic();
-                        updateServiceMusicList(tmp, new Random().nextInt(tmp.size()));
-                        setPlayMode(MusicService.PlayMode.SHUFFLE);
-                        MusicServiceController.sendPlayBroadcast(MainActivity.this);
-                    }
-                    Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
-                    intent.putExtra("music", musicService.getCurrentMusic());
-                    startActivity(intent);
+
+                        // Once the task is completed, update the UI in the main thread
+                        handler.post(() -> {
+                            updateServiceMusicList(tmp);
+                            setPlayMode(MusicService.PlayMode.SHUFFLE);
+                            playPauseView.setLoading(false);
+                            musicService.playNext();
+                            Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
+                            intent.putExtra("music", musicService.getCurrentMusic());
+                            startActivity(intent);
+                        });
+                    });
                     break;
                 case R.id.action_my:
                     mainVp.setCurrentItem(1);
@@ -165,5 +194,49 @@ public class MainActivity extends BaseMusicActivity {
                 // ToastUtils.show("存储权限获取失败");
             }
         }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        // 获取窗口位置调整底部导航栏选中
+        int position = mainVp.getCurrentItem();
+        switch (position) {
+            case 0:
+                bottomNavigation.setSelectedItemId(R.id.action_discover);
+                break;
+            case 1:
+                bottomNavigation.setSelectedItemId(R.id.action_my);
+                break;
+        }
+    }
+
+    /**
+     * 隐藏 NavigationBar和StatusBar
+     */
+    protected void hideBottomStatusBar() {
+        //隐藏虚拟按键，并且全屏
+        Window window = getWindow();
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(window, window.getDecorView());
+        if (windowInsetsController == null) {
+            return;
+        }
+// Hide the system bars.
+        window.setNavigationBarColor(Color.TRANSPARENT);
+        windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars());
+
+
+
+
+// Show the system bars.
+//        windowInsetsController.show(WindowInsetsCompat.Type.systemBars());
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+//
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
     }
 }

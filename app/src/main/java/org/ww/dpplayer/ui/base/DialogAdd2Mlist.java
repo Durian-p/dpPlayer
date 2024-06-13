@@ -27,7 +27,6 @@ import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.entity.MusicList;
 import org.ww.dpplayer.ui.adapter.MusicListsAdapter;
-import org.ww.dpplayer.ui.my.DialogNewMlist;
 
 import java.util.List;
 
@@ -83,6 +82,12 @@ public class DialogAdd2Mlist extends BottomSheetDialogFragment {
                     Toast.makeText(context, getResources().getString(R.string.add2mlist_fail), Toast.LENGTH_SHORT).show();
                     dismiss();
                 }
+            }
+
+            @Override
+            public void onLongClick(int position, long id)
+            {
+
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

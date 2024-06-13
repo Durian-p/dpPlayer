@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicServiceController;
+import org.ww.dpplayer.util.AnimUtil;
 
 import java.util.List;
 
@@ -115,6 +116,8 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.MusicV
             super(itemView);
             tvMusicInfo = itemView.findViewById(R.id.tvMusicInfo);
             llPlayListItem = itemView.findViewById(R.id.llPlayListItem);
+
+            llPlayListItem.setOnTouchListener(AnimUtil.getTouchAnimListener());
         }
     }
 }

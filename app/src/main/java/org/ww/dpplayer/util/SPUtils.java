@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
+import android.widget.ImageView;
 import androidx.annotation.Nullable;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.ww.dpplayer.R;
 
 import java.util.Set;
@@ -17,6 +21,20 @@ import java.util.Set;
  */
 public class SPUtils
 {
+//    public static void setImageSize(BottomNavigationView view, int width, int height) {
+//        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
+//        try {
+//            for (int i = 0; i < menuView.getChildCount(); i++) {
+//                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+//                ImageView imageView = item.findViewById(android.support.design.R.id.icon);
+//                imageView.getLayoutParams().width = width;
+//                imageView.getLayoutParams().height = height;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     /**
      * 第一次进入应用
      */

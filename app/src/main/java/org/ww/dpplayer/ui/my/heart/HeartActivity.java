@@ -12,8 +12,7 @@ import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
-import org.ww.dpplayer.ui.base.DialogItemLongPress;
-import org.ww.dpplayer.ui.my.history.HistoryActivity;
+import org.ww.dpplayer.ui.base.DialogMusicLongPress;
 
 import java.util.List;
 import java.util.Random;
@@ -35,6 +34,8 @@ public class HeartActivity extends BaseMusicActivity implements MusicListAdapter
     {
         super.onCreate(savedInstanceState);
 
+        getWindow().setStatusBarColor(getColor(R.color.colorPrimary));
+
         initData();
         initView();
     }
@@ -51,8 +52,8 @@ public class HeartActivity extends BaseMusicActivity implements MusicListAdapter
             @Override
             public void onItemLongClick(int position)
             {
-                DialogItemLongPress dialog = new DialogItemLongPress(heartList.get(position));
-                dialog.setOnItemDeleteListener(new DialogItemLongPress.OnItemDeleteListener(){
+                DialogMusicLongPress dialog = new DialogMusicLongPress(heartList.get(position));
+                dialog.setOnItemDeleteListener(new DialogMusicLongPress.OnItemDeleteListener(){
                     @Override
                     public void onItemDelete(Music music)
                     {

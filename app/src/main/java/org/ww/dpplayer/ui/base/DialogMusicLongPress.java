@@ -9,31 +9,26 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
-import org.ww.dpplayer.ui.main.MainActivity;
 import org.ww.dpplayer.ui.my.local.AlbumActivity;
 import org.ww.dpplayer.ui.my.local.ArtistActivity;
-import org.ww.dpplayer.ui.player.PlayerActivity;
 import org.ww.dpplayer.util.ShareUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class DialogItemLongPress extends BottomSheetDialogFragment {
+public class DialogMusicLongPress extends BottomSheetDialogFragment {
     private Music music;
     private OnItemDeleteListener deleteListener;
     public interface OnItemDeleteListener {
@@ -41,7 +36,7 @@ public class DialogItemLongPress extends BottomSheetDialogFragment {
     }
 
 
-    public DialogItemLongPress(Music music) {
+    public DialogMusicLongPress(Music music) {
         this.music = music;
     }
 

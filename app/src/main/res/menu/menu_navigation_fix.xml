@@ -5,10 +5,10 @@
             android:id="@+id/action_discover"
             android:icon="@drawable/ic_index"
             android:checked="true"
-            android:title="@string/discover" />
+            android:title="@string/discover"/>
     <item
             android:id="@+id/action_rover"
-            android:icon="@drawable/ic_good"
+            android:icon="@drawable/ic_radio"
             android:title="@string/rover" />
     <item
             android:id="@+id/action_my"

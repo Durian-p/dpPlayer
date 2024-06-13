@@ -12,8 +12,7 @@ import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
-import org.ww.dpplayer.ui.base.DialogItemLongPress;
-import org.ww.dpplayer.util.MusicLoader;
+import org.ww.dpplayer.ui.base.DialogMusicLongPress;
 
 import java.util.List;
 import java.util.Random;
@@ -35,6 +34,8 @@ public class HistoryActivity extends BaseMusicActivity implements MusicListAdapt
     {
         super.onCreate(savedInstanceState);
 
+        getWindow().setStatusBarColor(getColor(R.color.colorPrimary));
+
         initData();
         initView();
     }
@@ -49,8 +50,8 @@ public class HistoryActivity extends BaseMusicActivity implements MusicListAdapt
             @Override
             public void onItemLongClick(int position)
             {
-                DialogItemLongPress dialog = new DialogItemLongPress(historyList.get(position));
-                dialog.setOnItemDeleteListener(new DialogItemLongPress.OnItemDeleteListener(){
+                DialogMusicLongPress dialog = new DialogMusicLongPress(historyList.get(position));
+                dialog.setOnItemDeleteListener(new DialogMusicLongPress.OnItemDeleteListener(){
                     @Override
                     public void onItemDelete(Music music)
                     {
@@ -79,10 +80,12 @@ public class HistoryActivity extends BaseMusicActivity implements MusicListAdapt
         rv_list = findViewById(R.id.rv_musics);
         heartBackBtn = findViewById(R.id.historyBackBtn);
         llShufflePlay = findViewById(R.id.llShufflePlay);
+        TextView title2 = findViewById(R.id.mlName);
 
 
         iv_info_img.setImageResource(R.drawable.history_img);
         tv_title.setText("播放历史");
+        title2.setText("播放历史");
         tv_extra.setText("共" + historyList.size() + "首");
 
         rv_list.setLayoutManager(new LinearLayoutManager(this));

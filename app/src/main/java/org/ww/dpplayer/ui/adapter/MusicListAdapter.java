@@ -2,13 +2,11 @@
 package org.ww.dpplayer.ui.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
@@ -17,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.jetbrains.annotations.NotNull;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.entity.Music;
-import org.ww.dpplayer.ui.base.DialogItemLongPress;
+import org.ww.dpplayer.util.AnimUtil;
 import org.ww.dpplayer.util.ChineseToPinyin;
 
 import java.util.ArrayList;
@@ -115,6 +113,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
         TextView albumArtistTextView;
         ImageView coverImageView;
         TextView cntTv;
+        View container;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -122,6 +121,9 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
             albumArtistTextView = itemView.findViewById(R.id.tvAlbumArtist);
             coverImageView = itemView.findViewById(R.id.ivCover);
             cntTv = itemView.findViewById(org.ww.dpplayer.R.id.tvCnt);
+            container = itemView.findViewById(R.id.local_music_container);
+
+            container.setOnTouchListener(AnimUtil.getTouchAnimListener());
         }
     }
 

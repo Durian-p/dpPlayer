@@ -28,7 +28,7 @@ import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
-import org.ww.dpplayer.ui.base.DialogItemLongPress;
+import org.ww.dpplayer.ui.base.DialogMusicLongPress;
 import org.ww.dpplayer.ui.data.MusicViewModel;
 import org.ww.dpplayer.ui.widget.SidebarView;
 import org.ww.dpplayer.util.MusicLoader;
@@ -109,7 +109,7 @@ public class FragLocalMusic extends Fragment implements MusicListAdapter.OnItemC
                     @Override
                     public void onItemLongClick(int position)
                     {
-                        DialogItemLongPress dialog = new DialogItemLongPress(musicList.get(position));
+                        DialogMusicLongPress dialog = new DialogMusicLongPress(musicList.get(position));
                         dialog.show(requireActivity().getSupportFragmentManager(), "dialog");
                     }
                 });
@@ -118,8 +118,8 @@ public class FragLocalMusic extends Fragment implements MusicListAdapter.OnItemC
                     @Override
                     public void onItemLongClick(int position)
                     {
-                        DialogItemLongPress dialog = new DialogItemLongPress(musicList.get(position));
-                        dialog.setOnItemDeleteListener(new DialogItemLongPress.OnItemDeleteListener(){
+                        DialogMusicLongPress dialog = new DialogMusicLongPress(musicList.get(position));
+                        dialog.setOnItemDeleteListener(new DialogMusicLongPress.OnItemDeleteListener(){
                             @Override
                             public void onItemDelete(Music music)
                             {

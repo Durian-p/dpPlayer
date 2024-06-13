@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.entity.MusicList;
+import org.ww.dpplayer.util.AnimUtil;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class MusicListsAdapter extends RecyclerView.Adapter<MusicListsAdapter.Vi
     private OnItemClickListener listener;
     public interface OnItemClickListener {
         void onItemClick(int position, long id);
+        void onLongClick(int position, long id);
     }
 
     public MusicListsAdapter(List<MusicList> musicListList) {
@@ -56,6 +58,27 @@ public class MusicListsAdapter extends RecyclerView.Adapter<MusicListsAdapter.Vi
                     listener.onItemClick(holder.getBindingAdapterPosition(), holder.id);
             }
         });
+
+        holder.llMlist.setOnLongClickListener(new View.OnLongClickListener()
+        {
+            @Override
+            public boolean onLongClick(View v)
+            {
+                if (listener != null)
+                    listener.onLongClick(holder.getBindingAdapterPosition(), holder.id);
+                return true;
+            }
+        });
+
+        holder.ivMore.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (listener != null)
+                    listener.onLongClick(holder.getBindingAdapterPosition(), holder.id);
+            }
+        });
     }
 
     @Override
@@ -74,9 +97,11 @@ public class MusicListsAdapter extends RecyclerView.Adapter<MusicListsAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivCover;
+        ImageView ivMore;
         TextView tvTitle;
         TextView tvExtra;
         LinearLayout llMlist;
+        View container;
         long id;
 
         public ViewHolder(@NonNull View view) {
@@ -85,6 +110,10 @@ public class MusicListsAdapter extends RecyclerView.Adapter<MusicListsAdapter.Vi
             tvExtra = view.findViewById(R.id.tvMlistExtra);
             ivCover = view.findViewById(R.id.ivMlistCover);
             llMlist = view.findViewById(R.id.llMlist);
+            ivMore = view.findViewById(R.id.ivMlistMore);
+            container = view.findViewById(R.id.mlContainer);
+
+            container.setOnTouchListener(AnimUtil.getTouchAnimListener());
         }
     }
 }

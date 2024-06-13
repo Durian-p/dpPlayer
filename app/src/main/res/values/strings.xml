@@ -68,14 +68,15 @@
     <string name="delet">删除</string>
     <string name="share">分享</string>
     <string name="songs">Songs</string>
-    <string name="welcome">"欢迎, "</string>
+    <string name="welcome">"欢迎 "</string>
     <string name="suggestion_songs">推荐</string>
     <string name="new_music_mix">热歌速递</string>
     <string name="history">历史记录</string>
     <string name="last_added">最近添加</string>
-    <string name="my_top_tracks">最多播放</string>
+    <string name="my_top_tracks">最多收听</string>
     <string name="shuffle">随机播放</string>
     <string name="MlistName">歌单名</string>
+    <string name="edit_info">编辑信息</string>
 
 
 </resources>

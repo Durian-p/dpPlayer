@@ -5,7 +5,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.view.View;
 import android.widget.ImageButton;
@@ -18,18 +20,21 @@ import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.ui.adapter.MusicBarPagerAdapter;
 import org.ww.dpplayer.ui.widget.PlayPauseView;
+import org.ww.dpplayer.util.FormatUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseMusicActivity extends AppCompatActivity
 {
-    private ViewPager2 musicInfoViewPager;
-    private PlayPauseView playPauseView;
-    private ImageButton playListIb;
+    protected ViewPager2 musicInfoViewPager;
+    protected PlayPauseView playPauseView;
+    protected ImageButton playListIb;
     protected MusicService musicService;
 
     private boolean isBound = false;
+    Runnable progressRunnable;
+    private Handler progressHandler = new Handler();
     private MusicBarPagerAdapter adapter;
     protected List<Music> musicList = new ArrayList<>();
 
@@ -148,6 +153,22 @@ public abstract class BaseMusicActivity extends AppCompatActivity
             updateUIMusicList(musicService.getPlayingMusicList());
             musicInfoViewPager.setCurrentItem(musicService.getCurrentMusicIndex(), false);
 
+//            progressRunnable = new Runnable()
+//            {
+//                @Override
+//                public void run()
+//                {
+//                    if (musicService != null && musicService.isPlaying())
+//                    {
+//                        long currentPosition = musicService.getCurrentProgress();
+//                        long duration = musicService.getDuration();
+//                        updateUIProgress(currentPosition, duration);
+//                    }
+//                    // Schedule the next update after 0.5 second
+//                    progressHandler.postDelayed(this, 500);
+//                }
+//            };
+
             if (playbackInfo.state == MusicService.PlayerState.PLAYING)
             {
                 playPauseView.play();
@@ -156,6 +177,13 @@ public abstract class BaseMusicActivity extends AppCompatActivity
                 playPauseView.pause();
             }
         }
+    }
+
+    private void updateUIProgress(long progress, long max)
+    {
+//        playPauseView.setBgColor(Color.RED);
+//        playPauseView.setBtnColor(Color.BLUE);
+//        playPauseView.setProgress((float) progress / max);
     }
     // ----------------------------------------------
 

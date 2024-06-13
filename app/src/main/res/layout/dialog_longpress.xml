@@ -26,6 +26,7 @@
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                style="@style/TextSu"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -37,6 +38,7 @@
                 android:text="NewJeans - Get Up"
                 android:textColor="@color/black"
                 android:textSize="14sp"
+                style="@style/TextSu"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_song_title"/>
@@ -46,6 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:background="@color/gray"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_song_artist"/>
@@ -69,7 +72,7 @@
                     android:scaleX="0.97"
                     android:scaleY="0.97"
                     android:src="@drawable/ic_play_next"
-                    app:tint="@color/black"
+                    app:tint="@color/gray"
                     android:layout_gravity="center"/>
 
             <TextView
@@ -77,8 +80,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/play_song_next"
-                    android:textColor="@color/black"
+                    android:textColor="@color/colorOnPrimary"
                     android:textSize="18sp"
+                    android:textStyle="bold"
+                    style="@style/TextSu"
                     android:layout_marginStart="16dp"
                     android:layout_gravity="center"/>
         </LinearLayout>
@@ -100,7 +105,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_album"
-                    app:tint="@color/black"
+                    app:tint="@color/gray"
                     android:layout_gravity="center"/>
 
             <TextView
@@ -110,6 +115,8 @@
                     android:text="@string/check_album"
                     android:textColor="@color/black"
                     android:textSize="18sp"
+                    android:textStyle="bold"
+                    style="@style/TextSu"
                     android:layout_marginStart="16dp"
                     android:layout_gravity="center_vertical"/>
         </LinearLayout>
@@ -133,7 +140,7 @@
                     android:scaleX="0.98"
                     android:scaleY="0.98"
                     android:src="@drawable/ic_artist"
-                    app:tint="@color/black"
+                    app:tint="@color/gray"
                     android:layout_gravity="center"/>
 
             <TextView
@@ -143,6 +150,8 @@
                     android:text="@string/check_artist"
                     android:textColor="@color/black"
                     android:textSize="18sp"
+                    android:textStyle="bold"
+                    style="@style/TextSu"
                     android:layout_marginStart="16dp"
                     android:layout_gravity="center_vertical"/>
         </LinearLayout>
@@ -166,7 +175,7 @@
                     android:scaleX="0.95"
                     android:scaleY="0.95"
                     android:src="@drawable/ic_add2mlist"
-                    app:tint="@color/black"
+                    app:tint="@color/gray"
                     android:layout_gravity="center"/>
 
             <TextView
@@ -176,6 +185,8 @@
                     android:text="@string/add2mlist"
                     android:textColor="@color/black"
                     android:textSize="18sp"
+                    android:textStyle="bold"
+                    style="@style/TextSu"
                     android:layout_marginStart="16dp"
                     android:layout_gravity="center_vertical"/>
         </LinearLayout>
@@ -197,7 +208,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_delete"
-                    app:tint="@color/black"
+                    app:tint="@color/gray"
                     android:layout_gravity="center"/>
 
             <TextView
@@ -207,6 +218,9 @@
                     android:text="@string/delet"
                     android:textColor="@color/black"
                     android:textSize="18sp"
+                    android:textStyle="bold"
+
+                    style="@style/TextSu"
                     android:layout_marginStart="16dp"
                     android:layout_gravity="center_vertical"/>
         </LinearLayout>
@@ -230,7 +244,7 @@
                     android:scaleX="0.8"
                     android:scaleY="0.8"
                     android:src="@drawable/ic_share"
-                    app:tint="@color/black"
+                    app:tint="@color/gray"
                     android:layout_gravity="center"/>
 
             <TextView
@@ -240,6 +254,8 @@
                     android:text="@string/share"
                     android:textColor="@color/black"
                     android:textSize="18sp"
+                    android:textStyle="bold"
+                    style="@style/TextSu"
                     android:layout_marginStart="16dp"
                     android:layout_gravity="center_vertical"/>
         </LinearLayout>

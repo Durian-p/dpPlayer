@@ -11,7 +11,7 @@
                 android:layout_height="match_parent"
                 app:cardBackgroundColor="@color/cardColor"
                 app:cardCornerRadius="@dimen/dp_2"
-                app:cardElevation="@dimen/dp_2"
+                app:cardElevation="0dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:descendantFocusability="blocksDescendants">

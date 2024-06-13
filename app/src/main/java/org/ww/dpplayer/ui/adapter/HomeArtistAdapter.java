@@ -13,6 +13,7 @@ import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.ui.my.local.ArtistActivity;
+import org.ww.dpplayer.util.AnimUtil;
 
 import java.util.*;
 
@@ -68,6 +69,8 @@ public class HomeArtistAdapter extends RecyclerView.Adapter<HomeArtistAdapter.Ar
             artistName = itemView.findViewById(R.id.artist_name);
             artistImage = itemView.findViewById(R.id.artist_image);
             container = itemView.findViewById(R.id.home_artist_container);
+
+            container.setOnTouchListener(AnimUtil.getTouchAnimListener(1.12f));
         }
     }
 

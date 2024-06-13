@@ -67,13 +67,13 @@
             android:layout_weight="1"
             app:layout_constraintTop_toBottomOf="@id/localTab"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/playerBarContainer"/>
+            app:layout_constraintBottom_toBottomOf="@id/playerBarContainer"
+            android:paddingBottom="75dp"/>
 
     <include
             layout="@layout/bottom_player_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_player_height"
-            app:layout_constraintTop_toBottomOf="@id/localVp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
 

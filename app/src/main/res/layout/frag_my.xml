@@ -5,7 +5,7 @@
                                        android:layout_width="match_parent"
                                        android:layout_height="match_parent"
                                        android:id="@+id/myFrag"
-                android:background="@color/white_pressed">
+                android:background="@color/background">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                 android:layout_marginTop="0dp"
                 app:cardBackgroundColor="@color/cardColor"
                 android:padding="0dp"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="@dimen/dp_2">
 
             <LinearLayout
@@ -124,7 +124,7 @@
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 app:cardBackgroundColor="@color/cardColor"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="13dp"
                 app:cardElevation="@dimen/dp_2">
 
             <LinearLayout

@@ -30,7 +30,7 @@
                     android:layout_height="100dp"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed"
                     app:contentScrim="@color/transparent"
-                    app:expandedTitleMarginStart="54dp"
+                    app:expandedTitleMarginStart="20dp"
                     app:expandedTitleMarginEnd="0dp"
                     app:expandedTitleMarginBottom="26dp"
                     app:expandedTitleTextAppearance="@style/TextAppearanceExpandedHome"

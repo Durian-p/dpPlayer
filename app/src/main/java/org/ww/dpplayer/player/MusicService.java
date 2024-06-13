@@ -211,8 +211,18 @@ public class MusicService extends Service {
         if (originalPlaylist.size() == 0)
             return;
 
-        int index = playingPlaylist.indexOf(music);
+        int index = -1;
+        for (Music music1:playingPlaylist)
+        {
+            index++;
+            if (Objects.equals(music1.getId(), music.getId()))
+            {
+                break;
+            }
+        }
         if (index != -1) {
+            if (currentSongIndex == index)
+                return;
             playingPlaylist.remove(index);
             playingPlaylist.add((currentSongIndex + 1) % playingPlaylist.size(), music);
         } else {
@@ -265,6 +275,11 @@ public class MusicService extends Service {
             player.prepare();
             player.play();
         }
+    }
+
+    public void resumePlay() {
+        if (!player.isPlaying())
+            player.play();
     }
 
     public void playMediaFromBegin() {

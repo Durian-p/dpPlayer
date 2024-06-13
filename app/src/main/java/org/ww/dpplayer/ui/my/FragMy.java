@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -32,6 +33,9 @@ import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.player.MusicService;
 
 import org.ww.dpplayer.ui.adapter.MusicListsAdapter;
+import org.ww.dpplayer.ui.base.DialogEditPlaylist;
+import org.ww.dpplayer.ui.base.DialogNewMlist;
+import org.ww.dpplayer.ui.base.DialongMlistLongPress;
 import org.ww.dpplayer.ui.data.MusicViewModel;
 import org.ww.dpplayer.ui.my.heart.HeartActivity;
 import org.ww.dpplayer.ui.my.history.HistoryActivity;
@@ -62,6 +66,7 @@ public class FragMy extends Fragment {
     private ImageView multiSelectIv;
 
     private DialogNewMlist dialog;
+    private DialogEditPlaylist dialogEdit;
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -78,6 +83,7 @@ public class FragMy extends Fragment {
     };
 
     private ActivityResultLauncher<Intent> imagePickerLauncher;
+    private ActivityResultLauncher<Intent> imagePickerLauncher2;
 
     public static Fragment newInstance() {
         return new FragMy();
@@ -114,6 +120,13 @@ public class FragMy extends Fragment {
             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
 //                DialogNewMlist dialog = new DialogNewMlist(requireContext(), imagePickerLauncher);
                 dialog.handleImageResult(result.getData());
+            }
+        });
+
+        imagePickerLauncher2 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+
+                dialogEdit.handleImageResult(result.getData());
             }
         });
     }
@@ -168,6 +181,46 @@ public class FragMy extends Fragment {
                 Intent intent = new Intent(getActivity(), MusicListActivity.class);
                 intent.putExtra("mlistId", musicLists.get(position).getId());
                 startActivity(intent);
+            }
+
+            @Override
+            public void onLongClick(int position, long id)
+            {
+                // TODO:弹出dialog
+                DialongMlistLongPress dialog = new DialongMlistLongPress(musicLists.get(position));
+                dialog.setOnItemDeleteListener(new DialongMlistLongPress.OnItemClickListener()
+                {
+                    @Override
+                    public void onItemDelete(MusicList musicList)
+                    {
+                        if (MusicRepository.getInstance().deleteMusicList(musicList.getId()))
+                        {
+                            for(MusicList ml: musicLists)
+                            {
+                                if (ml.getId() == musicList.getId())
+                                {
+                                    musicLists.remove(ml);
+                                    break;
+                                }
+                            }
+                            musicListsAdapter.notifyDataSetChanged();
+                            Toast.makeText(requireContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(requireContext(), "删除失败", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onItemEdit(MusicList musicList)
+                    {
+                        dialogEdit = new DialogEditPlaylist(requireContext(), imagePickerLauncher2, musicList);
+                        dialogEdit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialogEdit.show();
+                    }
+                });
+                dialog.show(getParentFragmentManager(), "弹出更多选项dialog");
+
             }
         });
         mlistRcv.setLayoutManager(new LinearLayoutManager(requireContext()));

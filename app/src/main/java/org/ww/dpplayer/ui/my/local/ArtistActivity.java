@@ -2,16 +2,13 @@ package org.ww.dpplayer.ui.my.local;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.exoplayer2.C;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -21,7 +18,7 @@ import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
-import org.ww.dpplayer.ui.base.DialogItemLongPress;
+import org.ww.dpplayer.ui.base.DialogMusicLongPress;
 import org.ww.dpplayer.util.ColorUtil;
 import org.ww.dpplayer.util.MusicLoader;
 
@@ -41,6 +38,11 @@ public class ArtistActivity extends BaseMusicActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        getWindow().setStatusBarColor(getColor(R.color.transparent));
+        View view = getWindow().getDecorView();
+        view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.transparent, null));
 
         // 获取传入的艺术家信息与歌曲列表
         Intent intent = getIntent();
@@ -137,8 +139,8 @@ public class ArtistActivity extends BaseMusicActivity {
         musicListAdapter.setOnItemLongClickListener(new MusicListAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(int position) {
-                DialogItemLongPress dialog = new DialogItemLongPress(artistMusicList.get(position));
-                dialog.setOnItemDeleteListener(new DialogItemLongPress.OnItemDeleteListener() {
+                DialogMusicLongPress dialog = new DialogMusicLongPress(artistMusicList.get(position));
+                dialog.setOnItemDeleteListener(new DialogMusicLongPress.OnItemDeleteListener() {
                     @Override
                     public void onItemDelete(Music music) {
                         // 删除歌曲

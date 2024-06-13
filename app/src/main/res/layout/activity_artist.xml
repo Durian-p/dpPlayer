@@ -52,7 +52,8 @@
                         app:layout_collapseMode="pin"
                         app:navigationIcon="@drawable/ic_arrow_back"
                         app:title="Artist Name"
-                        android:visibility="visible" />
+                        android:visibility="visible"
+                        android:paddingTop="17dp"/>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
