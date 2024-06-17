@@ -1,5 +1,6 @@
 package org.ww.dpplayer.player;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
 import android.graphics.Bitmap;
 import android.os.Binder;
@@ -16,6 +18,7 @@ import android.os.IBinder;
 import android.widget.RemoteViews;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -131,8 +134,17 @@ public class MusicService extends Service {
         return PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 
+    private boolean hasNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+        }
+        return true; // Permission not needed for lower versions
+    }
 
     private void showNotification() {
+        if (!hasNotificationPermission()) {
+            return;
+        }
         Music currentMusic = getCurrentMusic();
         Bitmap albumArt = currentMusic != null ? currentMusic.getAlbumArt() : null;
 

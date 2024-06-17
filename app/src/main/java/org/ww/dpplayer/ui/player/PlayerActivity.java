@@ -324,7 +324,7 @@ public class PlayerActivity extends AppCompatActivity
                     String type = ShareUtil.getMimeType(file);
                     intent.setDataAndType(path, type);
                     //如果想让用户每次打开文件都自己选择（方便切换应用打开）加上下面这句代码
-                    intent = Intent.createChooser(intent, "请选择打开此文件的应用");
+                    intent = Intent.createChooser(intent, "请选择分享应用");
                     startActivity(intent);
 
 

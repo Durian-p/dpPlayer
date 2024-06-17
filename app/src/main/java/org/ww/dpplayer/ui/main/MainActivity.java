@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -34,26 +33,23 @@ import org.ww.dpplayer.ui.player.PlayerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends BaseMusicActivity {
 
     private static final int REQUEST_CODE = 1024;
+    private static final int REQUEST_CODE_NOTIFICATION = 1001;
     private ViewPager2 mainVp;
     private BottomNavigationView bottomNavigation;
     MainPagerAdaptor mainPagerAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
-
         hideBottomStatusBar();
-
-
-        requestPermission();
+        requestStoragePermission();
+        requestNotificationPermission();
         MusicRepository.initInstance(this);
         initView();
         startMusicService(); // 启动MusicService
@@ -71,7 +67,6 @@ public class MainActivity extends BaseMusicActivity {
         mainPagerAdaptor = new MainPagerAdaptor(this);
         mainVp.setAdapter(mainPagerAdaptor);
         mainVp.registerOnPageChangeCallback(pageChangeCallBack);
-        // 这里是bottomNavigationView的点击事件
         bottomNavigation.setOnItemSelectedListener(naviListener);
 
         Music defaultMusic = new Music("[无歌曲播放中]", "", "");
@@ -93,7 +88,6 @@ public class MainActivity extends BaseMusicActivity {
         @Override
         public void onPageSelected(int position) {
             super.onPageSelected(position);
-            // 根据 ViewPager2 的当前页面位置来设置 BottomNavigationView 的选中项
             switch (position) {
                 case 0:
                     bottomNavigation.setSelectedItemId(R.id.action_discover);
@@ -104,7 +98,6 @@ public class MainActivity extends BaseMusicActivity {
                 case 2:
                     bottomNavigation.setSelectedItemId(R.id.action_rover);
                     break;
-
             }
         }
     };
@@ -118,17 +111,11 @@ public class MainActivity extends BaseMusicActivity {
                     mainVp.setCurrentItem(0);
                     break;
                 case R.id.action_rover:
-//                    mainVp.setCurrentItem(1);
                     playPauseView.setLoading(true);
-
                     ExecutorService executor = Executors.newSingleThreadExecutor();
                     Handler handler = new Handler(Looper.getMainLooper());
-
                     executor.execute(() -> {
-                        // Execute the time-consuming task in a background thread
                         List<Music> tmp = MusicRepository.getInstance().getAllLocalMusic();
-
-                        // Once the task is completed, update the UI in the main thread
                         handler.post(() -> {
                             updateServiceMusicList(tmp);
                             setPlayMode(MusicService.PlayMode.SHUFFLE);
@@ -148,26 +135,26 @@ public class MainActivity extends BaseMusicActivity {
         }
     };
 
-    private void requestPermission() {
+    private void requestStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // 先判断有没有权限
-            if (Environment.isExternalStorageManager()) {
-                // writeFile();
-            } else {
+            if (!Environment.isExternalStorageManager()) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
                 intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
                 startActivityForResult(intent, REQUEST_CODE);
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // 先判断有没有权限
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                // writeFile();
-            } else {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
             }
-        } else {
-            // writeFile();
+        }
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_CODE_NOTIFICATION);
+            }
         }
     }
 
@@ -175,11 +162,13 @@ public class MainActivity extends BaseMusicActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                // writeFile();
-            } else {
-                // ToastUtils.show("存储权限获取失败");
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                // Permission denied
+            }
+        } else if (requestCode == REQUEST_CODE_NOTIFICATION) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // Permission denied
             }
         }
     }
@@ -188,19 +177,15 @@ public class MainActivity extends BaseMusicActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (Environment.isExternalStorageManager()) {
-                // writeFile();
-            } else {
-                // ToastUtils.show("存储权限获取失败");
+            if (!Environment.isExternalStorageManager()) {
+                // Permission denied
             }
         }
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        // 获取窗口位置调整底部导航栏选中
         int position = mainVp.getCurrentItem();
         switch (position) {
             case 0:
@@ -212,31 +197,14 @@ public class MainActivity extends BaseMusicActivity {
         }
     }
 
-    /**
-     * 隐藏 NavigationBar和StatusBar
-     */
     protected void hideBottomStatusBar() {
-        //隐藏虚拟按键，并且全屏
         Window window = getWindow();
         WindowInsetsControllerCompat windowInsetsController =
                 WindowCompat.getInsetsController(window, window.getDecorView());
         if (windowInsetsController == null) {
             return;
         }
-// Hide the system bars.
         window.setNavigationBarColor(Color.TRANSPARENT);
         windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars());
-
-
-
-
-// Show the system bars.
-//        windowInsetsController.show(WindowInsetsCompat.Type.systemBars());
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
     }
 }

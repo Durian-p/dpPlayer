@@ -30,5 +30,5 @@ dependencyResolutionManagement {
 }
 
 
-rootProject.name = "TestApp"
+rootProject.name = "dpPlayer"
 include ':app'

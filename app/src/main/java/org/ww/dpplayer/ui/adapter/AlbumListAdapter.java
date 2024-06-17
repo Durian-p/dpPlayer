@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.ViewHolder> implements SectionIndexer {
+public class  AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.ViewHolder> implements SectionIndexer {
 
     private Context context;
     private List<List<Music>> albumList;
