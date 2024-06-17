@@ -4,7 +4,7 @@
               android:layout_height="wrap_content"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="horizontal"
-              android:padding="16dp"
+              android:padding="12dp"
         android:id="@+id/local_music_container">
 
     <com.makeramen.roundedimageview.RoundedImageView

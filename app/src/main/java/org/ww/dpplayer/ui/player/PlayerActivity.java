@@ -5,13 +5,11 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
+import android.os.*;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -27,6 +25,7 @@ import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.palette.graphics.Palette;
 import androidx.viewpager2.widget.ViewPager2;
 import jp.wasabeef.blurry.Blurry;
 import me.wcy.lrcview.LrcView;
@@ -343,30 +342,44 @@ public class PlayerActivity extends AppCompatActivity
 
     }
 
-    private void setDynamicColor()
-    {
+    private void setDynamicColor() {
         // 设置背景
         if (playingMusic.getAlbumArt() == null)
-            playingMusic.setAlbumArt(MusicLoader.getAlbumArt(playingMusic.getPath())) ;
-//        setGradientBackground(playingBgIv, playingMusic.getAlbumArt());
-        if (playingMusic.getAlbumArt() != null)
-        {
+            playingMusic.setAlbumArt(MusicLoader.getAlbumArt(playingMusic.getPath()));
+
+        if (playingMusic.getAlbumArt() != null) {
             Blurry.with(this).radius(20).color(Color.argb(60, 0, 0, 0)).from(playingMusic.getAlbumArt()).into(playingBgIv);
             getWindow().setStatusBarColor(ColorUtil.getAverageColorWithBlackOverlay(playingMusic.getAlbumArt(), true));
-            // 设置进度条播放按钮
-            int themeColor = ColorUtil.getAverageColor(playingMusic.getAlbumArt());
-            progressSb.setThumbTintList(ColorStateList.valueOf(themeColor));
-            playPauseIv.setBgColor(themeColor);
-        }
-        else
-        {
+
+            // 使用 AsyncTask 处理调色板操作
+            new DynamicColorTask().execute(playingMusic.getAlbumArt());
+        } else {
             Blurry.with(this).radius(20).color(Color.argb(60, 0, 0, 0)).from(((BitmapDrawable) ResourcesCompat.getDrawable(getResources(), R.drawable.banner, null)).getBitmap()).into(playingBgIv);
             int themeColor = ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null);
             progressSb.setThumbTintList(ColorStateList.valueOf(themeColor));
             playPauseIv.setBgColor(themeColor);
         }
-
     }
+
+
+    private class DynamicColorTask extends AsyncTask<Bitmap, Void, Integer>
+    {
+        @Override
+        protected Integer doInBackground(Bitmap... bitmaps) {
+            Bitmap albumArt = bitmaps[0];
+            int themeColor = ColorUtil.getAverageColor(albumArt);
+            return Palette.from(albumArt).generate().getMutedColor(themeColor);
+        }
+
+        @Override
+        protected void onPostExecute(Integer themeColor) {
+            if (themeColor != null) {
+                progressSb.setThumbTintList(ColorStateList.valueOf(themeColor));
+                playPauseIv.setBgColor(themeColor);
+            }
+        }
+    }
+
 
 
     private void setupViewPager(ViewPager2 viewPager)

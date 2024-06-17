@@ -70,7 +70,7 @@ public class HomeArtistAdapter extends RecyclerView.Adapter<HomeArtistAdapter.Ar
             artistImage = itemView.findViewById(R.id.artist_image);
             container = itemView.findViewById(R.id.home_artist_container);
 
-            container.setOnTouchListener(AnimUtil.getTouchAnimListener(1.12f));
+            container.setOnTouchListener(AnimUtil.getTouchAnimListener(1.07f));
         }
     }
 

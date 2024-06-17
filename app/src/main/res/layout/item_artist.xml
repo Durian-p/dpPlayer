@@ -4,7 +4,7 @@
               android:layout_height="wrap_content"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="horizontal"
-              android:padding="8dp"
+              android:padding="12dp"
         android:id="@+id/artist_container">
 
     <com.makeramen.roundedimageview.RoundedImageView
@@ -31,6 +31,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="ArtistName"
+                android:maxLines="1"
+                android:ellipsize="end"
                 style="@style/SongTitleTextViewStyle"
                 android:textSize="16sp"/>
 
@@ -39,6 +41,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="cnt songs"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="16sp"
                 style="@style/ArtistTextViewStyle"/>
 
     </LinearLayout>

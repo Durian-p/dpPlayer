@@ -5,15 +5,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "music.db";
-    private static final int DATABASE_VERSION = 2; // Update database version to 2
+    private static final String DATABASE_NAME = "dpmusic.db";
+    private static final int DATABASE_VERSION = 1;
 
     // Table names
     public static final String TABLE_LOCAL_MUSIC = "local_music";
     public static final String TABLE_HEART_MUSIC = "heart_music";
     public static final String TABLE_PLAYLIST = "playlist";
     public static final String TABLE_PLAYLIST_SONGS = "playlist_songs";
-    public static final String TABLE_PLAY_HISTORY = "play_history"; // New table for play history
+    public static final String TABLE_PLAY_HISTORY = "play_history";
 
     // Common columns
     public static final String COLUMN_ID = "id";
@@ -97,11 +97,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            // Add new columns for play count and added time
-            db.execSQL("ALTER TABLE " + TABLE_LOCAL_MUSIC + " ADD COLUMN " + COLUMN_PLAY_COUNT + " INTEGER DEFAULT 0");
-            db.execSQL("ALTER TABLE " + TABLE_LOCAL_MUSIC + " ADD COLUMN " + COLUMN_ADDED_AT + " INTEGER");
-        }
+        return;
     }
 
     public synchronized SQLiteDatabase getDatabase() {

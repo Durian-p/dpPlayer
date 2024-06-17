@@ -119,10 +119,19 @@
     </style>
 
 
-    <style name="TextAppearance.Collapsed"
+    <style name="TextAppearance.Expanded"
            parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:fontFamily">sans</item>
         <item name="android:textSize">38sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Collapsed"
+           parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:textSize">23sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textColor">@color/white</item>
     </style>
 
     <style name="TextAppearanceCollapsedHome"

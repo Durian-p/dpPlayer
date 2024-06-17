@@ -2,11 +2,13 @@ package org.ww.dpplayer.ui.my.local;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
@@ -23,6 +25,7 @@ import org.ww.dpplayer.util.ColorUtil;
 import org.ww.dpplayer.util.MusicLoader;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class ArtistActivity extends BaseMusicActivity {
@@ -98,20 +101,25 @@ public class ArtistActivity extends BaseMusicActivity {
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout);
         collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.colorPrimary, null));
         collapsingToolbarLayout.setTitle(artistName);
-        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorOnPrimary, null));
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white, null));
 //        collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.create());
         collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.DEFAULT_BOLD);
 
         if (albumArt != null)
         {
             mArtistImage.setImageBitmap(albumArt);
+//            int color = Objects.requireNonNull(Palette.from(albumArt).generate().getVibrantSwatch()).getTitleTextColor()
+//            toolbar.setTitleTextColor(color);
+//            collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(color));
             if (ColorUtil.isDarkColor(ColorUtil.getAverageColor(albumArt)))
             {
+                toolbar.setNavigationIconTint(getResources().getColor(R.color.white, null));
                 toolbar.setTitleTextColor(getResources().getColor(R.color.white, null));
                 collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white, null));
             }
             else
             {
+                toolbar.setNavigationIconTint(getResources().getColor(R.color.colorOnPrimary, null));
                 toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary, null));
                 collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.colorOnPrimary, null));
             }
@@ -119,6 +127,7 @@ public class ArtistActivity extends BaseMusicActivity {
         }
         else
         {
+            toolbar.setNavigationIconTint(getResources().getColor(R.color.colorOnPrimary, null));
             mArtistImage.setImageDrawable(getDrawable(R.drawable.default_artist_avatar));
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary, null));
             collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorOnPrimary, null));

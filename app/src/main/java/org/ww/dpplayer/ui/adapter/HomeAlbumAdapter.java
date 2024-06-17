@@ -76,7 +76,7 @@ public class HomeAlbumAdapter extends RecyclerView.Adapter<HomeAlbumAdapter.Albu
             albumArt = itemView.findViewById(R.id.album_art);
             container = itemView.findViewById(R.id.home_album_container);
 
-            container.setOnTouchListener(AnimUtil.getTouchAnimListener(1.12f));
+            container.setOnTouchListener(AnimUtil.getTouchAnimListener(1.07f));
         }
     }
 

@@ -8,7 +8,7 @@ public class AnimUtil
 {
     public static View.OnTouchListener getTouchAnimListener()
     {
-        return getTouchAnimListener(1.05f);
+        return getTouchAnimListener(1.046f);
     }
 
     public static View.OnTouchListener getTouchAnimListener(float scale)

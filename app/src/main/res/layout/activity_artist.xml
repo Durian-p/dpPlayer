@@ -26,12 +26,13 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:id="@+id/collapsing_toolbar_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed"
                     app:contentScrim="@color/transparent"
                     app:expandedTitleMarginStart="48dp"
                     app:expandedTitleMarginEnd="64dp"
-                    app:expandedTitleTextAppearance="@style/TextAppearance.Collapsed">
+                    app:expandedTitleTextAppearance="@style/TextAppearance.Expanded"
+                    app:collapsedTitleTextAppearance="@style/TextAppearance.Collapsed">
 
                 <!-- 歌手大图 -->
 
@@ -48,12 +49,14 @@
                 <com.google.android.material.appbar.MaterialToolbar
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
+                        android:layout_height="wrap_content"
+                        android:minHeight="68dp"
                         app:layout_collapseMode="pin"
                         app:navigationIcon="@drawable/ic_arrow_back"
                         app:title="Artist Name"
                         android:visibility="visible"
-                        android:layout_marginTop="17dp"/>
+                        android:layout_marginTop="18dp"
+                        style="@style/myToolbarNavigationButtonStyle"/>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
