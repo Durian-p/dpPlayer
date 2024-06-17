@@ -28,7 +28,7 @@ import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
-import org.ww.dpplayer.ui.base.DialogMusicLongPress;
+import org.ww.dpplayer.ui.dialog.DialogMusicLongPress;
 import org.ww.dpplayer.ui.data.MusicViewModel;
 import org.ww.dpplayer.ui.widget.SidebarView;
 import org.ww.dpplayer.util.MusicLoader;

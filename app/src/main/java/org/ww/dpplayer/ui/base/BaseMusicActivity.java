@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -19,8 +18,8 @@ import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.ui.adapter.MusicBarPagerAdapter;
+import org.ww.dpplayer.ui.dialog.DialogPlaylist;
 import org.ww.dpplayer.ui.widget.PlayPauseView;
-import org.ww.dpplayer.util.FormatUtil;
 
 import java.util.ArrayList;
 import java.util.List;

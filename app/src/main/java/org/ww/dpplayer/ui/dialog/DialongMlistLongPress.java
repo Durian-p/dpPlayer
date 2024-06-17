@@ -1,4 +1,4 @@
-package org.ww.dpplayer.ui.base;
+package org.ww.dpplayer.ui.dialog;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

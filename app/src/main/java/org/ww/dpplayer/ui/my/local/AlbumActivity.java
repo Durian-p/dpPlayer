@@ -13,7 +13,7 @@ import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.ui.adapter.MusicListAdapter;
 import org.ww.dpplayer.ui.base.BaseMusicActivity;
-import org.ww.dpplayer.ui.base.DialogMusicLongPress;
+import org.ww.dpplayer.ui.dialog.DialogMusicLongPress;
 import org.ww.dpplayer.util.MusicLoader;
 
 import java.util.List;

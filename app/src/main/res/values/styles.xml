@@ -128,19 +128,20 @@
     <style name="TextAppearanceCollapsedHome"
            parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:fontFamily">sans</item>
-        <item name="android:textSize">26sp</item>
-        <item name="android:layout_marginLeft">5dp</item>
-        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">27sp</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_gravity">left</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:gravity">right</item>
+        <item name="android:gravity">left</item>
     </style>
 
     <style name="TextAppearanceExpandedHome"
-                parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-    <item name="android:fontFamily">sans</item>
-    <item name="android:textSize">30sp</item>
-        <item name="android:layout_marginLeft">56dp</item>
-</style>
+           parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:textSize">38sp</item>
+        <item name="android:layout_marginLeft">80dp</item>
+        <item name="android:layout_gravity">left</item>
+    </style>
 
     <style name="AppName1">
         <item name="android:textColor">@color/colorPrimary</item>
@@ -158,8 +159,8 @@
     </style>
 
     <style name="myToolbarNavigationButtonStyle" parent="@style/Widget.AppCompat.Toolbar.Button.Navigation">
-        <item name="android:layout_marginLeft">22dp</item>
-        <item name="android:layout_marginRight">-20dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">0dp</item>
     </style>
 
     <style name="TextMyUsername">
@@ -180,6 +181,7 @@
     <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
     </style>
+
     <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>

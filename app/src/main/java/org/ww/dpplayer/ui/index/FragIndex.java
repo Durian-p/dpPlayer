@@ -11,10 +11,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
+import android.text.*;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.TextAppearanceSpan;
 import android.text.style.TypefaceSpan;
@@ -29,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,7 +39,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
-import org.ww.dpplayer.databinding.FragHomeBinding;
+import org.ww.dpplayer.databinding.FragIndexBinding;
 import org.ww.dpplayer.entity.Music;
 import org.ww.dpplayer.player.MusicService;
 import org.ww.dpplayer.player.MusicServiceController;
@@ -60,7 +58,7 @@ import java.util.function.Consumer;
 
 public class FragIndex extends Fragment {
 
-    private FragHomeBinding binding;
+    private FragIndexBinding binding;
     private List<Music> localMusics;
     private List<Music> musicsSuList;
     private List<Music> musicsWithAlbum;
@@ -77,7 +75,7 @@ public class FragIndex extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragHomeBinding.inflate(inflater, container, false);
+        binding = FragIndexBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -121,39 +119,116 @@ public class FragIndex extends Fragment {
         AppBarLayout appBarLayout = view.findViewById(R.id.app_bar_layout);
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar_layout);
-//       Spanned appName = Html.fromHtml("<font color=#bae8e8;font-family:sans;font-weight:bold'>dp</span><span style='color:#272343;font-family:sans'>Player</span>", Html.FROM_HTML_MODE_LEGACY);
-        String appName = getResources().getString(R.string.app_name);
-        String coloredAppName = "<font color='#3f2b57'>dp</font><font color='#FFFFFF'>Player  </font>";
-        SpannableString appNameSpannable = new SpannableString(appName);
-        appNameSpannable.setSpan(new TextAppearanceSpan(getContext(), R.style.AppName1), 0, 2, 0 );
-        appNameSpannable.setSpan(new TextAppearanceSpan(getContext(), R.style.AppName2), 2, appName.length(), 0 );
-
-        // 设置View内容
-        toolbar.setTitle(appNameSpannable);
-        collapsingToolbarLayout.setTitle(appNameSpannable);
+//
+//        // 设置View内容
+//        toolbar.setTitle(appNameSpannable);
+//        collapsingToolbarLayout.setTitle(appNameSpannable);
 
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) requireActivity()).getWindow().setStatusBarColor(getResources().getColor(R.color.transparent, null));
         collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorOnPrimary, null)));
         collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.colorPrimary, null));
         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white, null));
-        collapsingToolbarLayout.setExpandedTitleMarginStart(54);
+//        collapsingToolbarLayout.setExpandedTitleMarginStart(54);
+
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary, null));
         toolbar.setNavigationIconTint(getResources().getColor(R.color.transparent, null));
 
         int maxScrollRange = appBarLayout.getTotalScrollRange();
+//        int colorPrimary = getResources().getColor(R.color.colorPrimary, null);
+//        int colorBlack = getResources().getColor(R.color.black, null);
+//        int colorWhite = getResources().getColor(R.color.white, null);
+//        int backgroundColor = Color.parseColor("#e9f3f2");
+//        ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+//
+//        String padding = "    ";
+//        collapsingToolbarLayout.setTitle(Html.fromHtml(
+//                "<font face='sans' color='" + colorPrimary + "'>dp</font>" +
+//                        "<font face='sans' color='" + colorBlack + "'>" + "Player" +"</font>",
+//                Html.FROM_HTML_MODE_LEGACY
+//        ));
+//
+//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                int absVerticalOffset = Math.abs(verticalOffset);
+//
+//                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() < -130) {
+//                    // Expanded
+//                    String playerStr = ((Spanned) collapsingToolbarLayout.getTitle()).toString();
+//                    playerStr = playerStr.replace("dp","");
+//                    if (playerStr.endsWith(" "))
+//                        playerStr = playerStr.replace(" ","");
+//                    else
+//                        playerStr += ' ';
+//                    collapsingToolbarLayout.setTitle(Html.fromHtml(
+//                            "<font face='sans' color='" + colorPrimary + "'>dp</font>" +
+//                                    "<font face='sans' color='" + colorBlack + "'>" +playerStr+"</font>",
+//                            Html.FROM_HTML_MODE_LEGACY
+//                    ));
+//                    toolbar.setNavigationIconTint(colorPrimary);
+//                    requireActivity().getWindow().setStatusBarColor(Color.TRANSPARENT);
+//                    toolbar.setNavigationIconTint(Color.TRANSPARENT);
+//
+//
+//                } else if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0) {
+//                    // Collapsed
+//                    String playerStr = ((Spanned) collapsingToolbarLayout.getTitle()).toString();
+//                    playerStr = playerStr.replace("dp","");
+//                    if (playerStr.endsWith(" "))
+//                        playerStr = playerStr.replace(" ","");
+//                    else
+//                        playerStr += ' ';
+//                    collapsingToolbarLayout.setTitle(Html.fromHtml(
+//                            "<font face='sans' color='" + colorWhite + "'>dp</font>" +
+//                                    "<font face='sans' color='" + colorWhite + "'>"+ playerStr +"</font>",
+//                            Html.FROM_HTML_MODE_LEGACY
+//                    ));
+//                    toolbar.setNavigationIconTint(colorWhite);
+//                    collapsingToolbarLayout.setContentScrimColor(colorPrimary);
+//                    requireActivity().getWindow().setStatusBarColor(colorPrimary);
+//                } else {
+//                    // In between
+//
+//                    float fraction = (float) absVerticalOffset / 132.0f;
+//                    float adjustedFraction = (float) Math.pow(fraction, 2);
+//                    int dpColor = (int) argbEvaluator.evaluate(fraction, colorPrimary, colorWhite);
+//                    int playerColor = (int) argbEvaluator.evaluate(fraction, colorBlack, colorWhite);
+//                    int statusBarColor = (int) argbEvaluator.evaluate(adjustedFraction, backgroundColor, colorPrimary);
+//                    String playerStr = ((Spanned) collapsingToolbarLayout.getTitle()).toString();
+//                    playerStr = playerStr.replace("dp","");
+//                    if (playerStr.endsWith(" "))
+//                        playerStr = playerStr.replace(" ","");
+//                    else
+//                        playerStr += ' ';
+//                    collapsingToolbarLayout.setTitle(Html.fromHtml(
+//                            "<font face='sans' color='" + String.format("#%06X", (0xFFFFFF & dpColor)) + "'>dp</font>" +
+//                                    "<font face='sans' color='" + String.format("#%06X", (0xFFFFFF & playerColor)) + "'>"+ playerStr + "</font>",
+//                            Html.FROM_HTML_MODE_LEGACY
+//                    ));
+//                    requireActivity().getWindow().setStatusBarColor(statusBarColor);
+//                    collapsingToolbarLayout.setContentScrimColor(statusBarColor);
+//                    toolbar.setNavigationIconTint(Color.TRANSPARENT);
+//                }
+//            }
+//        });
+
         int colorPrimary = getResources().getColor(R.color.colorPrimary, null);
         int colorBlack = getResources().getColor(R.color.black, null);
         int colorWhite = getResources().getColor(R.color.white, null);
         int backgroundColor = Color.parseColor("#e9f3f2");
         ArgbEvaluator argbEvaluator = new ArgbEvaluator();
 
+        Typeface sansTypeface = ResourcesCompat.getFont(requireContext(), R.font.sans);
+
+        collapsingToolbarLayout.setTitle(buildStyledTitle("dp", "Player", colorPrimary, colorBlack, sansTypeface));
+
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 int absVerticalOffset = Math.abs(verticalOffset);
 
-                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() < -130) {
+                if (absVerticalOffset - appBarLayout.getTotalScrollRange() < -130) {
                     // Expanded
                     String playerStr = ((Spanned) collapsingToolbarLayout.getTitle()).toString();
                     playerStr = playerStr.replace("dp","");
@@ -161,18 +236,12 @@ public class FragIndex extends Fragment {
                         playerStr = playerStr.replace(" ","");
                     else
                         playerStr += ' ';
-                    collapsingToolbarLayout.setTitle(Html.fromHtml(
-                            "<font face='sans' color='" + colorPrimary + "'>dp</font>" +
-                                    "<font face='sans' color='" + colorBlack + "'>" +playerStr+"</font>",
-                            Html.FROM_HTML_MODE_LEGACY
-                    ));
+                    collapsingToolbarLayout.setTitle(buildStyledTitle("dp", playerStr, colorPrimary, colorBlack, sansTypeface));
                     toolbar.setNavigationIconTint(colorPrimary);
-                    collapsingToolbarLayout.setContentScrimColor(colorPrimary);
                     requireActivity().getWindow().setStatusBarColor(Color.TRANSPARENT);
                     toolbar.setNavigationIconTint(Color.TRANSPARENT);
 
-
-                } else if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0) {
+                } else if (absVerticalOffset - appBarLayout.getTotalScrollRange() == 0) {
                     // Collapsed
                     String playerStr = ((Spanned) collapsingToolbarLayout.getTitle()).toString();
                     playerStr = playerStr.replace("dp","");
@@ -180,71 +249,33 @@ public class FragIndex extends Fragment {
                         playerStr = playerStr.replace(" ","");
                     else
                         playerStr += ' ';
-                    collapsingToolbarLayout.setTitle(Html.fromHtml(
-                            "<font face='sans' color='" + colorWhite + "'>dp</font>" +
-                                    "<font face='sans' color='" + colorWhite + "'>"+ playerStr +"</font>",
-                            Html.FROM_HTML_MODE_LEGACY
-                    ));
+                    collapsingToolbarLayout.setTitle(buildStyledTitle("dp", playerStr, colorWhite, colorWhite, sansTypeface));
                     toolbar.setNavigationIconTint(colorWhite);
                     collapsingToolbarLayout.setContentScrimColor(colorPrimary);
                     requireActivity().getWindow().setStatusBarColor(colorPrimary);
+
                 } else {
                     // In between
-
                     float fraction = (float) absVerticalOffset / 132.0f;
                     float adjustedFraction = (float) Math.pow(fraction, 2);
                     int dpColor = (int) argbEvaluator.evaluate(fraction, colorPrimary, colorWhite);
                     int playerColor = (int) argbEvaluator.evaluate(fraction, colorBlack, colorWhite);
                     int statusBarColor = (int) argbEvaluator.evaluate(adjustedFraction, backgroundColor, colorPrimary);
+
                     String playerStr = ((Spanned) collapsingToolbarLayout.getTitle()).toString();
                     playerStr = playerStr.replace("dp","");
                     if (playerStr.endsWith(" "))
                         playerStr = playerStr.replace(" ","");
                     else
                         playerStr += ' ';
-                    collapsingToolbarLayout.setTitle(Html.fromHtml(
-                            "<font face='sans' color='" + String.format("#%06X", (0xFFFFFF & dpColor)) + "'>dp</font>" +
-                                    "<font face='sans' color='" + String.format("#%06X", (0xFFFFFF & playerColor)) + "'>"+ playerStr + "</font>",
-                            Html.FROM_HTML_MODE_LEGACY
-                    ));
+
+                    collapsingToolbarLayout.setTitle(buildStyledTitle("dp", playerStr, dpColor, playerColor, sansTypeface));
                     requireActivity().getWindow().setStatusBarColor(statusBarColor);
+                    collapsingToolbarLayout.setContentScrimColor(statusBarColor);
                     toolbar.setNavigationIconTint(Color.TRANSPARENT);
                 }
             }
         });
-
-//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-//            int max = 0;
-//            @Override
-//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                max = Math.min(max, Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange());
-//
-//                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0)
-//                {
-//                    //  Collapsed 不加空格不更新
-//                    int color = getResources().getColor(R.color.colorPrimary, null);
-//
-//                    collapsingToolbarLayout.setTitle(Html.fromHtml(coloredAppName, Html.FROM_HTML_MODE_LEGACY));
-//                    toolbar.setNavigationIconTint(getResources().getColor(R.color.white, null));
-//                    collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.colorPrimary, null));
-//                    ((AppCompatActivity) requireActivity()).getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary, null));
-//
-//                }
-//                else if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() < 0 && Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() > -40)
-//                {
-//                    //Expanded
-//                    collapsingToolbarLayout.setTitle(appNameSpannable);
-//                    toolbar.setNavigationIconTint(getResources().getColor(R.color.transparent, null));
-//                    collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.colorPrimaryVariant, null));
-//                    ((AppCompatActivity) requireActivity()).getWindow().setStatusBarColor(Color.parseColor("#1AFFD803"));
-//
-//                }
-//                else if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() <= -40 && Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() > -100)
-//                {
-//                    ((AppCompatActivity) requireActivity()).getWindow().setStatusBarColor(getResources().getColor(R.color.transparent, null));
-//                }
-//            }
-//        });
 
 
         // 初始化推荐曲目
@@ -342,6 +373,20 @@ public class FragIndex extends Fragment {
 
         setupRecyclerView(recycler);
     }
+
+    private SpannableString buildStyledTitle(String firstPart, String secondPart, int firstPartColor, int secondPartColor, Typeface typeface) {
+        String title = firstPart + secondPart;
+        SpannableString spannableString = new SpannableString(title);
+
+        spannableString.setSpan(new ForegroundColorSpan(firstPartColor), 0, firstPart.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new ForegroundColorSpan(secondPartColor), firstPart.length(), title.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableString.setSpan(new TypefaceSpan(typeface), 0, firstPart.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new TypefaceSpan(typeface), firstPart.length(), title.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spannableString;
+    }
+
 
     private void updateTitleColors(int dpColor, int playerColor) {
         SpannableStringBuilder builder = new SpannableStringBuilder();

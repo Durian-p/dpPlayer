@@ -1,4 +1,4 @@
-package org.ww.dpplayer.ui.base;
+package org.ww.dpplayer.ui.dialog;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -21,6 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import org.ww.dpplayer.R;
 import org.ww.dpplayer.database.MusicRepository;
 import org.ww.dpplayer.entity.Music;
+import org.ww.dpplayer.ui.base.BaseMusicActivity;
 import org.ww.dpplayer.ui.my.local.AlbumActivity;
 import org.ww.dpplayer.ui.my.local.ArtistActivity;
 import org.ww.dpplayer.util.ShareUtil;

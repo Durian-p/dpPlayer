@@ -1,4 +1,4 @@
-package org.ww.dpplayer.ui.base;
+package org.ww.dpplayer.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -22,8 +22,7 @@ import org.ww.dpplayer.entity.MusicList;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class DialogEditPlaylist extends Dialog
-{
+public class DialogNewMlist extends Dialog {
 
     private EditText editTextPlaylistName;
     private ImageView imageViewPlaylistCover;
@@ -31,13 +30,11 @@ public class DialogEditPlaylist extends Dialog
     private Bitmap coverBitmap;
     private MusicRepository musicRepository;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
-    private MusicList musicList;
 
-    public DialogEditPlaylist(@NonNull Context context, ActivityResultLauncher<Intent> imagePickerLauncher, MusicList musicList) {
+    public DialogNewMlist(@NonNull Context context, ActivityResultLauncher<Intent> imagePickerLauncher) {
         super(context);
         this.imagePickerLauncher = imagePickerLauncher;
         musicRepository = MusicRepository.getInstance();
-        this.musicList = musicList;
     }
 
     @Override
@@ -49,15 +46,8 @@ public class DialogEditPlaylist extends Dialog
         imageViewPlaylistCover = findViewById(R.id.imageViewPlaylistCover);
         buttonSavePlaylist = findViewById(R.id.buttonSavePlaylist);
 
-        buttonSavePlaylist.setText("保存");
-        if (musicList != null)
-            imageViewPlaylistCover.setImageBitmap(musicList.getCover());
-        else
-            imageViewPlaylistCover.setImageResource(R.drawable.default_cover);
-        editTextPlaylistName.setText(musicList.getName());
-
         imageViewPlaylistCover.setOnClickListener(v -> chooseImage());
-        buttonSavePlaylist.setOnClickListener(v -> updatePlaylist());
+        buttonSavePlaylist.setOnClickListener(v -> createPlaylist());
         // 将cardview的宽度设置为屏幕宽度
         int width = getContext().getResources().getDisplayMetrics().widthPixels;
         CardView cardViewPlaylist = findViewById(R.id.cardViewPlaylist);
@@ -72,24 +62,24 @@ public class DialogEditPlaylist extends Dialog
         imagePickerLauncher.launch(intent);
     }
 
-    private void updatePlaylist() {
+    private void createPlaylist() {
         String name = editTextPlaylistName.getText().toString().trim();
         if (name.isEmpty()) {
-            Toast.makeText(getContext(), "歌单名不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "请输入歌单名", Toast.LENGTH_SHORT).show();
             return;
         }
 
-
-        musicList.setName(name);
+        MusicList playlist = new MusicList();
+        playlist.setName(name);
 
         if (coverBitmap != null) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             coverBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            musicList.setCoverFromByteArray(stream.toByteArray());
+            playlist.setCoverFromByteArray(stream.toByteArray());
         }
 
-        musicRepository.updateMusicList(musicList);
-        Toast.makeText(getContext(), "成功修改歌单信息", Toast.LENGTH_SHORT).show();
+        musicRepository.addMusicList(playlist);
+        Toast.makeText(getContext(), "成功创建歌单", Toast.LENGTH_SHORT).show();
         dismiss();
     }
 

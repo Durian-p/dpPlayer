@@ -33,9 +33,9 @@ import org.ww.dpplayer.player.MusicServiceController;
 import org.ww.dpplayer.player.MusicService;
 
 import org.ww.dpplayer.ui.adapter.MusicListsAdapter;
-import org.ww.dpplayer.ui.base.DialogEditPlaylist;
-import org.ww.dpplayer.ui.base.DialogNewMlist;
-import org.ww.dpplayer.ui.base.DialongMlistLongPress;
+import org.ww.dpplayer.ui.dialog.DialogEditPlaylist;
+import org.ww.dpplayer.ui.dialog.DialogNewMlist;
+import org.ww.dpplayer.ui.dialog.DialongMlistLongPress;
 import org.ww.dpplayer.ui.data.MusicViewModel;
 import org.ww.dpplayer.ui.my.heart.HeartActivity;
 import org.ww.dpplayer.ui.my.history.HistoryActivity;

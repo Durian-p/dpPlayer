@@ -5,9 +5,8 @@ import android.content.Context;
 
 
 /**
- * 作者：yonglong on 2016/8/22 19:20
- * 邮箱：643872807@qq.com
- * 版本：2.5
+ * 原作者：yonglong on 2016/8/22 19:20
+ * 修改：durianp on 2024/6/11
  */
 public class SizeUtils {
 
